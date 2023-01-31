@@ -1,0 +1,24 @@
+# Django
+*.log
+key_define.py
+
+# IDE
+.idea
+.vscode
+
+# Venv setting
+.env
+.venv
+venv
+
+# Python
+**/__pycache__
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+
+# MAC
+**/.DS_Store
+
+
