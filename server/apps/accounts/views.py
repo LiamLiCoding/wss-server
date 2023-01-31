@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.contrib import auth
 from django.views.generic import View
 
-from .forms import UserLoginForm
+from .forms import UserLoginForm, UserRegisterForm
 
 
 def redirect_to_login(request):
