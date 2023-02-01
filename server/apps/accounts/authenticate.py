@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # @Time : 2023/1/27 16:09
 # @Author : Haozheng Li (Liam)
-# @Email : hxl1119@case.edu
+# @Email : haozheng.l@outlook.com
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend

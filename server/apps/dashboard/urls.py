@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 # @Time : 2023/2/1 16:01
 # @Author : Haozheng Li (Liam)
-# @Email : hxl1119@case.edu
+# @Email : haozheng.l@outlook.com
 
 
 from django.urls import path
