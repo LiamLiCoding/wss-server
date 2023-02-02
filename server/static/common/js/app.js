@@ -539,7 +539,10 @@ function() {
 	}
 	function H() {
 		Array.from(document.querySelectorAll("#notificationItemsTabContent .tab-pane")).forEach(function(e) {
-			0 < e.querySelectorAll(".notification-item").length ? e.querySelector(".view-all") && (e.querySelector(".view-all").style.display = "block") : (e.querySelector(".view-all") && (e.querySelector(".view-all").style.display = "none"), e.querySelector(".empty-notification-elem") || (e.innerHTML += '<div class="empty-notification-elem">\t\t\t\t\t\t\t<div class="w-25 w-sm-50 pt-3 mx-auto">\t\t\t\t\t\t\t\t<img src="static/common/img/svg/bell.svg" class="img-fluid" alt="user-pic">\t\t\t\t\t\t\t</div>\t\t\t\t\t\t\t<div class="text-center pb-5 mt-2">\t\t\t\t\t\t\t\t<h6 class="fs-18 fw-semibold lh-base">Hey! You have no any notifications </h6>\t\t\t\t\t\t\t</div>\t\t\t\t\t\t</div>'))
+			0 < e.querySelectorAll(".notification-item").length ? e.querySelector(".view-all") && (e.querySelector(".view-all").style.display = "block") : (e.querySelector(".view-all") && (e.querySelector(".view-all").style.display = "none"),
+			e.querySelector(".empty-notification-elem") || (e.innerHTML += '<div class="empty-notification-elem">\t\t\t\t\t\t\t<div class="w-25 w-sm-50 pt-3 mx-auto">\t\t\t\t\t\t\t\t' +
+				'\t\t\t\t\t\t\t</div>\t\t\t\t\t\t\t<div class="text-center pb-5 mt-2">\t\t\t\t\t\t\t\t' +
+				'<h6 class="fs-18 fw-semibold lh-base">Hey! You have no any notifications </h6>\t\t\t\t\t\t\t</div>\t\t\t\t\t\t</div>'))
 		})
 	}
 	function G() {
@@ -604,7 +607,7 @@ function() {
 	l = document.getElementsByTagName("HTML")[0],
 	(m = document.querySelectorAll(".light-dark-mode")) && m.length && m[0].addEventListener("click",
 	function(e) {
-		l.hasAttribute("data-layout-mode") && "dark" == l.getAttribute("data-layout-mode") ? C("data-layout-mode", "light", "layout-mode-light", l) : C("data-layout-mode", "dark", "layout-mode-dark", l)
+		l.hasAttribute("data-layout-mode") && "dark" === l.getAttribute("data-layout-mode") ? C("data-layout-mode", "light", "layout-mode-light", l) : C("data-layout-mode", "dark", "layout-mode-dark", l)
 	}),
 	O(),
 	D(),
