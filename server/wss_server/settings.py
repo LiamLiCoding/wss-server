@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.accounts'
 ]
 
 MIDDLEWARE = [
@@ -71,8 +70,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wss_server.wsgi.application'
-
-AUTH_USER_MODEL = 'accounts.Users'
 
 
 # Database
