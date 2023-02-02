@@ -22,11 +22,13 @@ from django.views.static import serve
 from apps.accounts import urls as accounts_urls
 from apps.accounts import views as accounts_views
 from apps.dashboard import urls as dashboard_urls
+from apps.api_control import urls as api_control_urls
 
 
 urlpatterns = [
     path('', include(dashboard_urls)),
     path('dashboard/', include(dashboard_urls)),
+    path('api-control/', include(api_control_urls)),
     path('admin/', admin.site.urls),
     path('accounts/', include(accounts_urls)),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),

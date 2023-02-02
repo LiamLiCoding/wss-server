@@ -322,25 +322,11 @@
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                        <!-- begin Dashboard -->
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
                                 <i class="mdi mdi-speedometer"></i>
                                 <span data-key="t-dashboards">Dashboards</span>
                             </a>
-                        </li>
-                        <!-- end Dashboard -->
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarApps" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarApps">
-                                <i class="mdi mdi-view-grid-plus-outline"></i> <span data-key="t-apps">Apps</span>
-                            </a>
-                            <div class="collapse menu-dropdown" id="sidebarApps">
-                                <ul class="nav nav-sm flex-column">
-                                    <li class="nav-item">
-                                        <a href="apps-api-key.html" class="nav-link"> <span data-key="t-api-key">API Key</span> <span class="badge badge-pill bg-success" data-key="t-new">New</span></a>
-                                    </li>
-                                </ul>
-                            </div>
                         </li>
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li>
@@ -363,9 +349,11 @@
                             </div>
                         </li>
 
+                        <li class="nav-item"><a class="nav-link menu-link" href="#"><i class="mdi mdi-devices"></i> <span data-key="t-advance-ui">Device</span></a></li>
+
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#">
-                                <i class="mdi mdi-devices"></i> <span data-key="t-advance-ui">Device</span>
+                            <a class="nav-link" href="{% url 'api-keys' %}">
+                                <i class="mdi mdi-api"></i> <span>Api-keys</span>
                             </a>
                         </li>
 
@@ -376,13 +364,13 @@
 
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="mdi mdi-clipboard-alert-outline"></i> <span data-key="t-advance-ui">Event</span>
+                                <i class="mdi mdi-clipboard-alert-outline"></i> <span>Event</span>
                             </a>
                         </li>
 
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="mdi mdi-hammer-wrench"></i> <span data-key="t-advance-ui">Operations</span>
+                                <i class="mdi mdi-hammer-wrench"></i> <span>Operations</span>
                             </a>
                         </li>
 
@@ -402,53 +390,27 @@
         <!-- Start right Content here -->
         <!-- ============================================================== -->
         <div class="main-content">
+            {% block content %}
+            {% endblock %}
 
-            <div class="page-content">
-                <div class="container-fluid">
-
-                    {% block page-title %}
-                    <!-- start page title -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                <h4 class="mb-sm-0">Starter</h4>
-
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
-                                        <li class="breadcrumb-item active">Starter</li>
-                                    </ol>
+            {% block fotter %}
+                <!-- Begin Fotter-->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © WSS.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-end d-none d-sm-block">
+                                    Develop by Haozheng Li
                                 </div>
-
                             </div>
                         </div>
                     </div>
-                    <!-- end page title -->
-                    {% endblock %}
-
-                    {% block content %}{% endblock %}
-
-                </div>
-                <!-- container-fluid -->
-            </div>
-            <!-- End Page-content -->
-
-            <!-- Begin Fotter-->
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <script>document.write(new Date().getFullYear())</script> © WSS.
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-end d-none d-sm-block">
-                                Develop by Haozheng Li
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-            <!-- End Fotter-->
+                </footer>
+                <!-- End Fotter-->
+            {% endblock %}
 
         </div>
         <!-- end main content-->
