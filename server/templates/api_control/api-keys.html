@@ -19,7 +19,7 @@
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Apps</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Management</a></li>
                             <li class="breadcrumb-item active">API Key</li>
                         </ol>
                     </div>
@@ -120,6 +120,40 @@
                                         </tr>
                                     </thead>
                                     <tbody class="list form-check-all">
+                                        {% for each_key in api_keys %}
+                                            <tr>
+                                                <th scope="row">
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="chk_child" value="option1">
+                                                    </div>
+                                                </th>
+                                                <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">{{ each_key.id }}</a></td>
+                                                <td class="name">{{ each_key.name }}</td>
+                                                <td class="createBy">{{ each_key.owner }}</td>
+                                                <td class="apikey">
+                                                    <input type="text" class="form-control apikey-value" readonly value="b5815DE8A7224438932eb296Z5">
+                                                </td>
+                                                <td class="status">
+                                                    {% if each_key.status == 'enable' %}
+                                                        <span class="badge badge-soft-danger">{{ each_key.status }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="create_date">{{ each_key.created_time }}</td>
+                                                <td class="expiry_date">{{ each_key.expiration_time}}</td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="ri-more-fill align-middle"></i>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                            <li><a class="dropdown-item edit-item-btn" href="#api-key-modal" data-bs-toggle="modal">Rename</a></li>
+                                                            <li><a class="dropdown-item disable-btn" href="javascript:void(0);">Disable</a></li>
+                                                            <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="#deleteApiKeyModal">Delete</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
                                         <tr>
                                             <th scope="row">
                                                 <div class="form-check">

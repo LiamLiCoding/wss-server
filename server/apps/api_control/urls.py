@@ -9,5 +9,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-	path('', views.ApiKeysView.as_view(), name='api-keys'),
+	path('', views.ApiKeysView.as_view(), name='api-key'),
 ]
