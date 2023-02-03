@@ -3,13 +3,14 @@ import datetime
 
 from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from .models import APIKey
 from .forms import CreateAPIKeyForm
 
 
-class ApiKeysView(ListView):
+class ApiKeysView(LoginRequiredMixin, ListView):
     model = APIKey
     template_name = "api_control/api-keys.html"
     context_object_name = 'api_keys'
@@ -26,7 +27,7 @@ class ApiKeysView(ListView):
         return context
 
 
-class CreateApiKeyView(CreateView):
+class CreateApiKeyView(LoginRequiredMixin, CreateView):
     template_name = "api_control/api-keys.html"
     model = APIKey
     form_class = CreateAPIKeyForm
@@ -42,7 +43,7 @@ class CreateApiKeyView(CreateView):
         return reverse('api-key')
 
 
-class DeleteApiKeyView(DeleteView):
+class DeleteApiKeyView(LoginRequiredMixin, DeleteView):
     template_name = "api_control/api-keys.html"
     model = APIKey
     success_url = reverse_lazy('api-key')

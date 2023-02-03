@@ -73,10 +73,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wss_server.wsgi.application'
 
+LOGIN_URL = 'accounts/login/'
 AUTH_USER_MODEL = 'accounts.Users'
 AUTHENTICATION_BACKENDS = (
     'apps.accounts.authenticate.LoginBackend',
 )
+
+SILENCED_SYSTEM_CHECKS = ['auth.W004']
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

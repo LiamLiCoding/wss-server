@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
+from django.shortcuts import render
 from django.conf.urls.static import static
 from django.views.static import serve
 
@@ -39,5 +40,13 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
-handler404 = "dashboard.views.page_404"
-handler500 = "dashboard.views.page_500"
+def handler_404_page(request, exception=None):
+    return render(request, 'common/page-404.html')
+
+
+def handler_500_page(request, *args, **kwargs):
+    return render(request, 'common/page-500.html')
+
+
+handler404 = handler_404_page
+handler500 = handler_500_page

@@ -4,7 +4,6 @@
 # @Author : Haozheng Li (Liam)
 # @Email : haozheng.l@outlook.com
 
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q, ObjectDoesNotExist
 
@@ -12,9 +11,11 @@ from .models import Users
 
 
 class LoginBackend(ModelBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
+    def authenticate(self, request, email=None, password=None, **kwargs):
+        if email is None or password is None:
+            return
         try:
-            user = Users.objects.get(Q(username=username) | Q(email=username))
+            user = Users.objects.get(email=email)
             if user.check_password(password):
                 return user
         except ObjectDoesNotExist as error:
