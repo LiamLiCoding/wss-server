@@ -115,3 +115,26 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
 
 
+class ConfirmString(models.Model):
+    CONFIRM_TYPE_CHOICE = (
+        ("register", "register"),
+        ("forget", "forget_password")
+    )
+    code = models.CharField(max_length=20)
+    user = models.OneToOneField('Users', on_delete=models.CASCADE)
+    c_time = models.DateTimeField(auto_now_add=True)
+
+    email = models.EmailField(max_length=50)
+    send_type = models.CharField(max_length=20, choices=CONFIRM_TYPE_CHOICE)
+    send_time = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.user.username + ":   " + self.code
+
+    class Meta:
+
+        ordering = ["-c_time"]
+        verbose_name = "confirm_string"
+        verbose_name_plural = "confirm_string"
+
+
