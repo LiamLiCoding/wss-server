@@ -9,4 +9,14 @@ class CreateAPIKeyForm(ModelForm):
         widgets = {
             'name': TextInput(attrs={'class': 'form-control', 'id': "api-key-name",
                                      "placeholder": "Enter api key name"}),
+
+        }
+
+
+class DeleteAPIKeyForm(ModelForm):
+    class Meta:
+        model = APIKey
+        fields = ['key']
+        widgets = {
+            'key': HiddenInput(),
         }

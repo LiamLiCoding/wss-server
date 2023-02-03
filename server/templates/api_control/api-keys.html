@@ -123,7 +123,7 @@
                                             <tr>
                                                 <td class="id" style="display:none;"><a href="javascript:void(0);" class="fw-medium link-primary">{{ each_key.id }}</a></td>
                                                 <td class="name">{{ each_key.name }}</td>
-                                                <td class="createBy">{{ each_key.owner }}</td>
+                                                <td class="createBy">{{ each_key.user }}</td>
                                                 <td class="apikey">
                                                     <input type="text" class="form-control apikey-value" readonly value="{{ each_key.key }}">
                                                 </td>
@@ -138,14 +138,9 @@
                                                 <td class="expiry_date">{{ each_key.expiration_time|date:"d M, Y" }}</td>
                                                 <td>
                                                     <div class="dropdown">
-                                                        <button class="btn btn-soft-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                            <i class="ri-more-fill align-middle"></i>
+                                                        <button class="btn btn-soft-danger" type="button" data-bs-toggle="modal" data-bs-target="#deleteApiKeyModal" data-api-key-id="{{ each_key.id }}">
+                                                            Delete
                                                         </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                            <li><a class="dropdown-item edit-item-btn" href="#api-key-modal" data-bs-toggle="modal">Rename</a></li>
-                                                            <li><a class="dropdown-item disable-btn" href="javascript:void(0);">Disable</a></li>
-                                                            <li><a class="dropdown-item remove-item-btn" data-bs-toggle="modal" href="#deleteApiKeyModal">Delete</a></li>
-                                                        </ul>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -230,7 +225,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="api-key-name" class="form-label">API Key Name <span class="text-danger">*</span></label>
-                        <input type="text" name="api-key-name" class="form-control" id="api-key-name" placeholder="Enter api key name">
+                        {{ create_form.name }}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -262,22 +257,22 @@
                     </div>
                 </div>
                 <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
-                    <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn w-sm btn-danger " id="delete-record">Yes, Delete It!</button>
+                    <form method="post" id="delete-api-key" name="delete_api_key">
+                        {{ delete_form.key }}
+                        <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn w-sm btn-danger " id="delete-record">Yes, Delete It!</button>
+                    </form>
                 </div>
             </div>
-
         </div><!-- /.modal-content -->
     </div>
 </div>
 <!--end modal -->
-
 {% endblock %}
 
 
 
 {% block js %}
-<script src="{% static 'common/js/csrf.js' %}"></script>
 <!-- list.js min js -->
 <script src="{% static 'common/libs/list.js/list.min.js' %}"></script>
 <script src="{% static 'common/libs/list.pagination.js/list.pagination.min.js' %}"></script>
@@ -285,6 +280,17 @@
 <!-- Sweet Alerts js -->
 <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
 
-{#<script src="{% static 'api_control/js/api-key.init.js' %}"></script>#}
+<script>
+$('#deleteApiKeyModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let api_key_id = button.data('api-key-id');
+    let modal = $(this);
+
+    modal.find('.modal-body input').val(api_key_id);
+    let action_url = "{% url 'delete-api-key' 'api-pk-key' %}";
+    action_url = action_url.replace('api-pk-key', api_key_id);
+    document.delete_api_key.action = action_url;
+})
+</script>
 
 {% endblock %}
