@@ -10,4 +10,5 @@ from . import views
 
 urlpatterns = [
 	path('', views.ApiKeysView.as_view(), name='api-key'),
+	path('create-api-key', views.CreateApiKeyView.as_view(), name='create-api-key'),
 ]
