@@ -11,12 +11,3 @@ class CreateAPIKeyForm(ModelForm):
                                      "placeholder": "Enter api key name"}),
 
         }
-
-
-class DeleteAPIKeyForm(ModelForm):
-    class Meta:
-        model = APIKey
-        fields = ['key']
-        widgets = {
-            'key': HiddenInput(),
-        }

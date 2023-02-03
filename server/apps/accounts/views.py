@@ -2,8 +2,10 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import auth
 from django.views.generic import View
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import UserLoginForm, UserRegisterForm
+from .models import Users
 
 
 def redirect_to_login(request):
@@ -37,11 +39,11 @@ class LoginView(View):
         message = "Your email and password didn't match any record of our databases. Please try again"
 
         if login_form.is_valid():
-            email = login_form.cleaned_data.get('email')
+            username = login_form.cleaned_data.get('username')
             password = login_form.cleaned_data.get('password')
-            user = auth.authenticate(username=email, password=password)
             remember_status = request.POST.get('remember_checkbox')  # None or 'on'
-            if user:
+            user = auth.authenticate(username=username, password=password)
+            if isinstance(user, Users):
                 if remember_status:
                     pass
                 request.session['user_name'] = user.username

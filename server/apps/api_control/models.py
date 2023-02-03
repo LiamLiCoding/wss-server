@@ -13,10 +13,12 @@ class APIKey(models.Model):
         ('enable', 'Enable'),
     )
 
-    key = models.CharField(max_length=150)
+    key = models.CharField(max_length=150, editable=False)
     name = models.CharField(max_length=200, blank=False, default=None)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='enable')
+    suc_conv_num = models.PositiveIntegerField(default=0)
+    failed_conv_num = models.PositiveIntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     expiration_time = models.DateTimeField(blank=True, null=True, default=timezone.now() + datetime.timedelta(days=180))
 

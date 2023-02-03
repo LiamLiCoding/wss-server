@@ -10,4 +10,5 @@ from . import views
 urlpatterns = [
     path('', views.redirect_to_login),
     path('login/', views.LoginView.as_view(), name='login'),
+    # path('signup/', views.RegisterView.as_view(), name='register'),
 ]

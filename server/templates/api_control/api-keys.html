@@ -35,9 +35,9 @@
                     <div class="card-body">
                         <h5 class="card-title fw-semibold mb-3">Developer Plan</h5>
                         <div class="progress animated-progress custom-progress mb-1">
-                            <div class="progress-bar bg-secondary" role="progressbar" style="width: 38%" aria-valuenow="38" aria-valuemin="0" aria-valuemax="100"></div>
+                            <div class="progress-bar bg-secondary" role="progressbar" style="width: {% widthratio api_keys|length 1 10 %}%" aria-valuenow="{{ api_keys|length }}" aria-valuemin="0" aria-valuemax="10"></div>
                         </div>
-                        <p class="text-muted mb-2">You used 215 of 2000 of your API</p>
+                        <p class="text-muted mb-2">You used {{ api_keys|length }} of 10 of your API</p>
                         <div class="text-end">
                             <button type="button" class="btn btn-success btn-sm create-btn" data-bs-toggle="modal" data-bs-target="#api-key-modal">Create API Key</button>
                         </div>
