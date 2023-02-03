@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.contrib import auth
 from django.views.generic import View
+from django.views.generic import TemplateView
 
 from .forms import UserLoginForm, UserRegisterForm
 from .models import Users
@@ -57,23 +58,57 @@ class RegisterView(View):
     form_class = UserRegisterForm
     template_name = 'accounts/register.html'
 
-    def get_context_data(self, *args):
+    def get_context_data(self, message=None, *args):
         context = {'register_form': self.form_class}
+        if message:
+            context['message'] = message
         if args:
             context.update(*args)
         return context
 
-    def get_success_url(self):
-        if 'next' in self.request.session:
-            return self.request.session.pop('next')
-        else:
-            return '/'
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        register_form = self.form_class(request.POST)
+        message = ""
+
+        if register_form.is_valid():
+            username = register_form.cleaned_data.get('username')
+            password = register_form.cleaned_data.get('password')
+            email = register_form.cleaned_data.get('email')
+            same_email = self.model.objects.filter(email=email)
+            if same_email:
+                message = "The email has been taken. Try another."
+                return render(request, 'accounts/register.html', self.get_context_data(message))
+
+            user = self.model.objects.create_user(username=username, password=password, email=email)
+            request.session['user_name'] = user.username
+            auth.login(self.request, user)
+            return redirect('/accounts/register_success/')
+
+        return render(request, self.template_name, self.get_context_data(message))
+
+
+class LogoutView(View):
+    template_name = 'accounts/logout.html'
 
     def get(self, request, *args, **kwargs):
-        if 'next' in self.request.GET:
-            self.request.session['next'] = self.request.GET['next']
+        auth.logout(request)
+        return render(request, self.template_name)
 
-        return render(request, self.template_name, self.get_context_data())
+
+class RegisterSuccess(TemplateView):
+    template_name = 'accounts/register_success.html'
+
+
+class ResetPasswordView(View):
+    model = Users
+    form_class = UserRegisterForm
+    template_name = 'accounts/reset_password.html'
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         register_form = self.form_class(request.POST)
@@ -92,11 +127,3 @@ class RegisterView(View):
             return redirect('/accounts/login/')
 
         return render(request, self.template_name, self.get_context_data({"message": message}))
-
-
-class LogoutView(View):
-    template_name = 'accounts/logout.html'
-
-    def get(self, request, *args, **kwargs):
-        auth.logout(request)
-        return render(request, self.template_name)
