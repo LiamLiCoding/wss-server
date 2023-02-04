@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.email_control',
     'apps.api_control',
     'apps.accounts',
+    'apps.devices',
 ]
 
 MIDDLEWARE = [

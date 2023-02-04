@@ -24,6 +24,7 @@ from apps.accounts import urls as accounts_urls
 from apps.dashboard import views as dashboard_views
 from apps.dashboard import urls as dashboard_urls
 from apps.api_control import urls as api_control_urls
+from apps.devices import urls as devices_urls
 from apps.email_control import urls as email_control_urls
 
 
@@ -34,6 +35,7 @@ urlpatterns = [
     path('email_control/', include(email_control_urls)),
     path('admin/', admin.site.urls),
     path('accounts/', include(accounts_urls)),
+    path('devices/', include(devices_urls)),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
