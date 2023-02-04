@@ -1,4 +1,4 @@
-from apps.accounts.mixins import GetLoginInfoMixin
+from apps.accounts.mixins import UserSettingsMixin
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,7 +8,7 @@ def redirect_to_dashboard(request):
     return redirect('/dashboard/')
 
 
-class DashboardView(LoginRequiredMixin, GetLoginInfoMixin, TemplateView):
+class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
     template_name = "dashboard/dashboard.html"
 
     def get_context_data(self, *args, **kwargs):

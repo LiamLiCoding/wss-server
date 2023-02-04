@@ -103,6 +103,11 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     date_joined = models.DateTimeField("date joined", default=timezone.now)
 
+    STYLE_MODE_CHOICE = (
+        ('dark', 'dark'),
+        ('light', 'light')
+    )
+
     objects = UserCustomManager()
 
     EMAIL_FIELD = "email"
@@ -123,6 +128,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
         ordering = ["-create_time"]
         verbose_name = "users"
         verbose_name_plural = "users"
+
 
 
 

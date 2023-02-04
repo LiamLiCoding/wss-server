@@ -2,7 +2,7 @@ import secrets
 import datetime
 from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
-from apps.accounts.mixins import GetLoginInfoMixin
+from apps.accounts.mixins import UserSettingsMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
@@ -10,7 +10,7 @@ from .models import APIKey
 from .forms import CreateAPIKeyForm
 
 
-class ApiKeysView(LoginRequiredMixin, GetLoginInfoMixin, ListView):
+class ApiKeysView(LoginRequiredMixin, UserSettingsMixin, ListView):
     model = APIKey
     template_name = "api_control/api-keys.html"
     context_object_name = 'api_keys'

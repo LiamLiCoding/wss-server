@@ -4,12 +4,8 @@
 # @Author : Haozheng Li (Liam)
 # @Email : hxl1119@case.edu
 
-from .models import Users
 
-
-class GetLoginInfoMixin:
-	user = None
-
+class UserSettingsMixin:
 	def get_user_info(self):
 		user = self.request.user
 		context = {}
