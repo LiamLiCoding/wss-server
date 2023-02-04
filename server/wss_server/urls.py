@@ -21,14 +21,14 @@ from django.conf.urls.static import static
 from django.views.static import serve
 
 from apps.accounts import urls as accounts_urls
-from apps.accounts import views as accounts_views
+from apps.dashboard import views as dashboard_views
 from apps.dashboard import urls as dashboard_urls
 from apps.api_control import urls as api_control_urls
 from apps.email_control import urls as email_control_urls
 
 
 urlpatterns = [
-    path('', include(dashboard_urls)),
+    path('', dashboard_views.redirect_to_dashboard),
     path('dashboard/', include(dashboard_urls)),
     path('api-control/', include(api_control_urls)),
     path('email_control/', include(email_control_urls)),
