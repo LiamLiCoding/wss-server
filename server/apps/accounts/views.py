@@ -142,6 +142,7 @@ class ResetPasswordView(TemplateView):
                 user = Users.objects.get(email=email)
                 if isinstance(user, Users):
                     user.set_password(password)
+                    user.save()
                     code_record.delete()
                     return redirect("/accounts/reset_password_success")
             else:
