@@ -92,6 +92,10 @@ class Users(AbstractBaseUser, PermissionsMixin):
     oauth_id = models.PositiveIntegerField('Oauth-id', unique=True, null=True, blank=True)
     oauth_page_url = models.CharField('Oauth-Page-Url', max_length=255, null=True, blank=True)
 
+    is_verified = models.BooleanField("Is verified", default=False)
+
+    date_joined = models.DateTimeField("date joined", default=timezone.now)
+
     objects = UserCustomManager()
 
     EMAIL_FIELD = "email"
@@ -113,28 +117,5 @@ class Users(AbstractBaseUser, PermissionsMixin):
         verbose_name = "users"
         verbose_name_plural = "users"
 
-
-
-class ConfirmString(models.Model):
-    CONFIRM_TYPE_CHOICE = (
-        ("register", "register"),
-        ("forget", "forget_password")
-    )
-    code = models.CharField(max_length=20)
-    user = models.OneToOneField('Users', on_delete=models.CASCADE)
-    c_time = models.DateTimeField(auto_now_add=True)
-
-    email = models.EmailField(max_length=50)
-    send_type = models.CharField(max_length=20, choices=CONFIRM_TYPE_CHOICE)
-    send_time = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.user.username + ":   " + self.code
-
-    class Meta:
-
-        ordering = ["-c_time"]
-        verbose_name = "confirm_string"
-        verbose_name_plural = "confirm_string"
 
 

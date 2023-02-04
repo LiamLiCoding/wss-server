@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.views.generic import View
 from django.views.generic import TemplateView
 
-from .forms import UserLoginForm, UserRegisterForm
+from .forms import UserLoginForm, UserRegisterForm, ForgetPasswordForm
 from .models import Users
 
 
@@ -39,16 +39,21 @@ class LoginView(View):
         message = "Your email and password didn't match any record of our databases. Please try again"
 
         if login_form.is_valid():
-            username = login_form.cleaned_data.get('username')
+            email = login_form.cleaned_data.get('email')
             password = login_form.cleaned_data.get('password')
             remember_status = request.POST.get('remember_checkbox')  # None or 'on'
-            user = auth.authenticate(username=username, password=password)
+            user = auth.authenticate(email=email, password=password)
             if isinstance(user, Users):
                 if remember_status:
                     pass
-                request.session['user_name'] = user.username
-                auth.login(self.request, user)
-                return redirect(self.get_success_url())
+                if user.is_verified:
+                    request.session['user_name'] = user.username
+                    auth.login(self.request, user)
+                    return redirect(self.get_success_url())
+                else:
+                    verify_tips = "Your account have not been verified."
+                    return render(request, self.template_name,
+                                  self.get_context_data({"verify_tips": verify_tips, "verify_email": user.email}))
 
         return render(request, self.template_name, self.get_context_data({"message": message}))
 
@@ -67,6 +72,8 @@ class RegisterView(View):
         return context
 
     def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('/accounts/login/')
         return render(request, self.template_name, self.get_context_data())
 
     def post(self, request, *args, **kwargs):
@@ -82,10 +89,8 @@ class RegisterView(View):
                 message = "The email has been taken. Try another."
                 return render(request, 'accounts/register.html', self.get_context_data(message))
 
-            user = self.model.objects.create_user(username=username, password=password, email=email)
-            request.session['user_name'] = user.username
-            auth.login(self.request, user)
-            return redirect('/accounts/register_success/')
+            self.model.objects.create_user(username=username, password=password, email=email)
+            return redirect('/email_control/email_verify/')
 
         return render(request, self.template_name, self.get_context_data(message))
 
@@ -94,36 +99,29 @@ class LogoutView(View):
     template_name = 'accounts/logout.html'
 
     def get(self, request, *args, **kwargs):
-        auth.logout(request)
+        if request.user.is_authenticated():
+            return redirect('/accounts/login/')
         return render(request, self.template_name)
 
 
-class RegisterSuccess(TemplateView):
+class RegisterSuccessView(TemplateView):
     template_name = 'accounts/register_success.html'
 
 
-class ResetPasswordView(View):
-    model = Users
-    form_class = UserRegisterForm
-    template_name = 'accounts/reset_password.html'
+class ForgetPasswordView(TemplateView):
+    form_class = ForgetPasswordForm
+    template_name = 'accounts/forget_password.html'
 
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+    def get_context_data(self, request_email, *args):
+        print(request_email)
+        return {}
 
     def post(self, request, *args, **kwargs):
-        register_form = self.form_class(request.POST)
-        message = ""
-
-        if register_form.is_valid():
-            username = register_form.cleaned_data.get('username')
-            password = register_form.cleaned_data.get('password')
-            email = register_form.cleaned_data.get('email')
-            same_email = self.model.objects.filter(email=email)
-            if same_email:
-                message = "The email is taken. Try another."
-                return render(request, 'accounts/register.html', {"message": message})
-
-            user = self.model.objects.create_user(username=username, password=password, email=email)
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            print(email)
             return redirect('/accounts/login/')
+        return render(request, self.template_name, self.get_context_data())
 
-        return render(request, self.template_name, self.get_context_data({"message": message}))
+

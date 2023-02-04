@@ -1,7 +1,7 @@
 {% extends 'common/accounts_base.html' %}
 {% load static %}
 
-{% block title %}sign in | WSS{% endblock %}
+{% block title %}Sign in | WSS{% endblock %}
 
 
 {% block auth_content %}
@@ -40,14 +40,17 @@
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
                                 {% endif %}
+                                {% if verify_tips %}
+                                    <div class="alert alert-info alert-dismissible alert-solid alert-label-icon shadow fade show" role="alert">
+                                        <i class="ri-airplay-line label-icon"></i>{{ verify_tips }} <a href="{% url 'email_verify' verify_email %}" style="text-decoration:underline;">  <span class="text-white" style="text-decoration:underline;">Resend verification code</span></a>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                {% endif %}
                                 <div class="mb-3">
-                                    <label for="username" class="form-label">Username or Email</label>
-                                    {{ login_form.username }}
+                                    <label for="useremail" class="form-label">Email</label>
+                                    {{ login_form.email }}
                                 </div>
                                 <div class="mb-3">
-                                    <div class="float-end">
-                                        <a href="reset_password.html" class="text-muted">Forgot password?</a>
-                                    </div>
                                     <label class="form-label" for="password-input">Password</label>
                                     <div class="position-relative auth-pass-inputgroup mb-3">
                                         {{ login_form.password }}
@@ -63,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="col-6" style="margin-left: auto;text-align: right;">
-                                        <a href="{% url 'register' %}"> Forget password?</a>
+                                        <a href="{% url 'forget_password' %}"> Forget password?</a>
                                     </div>
                                 </div>
 
