@@ -74,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'wss_server.wsgi.application'
 
-LOGIN_URL = 'accounts/login/'
+LOGIN_URL = '/accounts/login/'
 AUTH_USER_MODEL = 'accounts.Users'
 AUTHENTICATION_BACKENDS = (
     'apps.accounts.authenticate.LoginBackend',
@@ -142,3 +142,12 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = key_define.EMAIL_BACKEND
+EMAIL_HOST = key_define.EMAIL_HOST
+EMAIL_PORT = key_define.EMAIL_PORT
+EMAIL_HOST_USER = key_define.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = key_define.EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = key_define.EMAIL_USE_TLS
+EMAIL_USE_SSL = key_define.EMAIL_USE_SSL
+DEFAULT_FROM_EMAIL = key_define.EMAIL_HOST_USER

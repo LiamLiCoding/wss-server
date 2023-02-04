@@ -12,7 +12,7 @@
                 <div class="text-center mt-sm-5 mb-4 text-white-50">
                     <div>
                         <a href="{% url 'dashboard' %}" class="d-inline-block auth-logo">
-                            <img src="{% static 'common/img/logo/logo-web.png' %}" alt="" height="25">
+                            <img src="{% static 'common/img/logo/logo-dark.png' %}" alt="" height="25">
                         </a>
                     </div>
                     <p class="mt-3 fs-15 fw-medium">Warehouse surveillance system</p>
@@ -24,7 +24,6 @@
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-5">
                 <div class="card mt-4">
-
                     <div class="card-body p-4">
                         <div class="mb-4">
                             <div class="avatar-lg mx-auto">
@@ -37,44 +36,56 @@
                         <div class="p-2 mt-4">
                             <div class="text-muted text-center mb-4 mx-lg-3">
                                 <h4 class="">Verify Your Email</h4>
-                                <p>Please enter the 4 digit code sent to <span class="fw-semibold">{{ request_email }}</span></p>
+
+                                <p>Please enter the 4-digit code sent to <span class="fw-semibold">{{ request_email }}</span></p>
                             </div>
 
-                            <form autocomplete="off">
+                            <form autocomplete="off" method="post" action="{% url 'email_verify' request_email %}">
+                               {% if message %}
+                                <div class="alert alert-danger alert-dismissible alert-solid alert-label-icon shadow fade show" role="alert">
+                                    <i class="ri-error-warning-line label-icon"></i>{{ message }}
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                               {% if resend_message %}
+                                <div class="alert alert-info alert-dismissible alert-solid alert-label-icon shadow fade show" role="alert">
+                                    <i class="ri-airplay-line label-icon"></i>{{ resend_message }}
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                {% endif %}
                                 <div class="row">
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label for="digit1-input" class="visually-hidden">Digit 1</label>
-                                            <input type="text" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(1, event)" maxLength="1" id="digit1-input">
+                                            <input type="text" name="digit1" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(1, event)" maxLength="1" id="digit1-input">
                                         </div>
                                     </div><!-- end col -->
 
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label for="digit2-input" class="visually-hidden">Digit 2</label>
-                                            <input type="text" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(2, event)" maxLength="1" id="digit2-input">
+                                            <input type="text" name="digit2" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(2, event)" maxLength="1" id="digit2-input">
                                         </div>
                                     </div><!-- end col -->
 
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label for="digit3-input" class="visually-hidden">Digit 3</label>
-                                            <input type="text" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(3, event)" maxLength="1" id="digit3-input">
+                                            <input type="text" name="digit3" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(3, event)" maxLength="1" id="digit3-input">
                                         </div>
                                     </div><!-- end col -->
 
                                     <div class="col-3">
                                         <div class="mb-3">
                                             <label for="digit4-input" class="visually-hidden">Digit 4</label>
-                                            <input type="text" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(4, event)" maxLength="1" id="digit4-input">
+                                            <input type="text" name="digit4" class="form-control form-control-lg bg-light border-light text-center" onkeyup="moveToNext(4, event)" maxLength="1" id="digit4-input">
                                         </div>
                                     </div><!-- end col -->
                                 </div>
+                                <div class="mt-3">
+                                    <button type="submit" class="btn btn-success w-100">Confirm</button>
+                                </div>
                             </form><!-- end form -->
-
-                            <div class="mt-3">
-                                <button type="button" class="btn btn-success w-100">Confirm</button>
-                            </div>
                         </div>
                     </div>
                     <!-- end card body -->
@@ -82,7 +93,7 @@
                 <!-- end card -->
 
                 <div class="mt-4 text-center">
-                    <p class="mb-0">Didn't receive a code ? <a href="auth-pass-reset-basic.html" class="fw-semibold text-primary text-decoration-underline">Resend</a> </p>
+                    <p class="mb-0">Didn't receive a code ? <a href="{% url 'resend_email_verify' request_email %}" class="fw-semibold text-primary text-decoration-underline">Resend</a> </p>
                 </div>
 
             </div>

@@ -25,6 +25,14 @@ class UserCustomManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    def change_password(self, email, password):
+        user = self.model(email=email)
+        if not user:
+            raise ValueError("User email error!")
+        user.password = make_password(password)
+        user.save(using=self._db)
+        return user
+
     def create_user(self, username, email, password, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)

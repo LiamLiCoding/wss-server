@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.utils import timezone
 
@@ -5,14 +6,16 @@ from django.utils import timezone
 
 
 class VerifyCode(models.Model):
-    CONFIRM_TYPE_CHOICE = (
-        ("register", "register"),
-        ("forget", "forget_password")
+    CODE_TYPE_CHOICE = (
+        ('verify_email', 'verify_email'),
+        ('reset_password', 'reset_password'),
     )
+
     code = models.CharField(max_length=20)
     email = models.EmailField(max_length=50)
-    send_type = models.CharField(max_length=20, choices=CONFIRM_TYPE_CHOICE)
+    code_type = models.CharField(max_length=20, choices=CODE_TYPE_CHOICE, default='verify_email')
     send_time = models.DateTimeField(default=timezone.now)
+    expiration_time = models.DateTimeField(blank=True, null=True, default=timezone.now() + datetime.timedelta(minutes=10))
 
     def __unicode__(self):
         return '{0}({1})'.format(self.code, self.email)

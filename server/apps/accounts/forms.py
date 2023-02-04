@@ -32,3 +32,19 @@ class ForgetPasswordForm(forms.Form):
                             widget=forms.EmailInput(attrs={'class': 'form-control', "id": "email",
                                                            'placeholder': "Enter email"}))
 
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(max_length=256, required=True,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control pe-5 password-input',
+                                                                 "onpaste": "return false",
+                                                                 "id": "password-input",
+                                                                 "aria - describedby": "passwordInput",
+                                                                 "pattern": "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+                                                                 'placeholder': "Enter Password"}))
+
+    confirmed_password = forms.CharField(max_length=256, required=True,
+                               widget=forms.PasswordInput(attrs={'class': 'form-control pe-5 password-input',
+                                                                 "onpaste": "return false",
+                                                                 "id": "Confirm password",
+                                                                 "pattern": "(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}",
+                                                                 'placeholder': "Enter Password"}))

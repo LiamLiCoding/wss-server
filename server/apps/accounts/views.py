@@ -1,15 +1,17 @@
 from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import HttpResponse, redirect
 from django.contrib import auth
 from django.views.generic import View
 from django.views.generic import TemplateView
+from django.db.models import ObjectDoesNotExist
 
-from .forms import UserLoginForm, UserRegisterForm, ForgetPasswordForm
+from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
 from .models import Users
+from apps.email_control.models import VerifyCode
 
 
 def redirect_to_login(request):
-    return redirect('/accounts/login/')
+    return HttpResponse('login')
 
 
 class LoginView(View):
@@ -90,7 +92,7 @@ class RegisterView(View):
                 return render(request, 'accounts/register.html', self.get_context_data(message))
 
             self.model.objects.create_user(username=username, password=password, email=email)
-            return redirect('/email_control/email_verify/')
+            return redirect('/email_control/email_verify/' + email)
 
         return render(request, self.template_name, self.get_context_data(message))
 
@@ -99,29 +101,61 @@ class LogoutView(View):
     template_name = 'accounts/logout.html'
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            return redirect('/accounts/login/')
+        auth.logout(request)
         return render(request, self.template_name)
 
 
-class RegisterSuccessView(TemplateView):
-    template_name = 'accounts/register_success.html'
+class ResetPasswordSuccessView(TemplateView):
+    template_name = 'accounts/reset_password_success.html'
 
 
-class ForgetPasswordView(TemplateView):
-    form_class = ForgetPasswordForm
-    template_name = 'accounts/forget_password.html'
+class ResetPasswordView(TemplateView):
+    template_name = 'accounts/reset_password.html'
+    model = VerifyCode
+    form_class = ResetPasswordForm
 
-    def get_context_data(self, request_email, *args):
-        print(request_email)
-        return {}
+    def get_context_data(self, *args, **kwargs):
+        context = {'form': self.form_class}
+        code = kwargs.get('code', None)
+        if code:
+            context["code"] = code
+        if args:
+            context.update(*args)
+        return context
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data.get('email')
-            print(email)
-            return redirect('/accounts/login/')
-        return render(request, self.template_name, self.get_context_data())
+        code = kwargs.get('code')
+        try:
+            code_record = self.model.objects.get(code=code, code_type='reset_password')
+        except ObjectDoesNotExist:
+            return render(request, self.template_name, self.get_context_data({
+                'message': "This reset link is invalid or has expired.",
+                'code': code
+            }))
+
+        email = code_record.email
+        reset_form = self.form_class(request.POST)
+        if reset_form.is_valid():
+            password = reset_form.cleaned_data.get('password')
+            confirmed_password = reset_form.cleaned_data.get('confirmed_password')
+            if password == confirmed_password:
+                user = Users.objects.get(email=email)
+                if isinstance(user, Users):
+                    user.set_password(password)
+                    code_record.delete()
+                    return redirect("/accounts/reset_password_success")
+            else:
+                return render(request, self.template_name, self.get_context_data({
+                    'message': "The two entered passwords do not match",
+                    'code': code
+                }))
+        return render(request, self.template_name, self.get_context_data({
+            'message': "Invalid request. Please check you input.",
+            'code': code
+        }))
+
+
+
+
 
 
