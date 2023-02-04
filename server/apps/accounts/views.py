@@ -1,9 +1,12 @@
-from django.shortcuts import render
-from django.shortcuts import HttpResponse, redirect
+import requests
 from django.contrib import auth
+from django.conf import settings
+from django.shortcuts import render
 from django.views.generic import View
 from django.views.generic import TemplateView
 from django.db.models import ObjectDoesNotExist
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import HttpResponse, redirect
 
 from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
 from .models import Users
@@ -19,7 +22,9 @@ class LoginView(View):
     template_name = 'accounts/login.html'
 
     def get_context_data(self, *args):
-        context = {'login_form': self.form_class}
+        context = {'login_form': self.form_class,
+                   'github_oauth_url': 'https://github.com/login/oauth/authorize?client_id={}'.format(
+                       settings.GITHUB_CLIENT_ID)}
         if args:
             context.update(*args)
         return context
@@ -60,13 +65,91 @@ class LoginView(View):
         return render(request, self.template_name, self.get_context_data({"message": message}))
 
 
+class OAuthBaseView(View):
+    access_token_url = None
+    user_api = None
+    client_id = None
+    client_secret = None
+
+    def authenticate(self, *args, **kwargs):
+        """
+        A function to authenticate user, needs to be rewritten
+        """
+        pass
+
+    def get(self, request, *args, **kwargs):
+        access_token = self.get_access_token(request)
+        user_info = self.get_user_info(access_token)
+        return self.authenticate(user_info)
+
+    def get_access_token(self, request):
+        headers = {'Accept': 'application/json'}
+        data = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'code': request.GET['code']
+        }
+        results = requests.post(self.access_token_url, data, headers=headers, timeout=1)
+        results = results.json()
+
+        if 'access_token' in results:
+            return results['access_token']
+        else:
+            raise PermissionDenied
+
+    def get_user_info(self, access_token):
+        headers = {'Authorization': 'token {}'.format(access_token)}
+        results = requests.get(self.user_api, headers=headers, timeout=1)
+        user_info = results.json()
+        return user_info
+
+    def get_success_url(self):
+        if 'next' in self.request.session:
+            return self.request.session.pop('next')
+        else:
+            return '/'
+
+
+class GitHubOAuthView(OAuthBaseView):
+    access_token_url = 'https://github.com/login/oauth/access_token'
+    user_api = 'https://api.github.com/user'
+    client_id = settings.GITHUB_CLIENT_ID
+    client_secret = settings.GITHUB_CLIENT_SECRET
+
+    def authenticate(self, user_info):
+        """
+        github use info return keys:
+        ['login', 'id', 'node_id', 'avatar_url', 'gravatar_id', 'url', 'html_url', 'followers_url',
+        'following_url', 'gists_url', 'starred_url', 'subscriptions_url', 'organizations_url',
+        'repos_url', 'events_url', 'received_events_url', 'type', 'site_admin', 'name', 'company',
+        'blog', 'location', 'email', 'hireable', 'bio', 'twitter_username', 'public_repos', 'public_gists',
+        'followers', 'following', 'created_at', 'updated_at']
+        """
+
+        user = Users.objects.filter(oauth_id=user_info['id'])
+        if not user:
+            user = Users.objects.create_user(username=user_info['login'],
+                                             oauth_id=user_info['id'],
+                                             email=user_info['email'],
+                                             password='********',
+                                             avatar=user_info['avatar_url'],
+                                             )
+        else:
+            user = user[0]
+        auth.login(self.request, user)
+        self.request.session['user_name'] = user.username
+        return redirect(self.get_success_url())
+
+
 class RegisterView(View):
     model = Users
     form_class = UserRegisterForm
     template_name = 'accounts/register.html'
 
     def get_context_data(self, message=None, *args):
-        context = {'register_form': self.form_class}
+        context = {'register_form': self.form_class,
+                   'github_oauth_url': 'https://github.com/login/oauth/authorize?client_id={}'.format(
+                       settings.GITHUB_CLIENT_ID)}
         if message:
             context['message'] = message
         if args:

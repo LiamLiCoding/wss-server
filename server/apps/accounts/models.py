@@ -98,7 +98,6 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     avatar = models.ImageField(upload_to='accounts/avatar', max_length=200, null=True, blank=True)
     oauth_id = models.PositiveIntegerField('Oauth-id', unique=True, null=True, blank=True)
-    oauth_page_url = models.CharField('Oauth-Page-Url', max_length=255, null=True, blank=True)
 
     is_verified = models.BooleanField("Is verified", default=False)
 

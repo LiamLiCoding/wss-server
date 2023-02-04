@@ -12,6 +12,7 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('oauth/github/', views.GitHubOAuthView.as_view(), name='github_oauth'),
     path('reset_password/<str:code>/', views.ResetPasswordView.as_view(), name='reset_password'),
     path('reset_password_success/', views.ResetPasswordSuccessView.as_view(), name='reset_password_success'),
 ]
