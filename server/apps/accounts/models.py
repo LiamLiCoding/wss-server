@@ -89,8 +89,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField("last name", max_length=150, blank=True)
     email = models.EmailField("email address", unique=True,
                               error_messages={"unique": "A user with that email already exists.", },)
-    is_staff = models.BooleanField("staff status", default=False, help_text="Designates whether the user can log into this admin site.",
-    )
+    is_staff = models.BooleanField("staff status", default=False)
     is_active = models.BooleanField("active", default=True,
                                     help_text="Designates whether this user should be treated as active. "
                                               "Unselect this instead of deleting accounts.",)
@@ -98,15 +97,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
     avatar = models.ImageField(upload_to='accounts/avatar', max_length=200, null=True, blank=True)
     oauth_id = models.PositiveIntegerField('Oauth-id', unique=True, null=True, blank=True)
-
     is_verified = models.BooleanField("Is verified", default=False)
-
-    date_joined = models.DateTimeField("date joined", default=timezone.now)
-
-    STYLE_MODE_CHOICE = (
-        ('dark', 'dark'),
-        ('light', 'light')
-    )
 
     objects = UserCustomManager()
 
@@ -128,6 +119,16 @@ class Users(AbstractBaseUser, PermissionsMixin):
         ordering = ["-create_time"]
         verbose_name = "users"
         verbose_name_plural = "users"
+
+
+class UserSettings(models.Model):
+    STYLE_MODE_CHOICE = (
+        ('dark', 'dark'),
+        ('light', 'light')
+    )
+
+    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    style_mode = models.SmallIntegerField(choices=STYLE_MODE_CHOICE, default='dark')
 
 
 
