@@ -8,6 +8,4 @@ class CreateAPIKeyForm(ModelForm):
         fields = ['name']
         widgets = {
             'name': TextInput(attrs={'class': 'form-control', 'id': "api-key-name",
-                                     "placeholder": "Enter api key name"}),
-
-        }
+                                     "placeholder": "Enter api key name"}),}
