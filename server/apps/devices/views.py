@@ -54,7 +54,7 @@ class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
         return context
 
 
-class DeviceDetailView(DetailView):
+class DeviceDetailView(LoginRequiredMixin, UserSettingsMixin, DetailView):
     model = Devices
     template_name = 'devices/device_detail.html'
     context_object_name = 'device'
@@ -63,6 +63,7 @@ class DeviceDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context.update(self.get_user_info())
         return context
 
 
