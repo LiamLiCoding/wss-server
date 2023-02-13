@@ -10,4 +10,5 @@ from . import views
 
 urlpatterns = [
 	path('list/', views.DeviceListView.as_view(), name='devices_list'),
+	path('create/', views.CreateDeviceView.as_view(), name='create_device'),
 ]

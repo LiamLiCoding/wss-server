@@ -271,7 +271,7 @@
                         <h5 class="modal-title" id="exampleModalLabel">Create Device</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                     </div>
-                    <form class="tablelist-form" autocomplete="off">
+                    <form class="tablelist-form" autocomplete="off" action="{% url 'create_device' %}" method="post">
                         <div class="modal-body">
                             <input type="hidden" id="tasksId" />
                             <div class="row g-3">
