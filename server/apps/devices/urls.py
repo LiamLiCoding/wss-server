@@ -9,9 +9,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-	path('list/', views.DeviceListView.as_view(), name='devices_list'),
+	path('', views.DeviceListView.as_view(), name='devices_list'),
 	path('create/', views.CreateDeviceView.as_view(), name='create_device'),
 	path('detail/<int:device_id>', views.DeviceDetailView.as_view(), name='device_detail'),
 	path('delete/<pk>', views.DeleteDeviceView.as_view(), name='delete_device'),
 	path('update/<pk>', views.UpdateDeviceStatusView.as_view(), name='update_device_status'),
+	path('edit_device/<pk>', views.UpdateDeviceStatusView.as_view(), name='edit_device'),
 ]

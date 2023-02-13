@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.db.models import ObjectDoesNotExist
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import HttpResponse
 
 
 from .models import Devices
@@ -27,6 +28,9 @@ class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_info())
+        activated_devices_num = 0
+        active_devices_num = 0
+        total_conversation = 0
         for each_object in context.get(self.context_object_name, []):
             if not each_object.is_enable:
                 each_object.status = 'disable'
@@ -34,11 +38,17 @@ class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
                 if not each_object.is_activated:
                     each_object.status = 'inactivated'
                 else:
+                    activated_devices_num += 1
                     if each_object.is_active:
                         each_object.status = 'active'
+                        active_devices_num += 1
                     else:
                         each_object.status = 'inactive'
+            total_conversation += each_object.suc_conv_num
 
+        context['activated_devices_num'] = activated_devices_num
+        context['active_devices_num'] = active_devices_num
+        context['total_conversation'] = total_conversation
         if args:
             context.update(*args)
         return context
@@ -87,9 +97,9 @@ class CreateDeviceView(LoginRequiredMixin, View):
             new_device.user = request.user
             new_device.api_key = secrets.token_urlsafe(32)
             new_device.save()
-            return redirect('/devices/list')
+            return redirect('/devices/')
 
-        return redirect('/devices/list')
+        return redirect('/devices/')
 
 
 class UpdateDeviceStatusView(LoginRequiredMixin, View):
@@ -127,5 +137,5 @@ class UpdateDeviceStatusView(LoginRequiredMixin, View):
                     return JsonResponse(response)
             except ObjectDoesNotExist:
                 pass
-        return redirect('/devices/list')
+        return redirect('/devices/')
 

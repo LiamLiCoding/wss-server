@@ -37,8 +37,8 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <p class="fw-medium text-muted mb-0">Total Devices</p>
-                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="4">4</span></h2>
-                                <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">4/10</span> </p>
+                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ devices|length }}">0</span></h2>
+                                <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">{{ devices|length }}/10</span> </p>
                             </div>
                             <div>
                                 <div class="avatar-sm flex-shrink-0">
@@ -58,8 +58,14 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <p class="fw-medium text-muted mb-0">Activated Devices</p>
-                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="1">1</span></h2>
-                                <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">1/4</span> </p>
+                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ activated_devices_num }}">{{ activated_devices_num }}</span></h2>
+                                <p class="mb-0 text-muted">
+                                    {% if activated_devices_num != 0 %}
+                                        <span class="badge bg-light text-success mb-0">{{ activated_devices_num }}/{{ devices|length }}</span>
+                                    {% else %}
+                                        <span class="badge bg-light text-danger mb-0">{{ activated_devices_num }}/{{ devices|length }}</span>
+                                    {% endif %}
+                                </p>
                             </div>
                             <div>
                                 <div class="avatar-sm flex-shrink-0">
@@ -79,8 +85,16 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 <p class="fw-medium text-muted mb-0">Active Devices</p>
-                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="1">1</span></h2>
-                                <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">1/4</span></p>
+                                <h2 class="mt-4 ff-secondary fw-semibold">
+                                    <span class="counter-value" data-target="{{ active_devices_num }}">{{ active_devices_num }}</span>
+                                </h2>
+                                <p class="mb-0 text-muted">
+                                    {% if active_devices_num != 0 %}
+                                        <span class="badge bg-light text-success mb-0">{{ active_devices_num }}/{{ devices|length }}</span>
+                                    {% else %}
+                                        <span class="badge bg-light text-danger mb-0">{{ active_devices_num }}/{{ devices|length }}</span>
+                                    {% endif %}
+                                </p>
                             </div>
                             <div>
                                 <div class="avatar-sm flex-shrink-0">
@@ -99,11 +113,13 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <p class="fw-medium text-muted mb-0">Communication</p>
-                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="200">0</span></h2>
-                                <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">
-                                        <i class="ri-arrow-up-line align-middle"></i> 0.63 %
-                                    </span> vs. previous week</p>
+                                <p class="fw-medium text-muted mb-0">Conversation</p>
+                                <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="{{ total_conversation }}">0</span></h2>
+                                <p class="mb-0 text-muted">
+                                    <span class="badge bg-light text-success mb-0">
+                                        <i class="ri-arrow-up-line align-middle"></i> 0 %
+                                    </span> vs. previous week
+                                </p>
                             </div>
                             <div>
                                 <div class="avatar-sm flex-shrink-0">
@@ -128,7 +144,7 @@
                             <h5 class="card-title mb-0 flex-grow-1">All Devices</h5>
                             <div class="flex-shrink-0">
                                <div class="d-flex flex-wrap gap-2">
-                                    <button class="btn btn-danger add-btn" data-bs-toggle="modal" data-bs-target="#showModal"><i class="ri-add-line align-bottom me-1"></i> Create Device</button>
+                                    <button class="btn btn-danger add-btn" data-bs-toggle="modal" data-bs-target="#createDevice"><i class="ri-add-line align-bottom me-1"></i> Create Device</button>
                                     <button class="btn btn-success" id="remove-actions" onClick="deleteMultiple()"><i class="ri-delete-bin-2-line"></i></button>
                                </div>
                             </div>
@@ -218,11 +234,6 @@
                                                         <li class="list-inline-item">
                                                             <a href="{% url 'device_detail' device.id %}">
                                                                 <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <a class="edit-item-btn" href="#showModal" data-bs-toggle="modal">
-                                                                <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item">
@@ -316,7 +327,7 @@
         </div>
         <!--end delete modal -->
 
-        <div class="modal fade zoomIn" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade zoomIn" id="createDevice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content border-0">
                     <div class="modal-header p-3">

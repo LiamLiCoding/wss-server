@@ -332,8 +332,9 @@
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'api-key' %}">
-                                <i class="mdi mdi-api"></i> <span>Api-key</span>
+                            <a class="nav-link menu-link" href="{% url 'devices_list' %}">
+                                <i class="mdi mdi-devices"></i>
+                                <span data-key="t-advance-ui">Device</span>
                             </a>
                         </li>
 
@@ -355,7 +356,6 @@
                             </div>
                         </li>
 
-                        <li class="nav-item"><a class="nav-link menu-link" href="{% url 'devices_list' %}"><i class="mdi mdi-devices"></i> <span data-key="t-advance-ui">Device</span></a></li>
 
                         <li class="menu-title">
                             <i class="ri-more-fill"></i>
@@ -440,7 +440,8 @@
     <!-- ================== BEGIN SEARCH ACTIVE JS ================== -->
     <script>
         $('ul.navbar-nav li.nav-item').each(function(i){
-            if($(this).children().first().attr('href')==='{{ request.path }}'){
+            let top_url = '/' + '{{ request.path }}'.split('/')[1] + '/';
+            if($(this).children().first().attr('href')===top_url){
                 $(this).children().first().addClass('active');
 				$(this).parent().parent().prev().addClass('active');
             }
