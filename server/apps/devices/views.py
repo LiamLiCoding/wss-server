@@ -92,7 +92,7 @@ class CreateDeviceView(LoginRequiredMixin, View):
         return redirect('/devices/list')
 
 
-class UpdateDeviceView(LoginRequiredMixin, View):
+class UpdateDeviceStatusView(LoginRequiredMixin, View):
     model = Devices
     template_name = "devices/devices_list.html"
 
