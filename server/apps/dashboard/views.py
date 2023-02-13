@@ -19,6 +19,10 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
         return context
 
 
+class ComingSoonView(TemplateView):
+    template_name = 'common/coming-soon.html'
+
+
 def page_404(request, *args, **kwargs):
     return render(request, 'common/page-404.html')
 

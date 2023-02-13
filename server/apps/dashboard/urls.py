@@ -10,4 +10,5 @@ from . import views
 
 urlpatterns = [
 	path('', views.DashboardView.as_view(), name='dashboard'),
+	path('comming-soon/', views.ComingSoonView.as_view(), name='coming_soon'),
 ]
