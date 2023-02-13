@@ -4,7 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
 from apps.accounts.mixins import UserSettingsMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView
 
 from .models import APIKey
 from .forms import CreateAPIKeyForm
