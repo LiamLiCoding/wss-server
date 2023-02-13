@@ -148,7 +148,7 @@
 
                                 <div class="col-xxl-3 col-sm-4">
                                     <div class="input-light">
-                                        <select class="form-control" data-choices data-choices-search-false name="choices-single-default" id="idStatus">
+                                        <select class="form-control" name="choices-single-default" id="idStatus">
                                             <option value="">Status</option>
                                             <option value="all" selected>All</option>
                                             <option value="New">New</option>
@@ -178,14 +178,14 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list">
-                                    {% for device in object_list %}
-                                        <tr>
-                                            <td><a href="#" class="fw-medium link-primary">{{ device.device_name }}</a></td>
+                                    {% for device in devices %}
+                                        <tr id="{{ device.id }}">
+                                            <td><a href="{% url 'device_detail' device.id %}" class="fw-medium link-primary">{{ device.device_name }}</a></td>
                                             <td><span class="badge badge-soft-secondary text-uppercase">{{ device.node_type }}</span></td>
                                             <td>
                                                 <input type="text" class="form-control" readonly value="{{ device.api_key }}">
                                             </td>
-                                            <td>
+                                            <td id="{{ device.id }}_status">
                                                 {% if device.status == 'active' %}
                                                     <span class="badge bg-success text-uppercase">{{ device.status }}</span>
                                                 {% elif device.status == 'inactive' %}
@@ -205,13 +205,11 @@
                                             </td>
                                             <td>
                                                 <div class="form-check form-switch form-switch-md ms-2">
-                                                    <form>
-                                                        {% if device.status == 'disable' %}
-                                                            <input type="checkbox" class="form-check-input">
-                                                        {% else %}
-                                                            <input type="checkbox" class="form-check-input" checked>
-                                                        {% endif %}
-                                                    </form>
+                                                    {% if device.is_enable %}
+                                                        <input type="checkbox" class="form-check-input status_change" data-device-id="{{ device.id }}" checked>
+                                                    {% else %}
+                                                        <input type="checkbox" class="form-check-input status_change" data-device-id="{{ device.id }}">
+                                                    {% endif %}
                                                 </div>
                                             </td>
                                             <td>
@@ -379,5 +377,39 @@ $('#deleteDevice').on('show.bs.modal', function (event) {
     action_url = action_url.replace('device-pk', device_id);
     document.delete_device.action = action_url;
 })
+</script>
+
+<script>
+$(".status_change").change(function() {
+    let enable_status = $(this).prop('checked');
+    let device_id = $(this).data('device-id');
+    let action_url = "{% url 'update_device' 'device-pk' %}";
+    action_url = action_url.replace('device-pk', device_id);
+    let data_obj={'enable':enable_status};
+    $.ajax({
+        url:action_url,
+        type:'post',
+        data:data_obj,
+        success:function (data) {
+            let target_id = data.target_id;
+            let is_enable = data.is_enable;
+            let status = data.device_status;
+            let target_status_node = $("#" + target_id + "_status");
+            let status_inner_html = '';
+            if (status === 'active'){
+                status_inner_html = `<span class="badge bg-success text-uppercase">${status}</span>`
+            }
+            else if(status === 'inactive'){
+                status_inner_html = `<span class="badge bg-warning text-uppercase">${status}</span>`
+            }
+            else if(status === 'inactivated'){
+                status_inner_html = `<span class="badge bg-primary text-uppercase">${status}</span>`
+            }
+            else {
+                status_inner_html = `<span class="badge bg-danger text-uppercase">${status}</span>`
+            }
+            target_status_node.html(status_inner_html);
+        }});
+});
 </script>
 {% endblock %}

@@ -19,19 +19,15 @@ class Devices(models.Model):
         ('C++', 'C++'),
         ('C', 'C'),
     )
-    STATUS_CHOICES = (
-        ('inactive', 'Inactive'),
-        ('inactivated', 'Inactivated'),
-        ('active', 'Active'),
-        ('disable', 'Disable'),
-    )
 
     device_name = models.CharField(max_length=200, blank=False)
     node_type = models.CharField(max_length=200, choices=NODE_TYPE_CHOICES, default='motion detect')
     device_type = models.CharField(max_length=200, choices=DEVICE_TYPE_CHOICES, default='Raspberry Pi')
     api_key = models.CharField(max_length=150, editable=False, blank=False, null=False)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='inactivated')
+    is_activated = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
+    is_enable = models.BooleanField(default=True)
     protocol = models.CharField(max_length=50, choices=PROTOCOL_CHOICES, default='HTTP')
     sdk = models.CharField(max_length=50, choices=SDK_CHOICES, default='Python')
     suc_conv_num = models.PositiveIntegerField(default=0)

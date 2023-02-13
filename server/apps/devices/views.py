@@ -1,10 +1,11 @@
 import secrets
+from django.views.generic import View
+from django.http import JsonResponse
 from apps.accounts.mixins import UserSettingsMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
-from django.views.generic import View
 from django.db.models import ObjectDoesNotExist
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,7 +17,7 @@ from .models import Devices
 class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
     model = Devices
     template_name = "devices/devices_list.html"
-    context_obj_name = "devices"
+    context_object_name = "devices"
     paginate_by = 6
 
     def get_queryset(self):
@@ -26,6 +27,18 @@ class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_info())
+        for each_object in context.get(self.context_object_name, []):
+            if not each_object.is_enable:
+                each_object.status = 'disable'
+            else:
+                if not each_object.is_activated:
+                    each_object.status = 'inactivated'
+                else:
+                    if each_object.is_active:
+                        each_object.status = 'active'
+                    else:
+                        each_object.status = 'inactive'
+
         if args:
             context.update(*args)
         return context
@@ -84,8 +97,35 @@ class UpdateDeviceView(LoginRequiredMixin, View):
     template_name = "devices/devices_list.html"
 
     def post(self, request, *args, **kwargs):
-        print(request)
-        print(args)
-        print(kwargs)
+        device_id = kwargs.get('pk')
+        if device_id:
+            try:
+                device = self.model.objects.get(id=device_id)
+                if device:
+                    enable_status = request.POST.get("enable")
+                    if enable_status:
+                        device.is_enable = False if enable_status == 'false' else True
+                    device.save()
+
+                    # get status
+                    if not device.is_enable:
+                        status = 'disable'
+                    else:
+                        if not device.is_activated:
+                            status = 'inactivated'
+                        else:
+                            if device.is_active:
+                                status = 'active'
+                            else:
+                                status = 'inactive'
+
+                    response = {
+                        'target_id': device.id,
+                        'is_enable': device.is_enable,
+                        'device_status': status,
+                    }
+                    return JsonResponse(response)
+            except ObjectDoesNotExist:
+                pass
         return redirect('/devices/list')
 
