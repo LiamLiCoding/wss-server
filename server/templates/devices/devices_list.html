@@ -178,51 +178,77 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list">
-                                    <tr>
-                                        <td><a href="#" class="fw-medium link-primary">RaspberryPI</a></td>
-                                        <td><span class="badge badge-soft-secondary text-uppercase">Motion detect</span></td>
-                                        <td>
-                                            <input type="text" class="form-control" readonly value="jd79c4y9_5rMpeD9Cgmvs8Omrv-c0WE0xvHlEIq74-w">
-                                        </td>
-                                        <td><span class="badge bg-danger text-uppercase">Inactive</span></td>
-                                        <td>25 Jan, 2022</td>
-                                        <td>
-                                            <div class="form-check form-switch form-switch-md ms-2">
-                                                <input type="checkbox" class="form-check-input" id="customSwitchsizemd">
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="flex-shrink-0">
-                                                <ul class="list-inline mb-0">
-                                                    <li class="list-inline-item">
-                                                        <a href="device_detail.html">
-                                                            <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a class="edit-item-btn" href="#showModal" data-bs-toggle="modal">
-                                                            <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li class="list-inline-item">
-                                                        <a class="remove-item-btn" data-bs-toggle="modal" href="#deleteOrder">
-                                                            <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    {% for device in object_list %}
+                                        <tr>
+                                            <td><a href="#" class="fw-medium link-primary">{{ device.device_name }}</a></td>
+                                            <td><span class="badge badge-soft-secondary text-uppercase">{{ device.node_type }}</span></td>
+                                            <td>
+                                                <input type="text" class="form-control" readonly value="{{ device.api_key }}">
+                                            </td>
+                                            <td>
+                                                {% if device.status == 'active' %}
+                                                    <span class="badge bg-success text-uppercase">{{ device.status }}</span>
+                                                {% elif device.status == 'inactive' %}
+                                                    <span class="badge bg-warning text-uppercase">{{ device.status }}</span>
+                                                {% elif device.status == 'inactivated' %}
+                                                    <span class="badge bg-primary text-uppercase">{{ device.status }}</span>
+                                                {% elif device.status == 'disable' %}
+                                                    <span class="badge bg-danger text-uppercase">{{ device.status }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if not device.last_online  %}
+                                                    <span style="text-align: center">-</span>
+                                                {% else %}
+                                                    {{ device.last_online }}
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <div class="form-check form-switch form-switch-md ms-2">
+                                                    <form>
+                                                        {% if device.status == 'disable' %}
+                                                            <input type="checkbox" class="form-check-input">
+                                                        {% else %}
+                                                            <input type="checkbox" class="form-check-input" checked>
+                                                        {% endif %}
+                                                    </form>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="flex-shrink-0">
+                                                    <ul class="list-inline mb-0">
+                                                        <li class="list-inline-item">
+                                                            <a href="{% url 'device_detail' device.id %}">
+                                                                <i class="ri-eye-fill align-bottom me-2 text-muted"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a class="edit-item-btn" href="#showModal" data-bs-toggle="modal">
+                                                                <i class="ri-pencil-fill align-bottom me-2 text-muted"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a class="remove-item-btn" data-bs-toggle="modal" href="#deleteDevice" data-device-id="{{ device.id }}">
+                                                                <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                             <!--end table-->
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">Click "Create Device" button to add a new start to begin.</p>
+                            {% if object_list|length == 0 %}
+                                <div class="noresult">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                                        <h5 class="mt-2">Sorry! No Result Found</h5>
+                                        <p class="text-muted mb-0">Click "Create Device" button to add a new start to begin.</p>
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         </div>
                         <div class="d-flex justify-content-end mt-2">
                             <div class="pagination-wrap hstack gap-2">
@@ -244,18 +270,20 @@
         </div>
         <!--end row-->
 
-        <div class="modal fade flip" id="deleteOrder" tabindex="-1" aria-hidden="true">
+        <div class="modal fade flip" id="deleteDevice" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-body p-5 text-center">
                         <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:90px;height:90px"></lord-icon>
                         <div class="mt-4 text-center">
                             <h4>You are about to delete a device ?</h4>
-                            <p class="text-muted fs-14 mb-4">Deleting your device will remove all of device information from our database.</p>
+                            <p class="text-muted fs-14 mb-4">Deleting your device will remove all device information from our database.</p>
                             <div class="hstack gap-2 justify-content-center remove">
-                                <button class="btn btn-link btn-ghost-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
-                                    <i class="ri-close-line me-1 align-middle"></i> Close</button>
-                                <button class="btn btn-danger" id="delete-record">Yes, Delete It</button>
+                                <form method="post" id="delete_device" name="delete_device">
+                                    <button class="btn btn-link btn-ghost-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
+                                        <i class="ri-close-line me-1 align-middle"></i> Close</button>
+                                    <button class="btn btn-danger" id="delete-record" type="submit">Yes, Delete It</button>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -271,34 +299,34 @@
                         <h5 class="modal-title" id="exampleModalLabel">Create Device</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                     </div>
+
                     <form class="tablelist-form" autocomplete="off" action="{% url 'create_device' %}" method="post">
                         <div class="modal-body">
-                            <input type="hidden" id="tasksId" />
                             <div class="row g-3">
                                 <div class="col-lg-12">
-                                    <label for="projectName-field" class="form-label">Device Name</label>
-                                    <input type="text" id="projectName-field" class="form-control" placeholder="Device name" required />
+                                    <label for="device_name" class="form-label">Device Name</label>
+                                    <input type="text" name= "device_name" id="device_name" class="form-control" placeholder="Device name" required />
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                    <label for="ticket-status" class="form-label">Node type</label>
-                                    <select class="form-control" data-choices data-choices-search-false id="ticket-status">
-                                        <option value="">Motion detect</option>
-                                        <option value="">Gateway</option>
+                                    <label for="node_type" class="form-label">Node type</label>
+                                    <select class="form-control" name="node_type" id="node_type">
+                                        <option value="motion_detect">Motion detect</option>
+                                        <option value="gateway">Gateway</option>
                                     </select>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
-                                    <label for="ticket-status" class="form-label">Device type</label>
-                                    <select class="form-control" data-choices data-choices-search-false id="ticket-status">
-                                        <option value="">Raspberry Pi</option>
+                                    <label for="device_type" class="form-label">Device type</label>
+                                    <select class="form-control" name="device_type" id="device_type">
+                                        <option value="raspberry_pi">Raspberry Pi</option>
                                     </select>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-12">
-                                    <label for="ticket-status" class="form-label">Select Connection Protocol</label>
+                                    <label for="protocol" class="form-label">Select Connection Protocol</label>
                                     <div class="hstack gap-2 flex-wrap">
-                                        <input type="radio" class="btn-check" name="protocol" id="protocol1"  checked>
+                                        <input type="radio" class="btn-check" name="protocol" id="protocol1" value="HTTP" checked>
                                         <label class="btn btn-outline-primary shadow-none" for="protocol1">HTTPS</label>
                                     </div>
                                 </div>
@@ -306,10 +334,10 @@
                                 <div class="col-lg-12">
                                     <label for="sdk" class="form-label">Select SDK</label>
                                     <div class="hstack gap-2 flex-wrap" id="sdk">
-                                        <input type="radio" class="btn-check" name="sdk" id="sdk1"  checked>
+                                        <input type="radio" class="btn-check" name="sdk" id="sdk1" value="python" checked>
                                         <label class="btn btn-outline-primary shadow-none" for="sdk1">Python</label>
 
-                                        <input type="radio" class="btn-check" name="sdk" id="sdk2" >
+                                        <input type="radio" class="btn-check" name="sdk" id="sdk2" value="c++">
                                         <label class="btn btn-outline-primary shadow-none" for="sdk2">C++</label>
                                     </div>
                                 </div>
@@ -334,16 +362,22 @@
     <!-- container-fluid -->
 </div>
 <!-- End Page-content -->
-<!-- End Page-content -->
 {% endblock %}
 
 {% block js %}
 
-
-
 <script src="{% static 'common/libs/list.js/list.min.js' %}"></script>
 <script src="{% static 'common/libs/list.pagination.js/list.pagination.min.js' %}"></script>
-{#<script src="{% static 'devices/js/devices_list.init.js' %}"></script>#}
 <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
-    
+
+<script>
+$('#deleteDevice').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let device_id = button.data('device-id');
+
+    let action_url = "{% url 'delete_device' 'device-pk' %}";
+    action_url = action_url.replace('device-pk', device_id);
+    document.delete_device.action = action_url;
+})
+</script>
 {% endblock %}
