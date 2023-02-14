@@ -24,13 +24,11 @@
                         </div>
 
                         <div class="mt-5">
-                            <h4>Get notified when we launch</h4>
-                            <p class="text-muted">Don't worry we will not spam you 😊</p>
+                            <h4>Wonderful features coming soon </h4>
                         </div>
 
-                        <div class="input-group countdown-input-group mx-auto my-4">
-                            <input type="email" class="form-control border-light shadow" placeholder="Enter your email address" aria-label="search result" aria-describedby="button-email">
-                            <button class="btn btn-success" type="button" id="button-email">Send<i class="ri-send-plane-2-fill align-bottom ms-2"></i></button>
+                        <div class="mt-5">
+                            <h6>Go back to <a href="{% url 'dashboard' %}"><span class="text-primary">dashboard</span></a></h6>
                         </div>
                     </div>
                 </div>
@@ -67,7 +65,8 @@ document.addEventListener("DOMContentLoaded",
                 '</div></div><div class="countdownlist-item"><div class="count-title">Seconds</div><div class="count-num">'
                 + Math.floor(t % 6e4 / 1e3) + "</div></div>";
             document.getElementById("countdown") && (document.getElementById("countdown").innerHTML = n),
-            t < 0 && (clearInterval(d), document.getElementById("countdown").innerHTML = '<div class="countdown-endtxt">The countdown has ended!</div>')
+            t < 0 && (clearInterval(d),
+                document.getElementById("countdown").innerHTML = '<div class="countdown-endtxt">The countdown has ended!</div>')
         }, 1e3)
     });
     </script>
