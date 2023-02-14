@@ -1,6 +1,6 @@
 # warehouse-surveillance-system
 
-Website: wssweb.net
+Website: [Wss-web](https://wssweb.net/)
 
 The project is divided into two parts: client and server
 
