@@ -63,9 +63,9 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <p class="fw-medium text-muted mb-0">Nodes</p>
+                                            <p class="fw-medium text-muted mb-0">Devices</p>
                                             <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="1">0</span></h2>
-                                            <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">1/2</span></p>
+                                            <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0">1/4</span></p>
                                         </div>
                                         <div>
                                             <div class="avatar-sm flex-shrink-0">
@@ -84,9 +84,9 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <p class="fw-medium text-muted mb-0">Camera</p>
-                                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="4">0</span></h2>
-                                            <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">4/8</span></p>
+                                            <p class="fw-medium text-muted mb-0">New Log</p>
+                                            <h2 class="mt-4 ff-secondary fw-semibold"><span class="counter-value" data-target="30">0</span></h2>
+                                            <p class="mb-0 text-muted"><span class="badge bg-light text-danger mb-0">0/32</span></p>
                                         </div>
                                         <div>
                                             <div class="avatar-sm flex-shrink-0">
@@ -154,7 +154,7 @@
                     <div class="col-xl-6">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Live Users By Country</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Devices location</h4>
                                 <div class="flex-shrink-0">
                                     <button type="button" class="btn btn-soft-primary btn-sm shadow-none">
                                         Export Report
@@ -173,29 +173,29 @@
                                             <tr>
                                                 <th>Duration (Secs)</th>
                                                 <th style="width: 30%;">Sessions</th>
-                                                <th style="width: 30%;">Views</th>
+                                                <th style="width: 30%;">Logs</th>
                                             </tr>
                                         </thead>
                                         <tbody class="border-0">
                                             <tr>
                                                 <td>0-30</td>
-                                                <td>2,250</td>
-                                                <td>4,250</td>
+                                                <td>250</td>
+                                                <td>100</td>
                                             </tr>
                                             <tr>
                                                 <td>31-60</td>
-                                                <td>1,501</td>
-                                                <td>2,050</td>
+                                                <td>501</td>
+                                                <td>50</td>
                                             </tr>
                                             <tr>
                                                 <td>61-120</td>
-                                                <td>750</td>
-                                                <td>1,600</td>
+                                                <td>150</td>
+                                                <td>600</td>
                                             </tr>
                                             <tr>
                                                 <td>121-240</td>
-                                                <td>540</td>
-                                                <td>1,040</td>
+                                                <td>40</td>
+                                                <td>40</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -208,7 +208,7 @@
                     <div class="col-xl-6">
                         <div class="card card-height-100">
                             <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Sessions by Countries</h4>
+                                <h4 class="card-title mb-0 flex-grow-1">Sessions by Devices</h4>
                                 <div>
                                     <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
                                         ALL
@@ -237,7 +237,7 @@
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-header border-0 align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Audiences Metrics</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">Log analysis</h4>
                         <div>
                             <button type="button" class="btn btn-soft-secondary btn-sm shadow-none">
                                 ALL
@@ -296,7 +296,7 @@
             <div class="col-xl-6">
                 <div class="card card-height-100">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Audiences Sessions by Country</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">Logs anaylsis</h4>
                         <div class="flex-shrink-0">
                             <div class="dropdown card-header-dropdown">
                                 <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -325,7 +325,7 @@
             <div class="col-xl-4">
                 <div class="card card-height-100">
                     <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Users by Device</h4>
+                        <h4 class="card-title mb-0 flex-grow-1">Devices type</h4>
                         <div class="flex-shrink-0">
                             <div class="dropdown card-header-dropdown">
                                 <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -348,11 +348,10 @@
                                 <tbody class="border-0">
                                     <tr>
                                         <td>
-                                            <h4 class="text-truncate fs-14 fs-medium mb-0"><i class="ri-stop-fill align-middle fs-18 text-primary me-2"></i>Desktop
-                                                Users</h4>
+                                            <h4 class="text-truncate fs-14 fs-medium mb-0"><i class="ri-stop-fill align-middle fs-18 text-primary me-2"></i>RaspberryPi</h4>
                                         </td>
                                         <td>
-                                            <p class="text-muted mb-0"><i data-feather="users" class="me-2 icon-sm"></i>78.56k</p>
+                                            <p class="text-muted mb-0"><i data-feather="users" class="me-2 icon-sm"></i>3</p>
                                         </td>
                                         <td class="text-end">
                                             <p class="text-success fw-medium fs-12 mb-0"><i class="ri-arrow-up-s-fill fs-5 align-middle"></i>2.08%
