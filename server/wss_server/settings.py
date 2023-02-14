@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 from . import key_define
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -84,6 +85,10 @@ AUTHENTICATION_BACKENDS = (
 
 SILENCED_SYSTEM_CHECKS = ['auth.W004']
 
+ADMINS = key_define.ADMINS
+SEND_BROKEN_LINK_EMAILS = True
+MANAGERS = ADMINS
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -143,6 +148,11 @@ else:
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# logfile
+log_path = BASE_DIR / 'logs'
+if not os.path.exists(log_path):
+    os.makedirs("logs")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -154,8 +164,65 @@ EMAIL_PORT = key_define.EMAIL_PORT
 EMAIL_HOST_USER = key_define.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = key_define.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = key_define.EMAIL_USE_TLS
+EMAIL_SUBJECT_PREFIX = key_define.EMAIL_SUBJECT_PREFIX
 EMAIL_USE_SSL = key_define.EMAIL_USE_SSL
 DEFAULT_FROM_EMAIL = key_define.EMAIL_HOST_USER
 
 GITHUB_CLIENT_ID = key_define.GITHUB_CLIENT_ID
 GITHUB_CLIENT_SECRET = key_define.GITHUB_CLIENT_SECRET
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'}
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        }
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'logging.NullHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'include_html': True,
+        },
+        'debug': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, "logs", 'debug.log'),
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'django.request': {
+            'handlers': ['debug', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+    }
+}
