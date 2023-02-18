@@ -25,6 +25,7 @@ from apps.dashboard import views as dashboard_views
 from apps.dashboard import urls as dashboard_urls
 from apps.api_control import urls as api_control_urls
 from apps.devices import urls as devices_urls
+from apps.api import urls as api_urls
 from apps.email_control import urls as email_control_urls
 
 
@@ -36,6 +37,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include(accounts_urls)),
     path('devices/', include(devices_urls)),
+    path('api/', include(api_urls)),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
