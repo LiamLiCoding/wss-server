@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'apps.email_control',
     'apps.api_control',
+    'apps.api',
+    'apps.record',
     'apps.accounts',
     'apps.devices',
 ]

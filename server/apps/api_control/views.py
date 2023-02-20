@@ -1,5 +1,4 @@
 import secrets
-import datetime
 from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
 from apps.accounts.mixins import UserSettingsMixin
