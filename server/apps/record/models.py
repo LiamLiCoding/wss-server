@@ -2,7 +2,7 @@ from django.db import models
 from apps.devices.models import Devices
 
 
-class SurveillanceLog(models.Model):
+class EventLog(models.Model):
     EVENT_TYPE = (
         ('1', 'Event1'),
         ('2', 'Event2'),
@@ -17,8 +17,29 @@ class SurveillanceLog(models.Model):
 
     class Meta:
         ordering = ("-created_time",)
-        verbose_name = "SurveillanceLog"
-        verbose_name_plural = "SurveillanceLog"
+        verbose_name = "eventlog"
+        verbose_name_plural = "eventlog"
 
     def __str__(self) -> str:
-        return str(self.device)
+        return str(self.event)
+
+
+class OperationLog(models.Model):
+    OPERATION_TYPE = (
+        ('Shutdown', 'Shutdown'),
+        ('Restart', 'Restart'),
+        ('Other', 'Other'),
+    )
+
+    device = models.ForeignKey(Devices, on_delete=models.CASCADE)
+    operation = models.CharField(max_length=50, choices=OPERATION_TYPE, default='1')
+    message = models.TextField(null=True, default=True)
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-created_time",)
+        verbose_name = "operationlog"
+        verbose_name_plural = "operationlog"
+
+    def __str__(self) -> str:
+        return str(self.operation)

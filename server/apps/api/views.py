@@ -1,12 +1,10 @@
-import datetime
-
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import ObjectDoesNotExist
 from django.utils import timezone
 from apps.devices.models import Devices
-from apps.record.models import SurveillanceLog
+from apps.record.models import EventLog
 from apps.devices.serializers import DevicesSerializer
 
 
@@ -36,14 +34,14 @@ class GetDeviceInfoView(APIView, DeviceInfoMixin):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-class SurveillanceLogView(APIView, DeviceInfoMixin):
+class EventLogView(APIView, DeviceInfoMixin):
     def post(self, request):
         device_key = request.POST.get('device_key')
         event = request.POST.get('event')
         message = request.POST.get('message')
         device, device_data = self.get_device_data(device_key)
         if device_data:
-            new_log = SurveillanceLog(message=message, event=event, device=device)
+            new_log = EventLog(message=message, event=event, device=device)
             new_log.save()
             return Response(status=status.HTTP_201_CREATED)
         else:
