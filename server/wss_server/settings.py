@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'channels',
     'apps.email_control',
     'apps.api_control',
     'apps.api',
     'apps.record',
     'apps.accounts',
     'apps.devices',
+    'apps.websocket'
 ]
 
 MIDDLEWARE = [
@@ -59,6 +61,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'wss_server.urls'
+ASGI_APPLICATION = 'wss_server.routing.application'
 
 TEMPLATES = [
     {
