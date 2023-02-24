@@ -47,7 +47,6 @@ INSTALLED_APPS = [
     'apps.record',
     'apps.accounts',
     'apps.devices',
-    'apps.websocket'
 ]
 
 MIDDLEWARE = [

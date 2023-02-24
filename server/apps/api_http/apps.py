@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class NotificationConfig(AppConfig):
+class ApiHttpConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.websocket'
+    name = 'api_http'
