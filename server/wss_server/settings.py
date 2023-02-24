@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'channels',
     'apps.email_control',
     'apps.api_control',
-    'apps.api',
+    'apps.api_websocket',
+    'apps.api_http'
     'apps.record',
     'apps.accounts',
     'apps.devices',
@@ -53,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

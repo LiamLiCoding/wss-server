@@ -153,6 +153,7 @@
 
                     <div class="card-body border border-dashed border-end-0 border-start-0">
                         <form>
+                            {% csrf_token %}
                             <div class="row g-3">
                                 <div class="col-xxl-5 col-sm-12">
                                     <div class="search-box">
@@ -315,6 +316,7 @@
                             <p class="text-muted fs-14 mb-4">Deleting your device will remove all device information from our database.</p>
                             <div class="hstack gap-2 justify-content-center remove">
                                 <form method="post" id="delete_device" name="delete_device">
+                                    {% csrf_token %}
                                     <button class="btn btn-link btn-ghost-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
                                         <i class="ri-close-line me-1 align-middle"></i> Close</button>
                                     <button class="btn btn-danger" id="delete-record" type="submit">Yes, Delete It</button>
@@ -336,6 +338,7 @@
                     </div>
 
                     <form class="tablelist-form" autocomplete="off" action="{% url 'create_device' %}" method="post">
+                        {% csrf_token %}
                         <div class="modal-body">
                             <div class="row g-3">
                                 <div class="col-lg-12">

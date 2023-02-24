@@ -219,6 +219,7 @@
                 <button type="button" class="btn-close" id="close-modal" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form autocomplete="off" method="post" action="{%  url 'create-api-key' %}">
+                {% csrf_token %}
                 <div class="modal-body">
                     <div id="api-key-error-msg" class="alert alert-danger py-2 d-none">
                         {{ create_fail_message }}
@@ -258,6 +259,7 @@
                 </div>
                 <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
                     <form method="post" id="delete-api-key" name="delete_api_key">
+                        {% csrf_token %}
                         {{ delete_form.key }}
                         <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn w-sm btn-danger " id="delete-record">Yes, Delete It!</button>
