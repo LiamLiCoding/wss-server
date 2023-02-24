@@ -17,7 +17,7 @@ class UserCustomManager(BaseUserManager):
         if not username:
             raise ValueError("The given username must be set")
         if not email:
-            raise ValueError("The given username must be set")
+            raise ValueError("The given email must be set")
         email = self.normalize_email(email)
 
         user = self.model(username=username, email=email, **extra_fields)
@@ -130,6 +130,8 @@ class UserSettings(models.Model):
     user = models.OneToOneField(Users, on_delete=models.CASCADE)
     style_mode = models.SmallIntegerField(choices=STYLE_MODE_CHOICE, default='dark')
 
-
+    class Meta:
+        verbose_name = "usersettings"
+        verbose_name_plural = "usersettings"
 
 

@@ -1,10 +1,11 @@
 import requests
 import time
+import status_code
 
 from api_define import *
 
 
-class BaseCommunicate:
+class Communicate:
     def __init__(self, device_key):
         self.m_device_key = device_key
 
@@ -17,8 +18,7 @@ class BaseCommunicate:
         timestamp = self.get_timestamp()
         body = {
             'timestamp': timestamp,
-            'deviceName': 'Test',
-            'productKey': self.m_device_key
+            'device_key': self.m_device_key
         }
         if data:
             body.update(data)
@@ -26,12 +26,23 @@ class BaseCommunicate:
 
     def get_device_info(self):
         request = requests.post(GET_DEVICE_INFO, data=self.get_body_data())
-        print(request.text)
-        print(request.headers)
+        return request.text
+
+    def upload_event_log(self, event, message):
+        log_info = {
+            'event': event,
+            'message': message
+        }
+        data = self.get_body_data(log_info)
+        request = requests.post(UPLOAD_EVENT_LOG, data=data)
+        if request.status_code != status_code.HTTP_201_CREATED:
+            print("Upload log failed")
 
 
 if __name__ == '__main__':
-    connection = BaseCommunicate('pPrIkmvSP89JYo_xrGwPwbEVR6wRZO-cixisuDuGlDM')
+    connection = Communicate('KUJ_zIZp2Qp5KpLl61-tWdl6zPvPbZmtEGrndhVRsVc')
     connection.get_device_info()
+    connection.upload_event_log('1', 'test')
+
 
 

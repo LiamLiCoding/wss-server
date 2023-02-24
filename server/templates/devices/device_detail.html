@@ -27,22 +27,6 @@
 
             <div class="row">
                 <div class="col-xxl-3">
-                    <div class="card">
-                        <div class="card-body text-center">
-                            <h6 class="card-title mb-3 flex-grow-1 text-start">Time Tracking</h6>
-                            <div class="mb-2">
-                                <lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
-                            </div>
-                            <h3 class="mb-1">9 hrs 13 min</h3>
-                            <h5 class="fs-14 mb-4">Online time</h5>
-                            <div class="hstack gap-2 justify-content-center">
-                                <button class="btn btn-danger btn-sm"><i class="ri-stop-circle-line align-bottom me-1"></i> Stop</button>
-                                <button class="btn btn-success btn-sm"><i class="ri-play-circle-line align-bottom me-1"></i> Start</button>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end card-->
-
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="d-flex mb-3">
@@ -58,7 +42,7 @@
                                     <tbody>
                                         <tr>
                                             <td class="fw-medium">Device name</td>
-                                            <td>{{ device.device_name }}</td>
+                                            <td class="fw-medium">{{ device.device_name }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Node Type</td>
@@ -90,6 +74,21 @@
                                 </table>
                                 <!--end table-->
                             </div>
+                        </div>
+                    </div>
+                    <!--end card-->
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6 class="card-title mb-3 flex-grow-1 text-start">Time Tracking</h6>
+                            <div class="mb-2">
+                                <lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
+                            </div>
+                            <h3 class="mb-1">9 hrs 13 min</h3>
+                            <h5 class="fs-14 mb-4">Online time</h5>
+{#                            <div class="hstack gap-2 justify-content-center">#}
+{#                                <button class="btn btn-danger btn-sm"><i class="ri-stop-circle-line align-bottom me-1"></i> Stop</button>#}
+{#                                <button class="btn btn-success btn-sm"><i class="ri-play-circle-line align-bottom me-1"></i> Start</button>#}
+{#                            </div>#}
                         </div>
                     </div>
                     <!--end card-->
@@ -480,70 +479,70 @@
             </div>
             <!--end row-->
 
-        <div class="modal fade zoomIn" id="editDevice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0">
-                    <div class="modal-header p-3">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit Device</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            <div class="modal fade zoomIn" id="editDevice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content border-0">
+                        <div class="modal-header p-3">
+                            <h5 class="modal-title" id="exampleModalLabel">Edit Device</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                        </div>
+
+                        <form class="tablelist-form" autocomplete="off" action="{% url 'edit_device' 1 %}" method="post">
+                            <div class="modal-body">
+                                <div class="row g-3">
+                                    <div class="col-lg-12">
+                                        <label for="device_name" class="form-label">Device Name</label>
+                                        <input type="text" name= "device_name" id="device_name" class="form-control" placeholder="Device name" value="{{ device.device_name }}" required />
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="node_type" class="form-label">Node type</label>
+                                        <select class="form-control" name="node_type" id="node_type">
+                                            <option value="motion_detect" {% if device.node_type == 'motion_detect' %} selected {% endif %}>Motion detect</option>
+                                            <option value="gateway"{% if device.node_type == 'gateway' %} selected {% endif %}>Gateway</option>
+                                        </select>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-6">
+                                        <label for="device_type" class="form-label">Device type</label>
+                                        <select class="form-control" name="device_type" id="device_type">
+                                            <option value="raspberry_pi" {% if device.device_type == 'raspberry_pi' %} selected {% endif %}>Raspberry Pi</option>
+                                        </select>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-12">
+                                        <label for="protocol" class="form-label">Select Connection Protocol</label>
+                                        <div class="hstack gap-2 flex-wrap">
+                                            <input type="radio" class="btn-check" name="protocol" id="protocol1" value="HTTP" {% if device.protocol == 'HTTP' %} checked {% endif %}>
+                                            <label class="btn btn-outline-primary shadow-none" for="protocol1">HTTPS</label>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                    <div class="col-lg-12">
+                                        <label for="sdk" class="form-label">Select SDK</label>
+                                        <div class="hstack gap-2 flex-wrap" id="sdk">
+                                            <input type="radio" class="btn-check" name="sdk" id="sdk1" value="python" {% if device.sdk == 'python' %} checked {% endif %}>
+                                            <label class="btn btn-outline-primary shadow-none" for="sdk1">Python</label>
+
+                                            <input type="radio" class="btn-check" name="sdk" id="sdk2" value="c++" {% if device.sdk == 'c++' %} checked {% endif %}>
+                                            <label class="btn btn-outline-primary shadow-none" for="sdk2">C++</label>
+                                        </div>
+                                    </div>
+                                    <!--end col-->
+                                </div>
+                                <!--end row-->
+                            </div>
+                            <div class="modal-footer">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" id="edit-btn">Update Device</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-
-                    <form class="tablelist-form" autocomplete="off" action="{% url 'edit_device' 1 %}" method="post">
-                        <div class="modal-body">
-                            <div class="row g-3">
-                                <div class="col-lg-12">
-                                    <label for="device_name" class="form-label">Device Name</label>
-                                    <input type="text" name= "device_name" id="device_name" class="form-control" placeholder="Device name" value="{{ device.device_name }}" required />
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-6">
-                                    <label for="node_type" class="form-label">Node type</label>
-                                    <select class="form-control" name="node_type" id="node_type">
-                                        <option value="motion_detect" {% if device.node_type == 'motion_detect' %} selected {% endif %}>Motion detect</option>
-                                        <option value="gateway"{% if device.node_type == 'gateway' %} selected {% endif %}>Gateway</option>
-                                    </select>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-6">
-                                    <label for="device_type" class="form-label">Device type</label>
-                                    <select class="form-control" name="device_type" id="device_type">
-                                        <option value="raspberry_pi" {% if device.device_type == 'raspberry_pi' %} selected {% endif %}>Raspberry Pi</option>
-                                    </select>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <label for="protocol" class="form-label">Select Connection Protocol</label>
-                                    <div class="hstack gap-2 flex-wrap">
-                                        <input type="radio" class="btn-check" name="protocol" id="protocol1" value="HTTP" {% if device.protocol == 'HTTP' %} checked {% endif %}>
-                                        <label class="btn btn-outline-primary shadow-none" for="protocol1">HTTPS</label>
-                                    </div>
-                                </div>
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <label for="sdk" class="form-label">Select SDK</label>
-                                    <div class="hstack gap-2 flex-wrap" id="sdk">
-                                        <input type="radio" class="btn-check" name="sdk" id="sdk1" value="python" {% if device.sdk == 'python' %} checked {% endif %}>
-                                        <label class="btn btn-outline-primary shadow-none" for="sdk1">Python</label>
-
-                                        <input type="radio" class="btn-check" name="sdk" id="sdk2" value="c++" {% if device.sdk == 'c++' %} checked {% endif %}>
-                                        <label class="btn btn-outline-primary shadow-none" for="sdk2">C++</label>
-                                    </div>
-                                </div>
-                                <!--end col-->
-                            </div>
-                            <!--end row-->
-                        </div>
-                        <div class="modal-footer">
-                            <div class="hstack gap-2 justify-content-end">
-                                <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-success" id="edit-btn">Update Device</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
-        </div>
-        <!--end modal-->
+            <!--end modal-->
 
         </div>
         <!-- container-fluid -->
