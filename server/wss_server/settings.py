@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'apps.email_control',
     'apps.api_control',
     'apps.api_websocket',
-    'apps.api_http'
     'apps.record',
     'apps.accounts',
     'apps.devices',
