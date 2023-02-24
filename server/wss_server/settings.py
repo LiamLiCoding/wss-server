@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = key_define.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -33,20 +33,22 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'channels',
     'apps.email_control',
     'apps.api_control',
     'apps.api_websocket',
     'apps.record',
     'apps.accounts',
     'apps.devices',
+    'apps.chat',
 ]
 
 MIDDLEWARE = [
@@ -58,9 +60,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'wss_server.urls'
-ASGI_APPLICATION = 'wss_server.routing.application'
 
 TEMPLATES = [
     {
@@ -80,6 +79,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wss_server.wsgi.application'
+ASGI_APPLICATION = 'wss_server.asgi.application'
+
+ROOT_URLCONF = 'wss_server.urls'
 
 LOGIN_URL = '/accounts/login/'
 AUTH_USER_MODEL = 'accounts.Users'
