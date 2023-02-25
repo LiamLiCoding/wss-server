@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = key_define.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'apps.record',
     'apps.accounts',
     'apps.devices',
-    'apps.chat',
 ]
 
 MIDDLEWARE = [
