@@ -9,7 +9,7 @@ a, b = cap.read()
 print(a, b)
 
 # fgbg = cv2.createBackgroundSubtractorMOG2(history=5, varThreshold=150)
-fgbg = cv2.bgsegm.createBackgroundSubtractorMOG(history=150, backgroundRatio=0.3)
+fgbg = cv2.bgsegm.createBackgroundSubtractorCNT()
 
 def line1(x,y):
     return y - (29*x)/96.0 - 300
