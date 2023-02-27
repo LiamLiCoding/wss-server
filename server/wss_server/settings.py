@@ -33,35 +33,32 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'channels',
     'apps.email_control',
     'apps.api_control',
-    'apps.api',
+    'apps.api_websocket',
     'apps.record',
     'apps.accounts',
     'apps.devices',
-    'apps.websocket'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'wss_server.urls'
-ASGI_APPLICATION = 'wss_server.routing.application'
 
 TEMPLATES = [
     {
@@ -81,6 +78,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'wss_server.wsgi.application'
+ASGI_APPLICATION = 'wss_server.asgi.application'
+
+ROOT_URLCONF = 'wss_server.urls'
 
 LOGIN_URL = '/accounts/login/'
 AUTH_USER_MODEL = 'accounts.Users'
@@ -106,6 +106,10 @@ if DEBUG:
     }
 else:
     DATABASES = key_define.DATABASE_INFO
+
+CACHES = key_define.CACHES
+
+CHANNEL_LAYERS = key_define.CHANNEL_LAYERS
 
 
 # Password validation
@@ -175,59 +179,3 @@ DEFAULT_FROM_EMAIL = key_define.EMAIL_HOST_USER
 
 GITHUB_CLIENT_ID = key_define.GITHUB_CLIENT_ID
 GITHUB_CLIENT_SECRET = key_define.GITHUB_CLIENT_SECRET
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'}
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        }
-    },
-    'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'logging.NullHandler',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'filters': ['require_debug_false'],
-            'include_html': True,
-        },
-        'debug': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, "logs", 'debug.log'),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 5,
-            'formatter': 'standard',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False
-        },
-        'django.request': {
-            'handlers': ['debug', 'mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-
-        'django.security.DisallowedHost': {
-            'handlers': ['null'],
-            'propagate': False,
-        },
-    }
-}

@@ -20,7 +20,7 @@ class APIKey(models.Model):
     suc_conv_num = models.PositiveIntegerField(default=0)
     failed_conv_num = models.PositiveIntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
-    expiration_time = models.DateTimeField(blank=True, null=True, default=timezone.now() + datetime.timedelta(days=180))
+    expiration_time = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         ordering = ("-created_time",)

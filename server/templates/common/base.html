@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <title>{% block title %}WSS{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Warehouse serveillance system" name="description" />
+    <meta content="Warehouse surveillance system" name="description" />
     <meta content="Haozheng Li" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
@@ -73,12 +73,13 @@
                         </div>
 
                         <!-- Dark and light mode switch -->
-{#                        <div class="ms-1 header-item d-none d-sm-flex">#}
-{#                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">#}
-{#                                <i class='bx bx-moon fs-22'></i>#}
-{#                            </button>#}
-{#                        </div>#}
+                        <div class="ms-1 header-item d-none d-sm-flex">
+                            <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode shadow-none">
+                                <i class='bx bx-moon fs-22'></i>
+                            </button>
+                        </div>
 
+                        {% comment %}
                         <!-- Notification -->
                         <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
                             <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
@@ -162,6 +163,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endcomment %}
 
                         <!-- User -->
                         <div class="dropdown ms-sm-3 header-item topbar-user">
@@ -255,6 +257,7 @@
                     <div id="two-column-menu">
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
+                        {% comment %}
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
@@ -262,6 +265,7 @@
                                 <span data-key="t-dashboards">Dashboards</span>
                             </a>
                         </li>
+                        {% endcomment %}
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li>
 
@@ -365,13 +369,12 @@
     <script src="{% static 'common/libs/node-waves/waves.min.js' %}"></script>
     <script src="{% static 'common/libs/feather-icons/feather.min.js' %}"></script>
     <script src="{% static 'common/js/plugins/lord-icon-2.1.0.js' %}"></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/toastify-js'></script>
 
     {% block js %}{% endblock %}
 
     <!-- App js -->
     <script src="{% static 'common/js/app.js' %}"></script>
-
-    <!-- ================== BEGIN SEARCH ACTIVE JS ================== -->
     <script>
         $('ul.navbar-nav li.nav-item').each(function(i){
             let top_url = '/' + '{{ request.path }}'.split('/')[1] + '/';
@@ -381,7 +384,37 @@
             }
     });
     </script>
-	<!-- ================== END SEARCH ACTIVE JS ================== -->
+
+<script>
+    const notificationSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
+
+    notificationSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        let message = data.message;
+        let duration = data.duration;
+        let style = data.style;
+        let type = data.notification_type ? data.notification_type: 'success';
+        console.log(type);
+        Toastify({
+            newWindow: !0,
+            text: message,
+            gravity: "top",
+            position: "center",
+            className: "bg-" + type,
+            stopOnFocus: !0,
+            offset: {x: 0, y: 0,},
+            duration: duration,
+            close: "close",
+            style: style === "gradient" ? {
+                background: "linear-gradient(to right, #0AB39C, #405189)"
+            }: ""
+        }).showToast()
+    };
+
+    notificationSocket.onclose = function(e) {
+        console.error('Notification socket closed unexpectedly');
+    };
+</script>
 </body>
 
 </html>

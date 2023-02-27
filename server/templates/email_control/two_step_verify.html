@@ -41,7 +41,8 @@
                             </div>
 
                             <form autocomplete="off" method="post" action="{% url 'email_verify' request_email %}">
-                               {% if message %}
+                                {% csrf_token %}
+                                {% if message %}
                                 <div class="alert alert-danger alert-dismissible alert-solid alert-label-icon shadow fade show" role="alert">
                                     <i class="ri-error-warning-line label-icon"></i>{{ message }}
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
