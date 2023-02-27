@@ -14,10 +14,20 @@ from django.db.models import ObjectDoesNotExist
 from apps.devices.models import Devices
 
 
+async def send_notification(user_id, message, notification_type="success", style='', duration=3000):
+    channel_layer = get_channel_layer()
+    await channel_layer.group_send('notification_{}'.format(user_id), {"type": "group_message",
+                                                                       "message": message,
+                                                                       "notification_type": notification_type,
+                                                                       "style": style,
+                                                                       "duration": duration})
+
+
 class DeviceConsumer(AsyncWebsocketConsumer):
     api_key = ''
     device = None
     device_name = ''
+    user_id = 0
 
     async def connect(self):
         self.api_key = self.scope["url_route"]["kwargs"].get('api_key', '')
@@ -25,9 +35,9 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         if self.device and self.device.is_enable:
             await self.accept()
             await self.update_device(active=True)
-            channel_layer = get_channel_layer()
+            print(self.user_id)
             message = "Device: {} is online now.".format(self.device.device_name)
-            await channel_layer.group_send('notification_3', {"type": "group_message", "message": message})
+            await send_notification(self.user_id, message=message, duration=5000)
         else:
             await self.close(code=3003)
 
@@ -37,6 +47,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             device = Devices.objects.get(api_key=self.api_key)
             if device:
                 self.device = device
+                self.user_id = device.user.id
                 return device
         except ObjectDoesNotExist:
             return
@@ -51,11 +62,8 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.update_device(active=False)
-
-        channel_layer = get_channel_layer()
         message = "Device: {} is offline now.".format(self.device.device_name)
-        await channel_layer.group_send('notification_3', {"type": "group_message", "message": message,
-                                                          "notification_type": "warning"})
+        await send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
 
     async def receive(self, text_data=None, bytes_data=None):
         self.device = await self.get_device()   # get the newest database info
