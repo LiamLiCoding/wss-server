@@ -35,7 +35,7 @@ class CSICamera:
             self.m_thread.start()
     
     def stop(self):
-        self.running = False
+        self.m_running = False
         if self.m_thread:
             self.m_thread.join()
         self.m_thread = None
@@ -49,9 +49,9 @@ class CSICamera:
     def update(self):
         while self.m_running:
             try:
-                grabb_result, frame = self.m_video_capture.read()
+                grabbed, frame = self.m_video_capture.read()
                 with self.m_thread_lock:
-                    self.m_grabbed = grabb_result
+                    self.m_grabbed = grabbed
                     self.m_frame = frame
             except RuntimeError:
                 print("Could not read image from camera")
