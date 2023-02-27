@@ -35,7 +35,6 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         if self.device and self.device.is_enable:
             await self.accept()
             await self.update_device(active=True)
-            print(self.user_id)
             message = "Device: {} is online now.".format(self.device.device_name)
             await send_notification(self.user_id, message=message, duration=5000)
         else:
@@ -58,6 +57,8 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             self.device.last_online = timezone.now()
             self.device.is_activated = True
             self.device.is_active = active
+            if active:
+                self.device.suc_conv_num += 1
             self.device.save()
 
     async def disconnect(self, close_code):
@@ -85,11 +86,6 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.group_name = 'notification_{}'.format(str(self.scope.get('user').id))
             await self.accept()
             await self.channel_layer.group_add(self.group_name, self.channel_name)
-
-            data = {"message": "Welcome to WSS-web, {} !".format(self.scope.get('user').username),
-                    "duration": 3000,
-                    "style": "gradient"}
-            await self.send(text_data=json.dumps(data))
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)

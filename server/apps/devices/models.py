@@ -31,7 +31,6 @@ class Devices(models.Model):
     protocol = models.CharField(max_length=50, choices=PROTOCOL_CHOICES, default='HTTP')
     sdk = models.CharField(max_length=50, choices=SDK_CHOICES, default='Python')
     suc_conv_num = models.PositiveIntegerField(default=0)
-    failed_conv_num = models.PositiveIntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     last_online = models.DateTimeField(blank=True, null=True)
 
