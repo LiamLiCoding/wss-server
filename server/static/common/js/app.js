@@ -607,7 +607,16 @@ function() {
 	l = document.getElementsByTagName("HTML")[0],
 	(m = document.querySelectorAll(".light-dark-mode")) && m.length && m[0].addEventListener("click",
 	function(e) {
-		l.hasAttribute("data-layout-mode") && "dark" === l.getAttribute("data-layout-mode") ? C("data-layout-mode", "light", "layout-mode-light", l) : C("data-layout-mode", "dark", "layout-mode-dark", l)
+
+		if (l.hasAttribute("data-layout-mode") && "dark" === l.getAttribute("data-layout-mode")){
+			C("data-layout-mode", "light", "layout-mode-light", l);
+			sessionStorage.setItem('data-layout-mode', 'light');
+		}
+		else{
+			C("data-layout-mode", "dark", "layout-mode-dark", l);
+			sessionStorage.setItem('data-layout-mode', 'dark');
+		}
+
 	}),
 	O(),
 	D(),

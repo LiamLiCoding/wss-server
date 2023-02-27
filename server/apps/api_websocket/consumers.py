@@ -10,6 +10,7 @@ from channels.generic.websocket import WebsocketConsumer
 class DeviceConsumer(WebsocketConsumer):
     def connect(self):
         self.accept()
+        print(self.scope)
 
     def disconnect(self, close_code):
         print("Websocket:connection closed, close code={}".format(close_code))
