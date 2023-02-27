@@ -19,6 +19,11 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
         return context
 
 
+# TODO: tmp cancel dashboard page
+def redirect_to_device(request):
+    return redirect('/devices/')
+
+
 class ComingSoonView(TemplateView):
     template_name = 'common/coming-soon.html'
 

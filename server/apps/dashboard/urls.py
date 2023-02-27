@@ -7,8 +7,9 @@
 
 from django.urls import path
 from . import views
+from apps.devices.views import DeviceListView
 
 urlpatterns = [
-	path('', views.DashboardView.as_view(), name='dashboard'),
+	path('', views.redirect_to_device, name='dashboard'),
 	path('comming-soon/', views.ComingSoonView.as_view(), name='coming_soon'),
 ]

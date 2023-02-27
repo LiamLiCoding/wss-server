@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <title>{% block title %}WSS{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Warehouse serveillance system" name="description" />
+    <meta content="Warehouse surveillance system" name="description" />
     <meta content="Haozheng Li" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
@@ -255,6 +255,7 @@
                     <div id="two-column-menu">
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
+                        {% comment %}
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
@@ -262,6 +263,7 @@
                                 <span data-key="t-dashboards">Dashboards</span>
                             </a>
                         </li>
+                        {% endcomment %}
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li>
 
@@ -365,6 +367,7 @@
     <script src="{% static 'common/libs/node-waves/waves.min.js' %}"></script>
     <script src="{% static 'common/libs/feather-icons/feather.min.js' %}"></script>
     <script src="{% static 'common/js/plugins/lord-icon-2.1.0.js' %}"></script>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/toastify-js'></script>
 
     {% block js %}{% endblock %}
 
@@ -379,6 +382,35 @@
             }
     });
     </script>
+
+<script>
+    const notificationSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
+
+    notificationSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        let message = data.message;
+        let duration = data.duration;
+        let style = data.style;
+        Toastify({
+            newWindow: !0,
+            text: message,
+            gravity: "top",
+            position: "center",
+            className: "bg-success",
+            stopOnFocus: !0,
+            offset: {x: 0, y: 0,},
+            duration: duration,
+            close: "close",
+            style: style === "gradient" ? {
+                background: "linear-gradient(to right, #0AB39C, #405189)"
+            }: ""
+        }).showToast()
+    };
+
+    notificationSocket.onclose = function(e) {
+        console.error('Notification socket closed unexpectedly');
+    };
+</script>
 </body>
 
 </html>
