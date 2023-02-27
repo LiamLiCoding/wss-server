@@ -69,7 +69,6 @@ class CSICamera:
             self.m_video_capture = None
             
 
-
 if __name__ == '__main__':
     camera = CSICamera()
     camera.open(0)
