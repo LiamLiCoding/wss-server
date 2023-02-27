@@ -15,7 +15,7 @@ class VerifyCode(models.Model):
     email = models.EmailField(max_length=50)
     code_type = models.CharField(max_length=20, choices=CODE_TYPE_CHOICE, default='verify_email')
     send_time = models.DateTimeField(default=timezone.now)
-    expiration_time = models.DateTimeField(blank=True, null=True, default=timezone.now() + datetime.timedelta(minutes=10))
+    expiration_time = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return '{0}({1})'.format(self.code, self.email)

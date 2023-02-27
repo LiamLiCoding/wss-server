@@ -4,8 +4,9 @@
 # @Author : Haozheng Li (Liam)
 # @Email : hxl1119@case.edu
 
-
+import datetime
 from django.conf import settings
+from django.utils import timezone
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from .gen_verifi_code import generate_digit_verification_code, generate_str_verification_code
@@ -18,6 +19,7 @@ def send_digit_code_email(email, code_type="verify_email"):
     send_record.code = code
     send_record.email = email
     send_record.code_type = code_type
+    send_record.expiration_time = timezone.now() + datetime.timedelta(minutes=10)
     send_record.save()
 
     email_title = "[WSS] Please verify your email"
@@ -48,7 +50,7 @@ def send_reset_password_link_email(email, code_type="reset_password"):
     send_record.code = code
     send_record.email = email
     send_record.code_type = 'reset_password'
-    send_record.code_type = code_type
+    send_record.expiration_time = timezone.now() + datetime.timedelta(minutes=10)
     send_record.save()
 
     reset_link = "http://127.0.0.1:7000/accounts/reset_password/{}".format(code)

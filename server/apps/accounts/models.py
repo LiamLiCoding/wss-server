@@ -121,17 +121,3 @@ class Users(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "users"
 
 
-class UserSettings(models.Model):
-    STYLE_MODE_CHOICE = (
-        ('dark', 'dark'),
-        ('light', 'light')
-    )
-
-    user = models.OneToOneField(Users, on_delete=models.CASCADE)
-    style_mode = models.SmallIntegerField(choices=STYLE_MODE_CHOICE, default='dark')
-
-    class Meta:
-        verbose_name = "usersettings"
-        verbose_name_plural = "usersettings"
-
-

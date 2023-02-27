@@ -391,12 +391,14 @@
         let message = data.message;
         let duration = data.duration;
         let style = data.style;
+        let type = data.notification_type ? data.notification_type: 'success';
+        console.log(type);
         Toastify({
             newWindow: !0,
             text: message,
             gravity: "top",
             position: "center",
-            className: "bg-success",
+            className: "bg-" + type,
             stopOnFocus: !0,
             offset: {x: 0, y: 0,},
             duration: duration,
