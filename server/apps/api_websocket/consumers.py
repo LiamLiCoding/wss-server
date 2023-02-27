@@ -5,6 +5,7 @@
 # @Email : hxl1119@case.edu
 
 import json
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
@@ -26,15 +27,17 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         if not self.scope.get('user'):
             await self.close()
         else:
-            # await self.channel_layer.group_add(str(self.scope.get('user')) + 'notification', self.channel_name)
+            self.group_name = 'notification_{}'.format(str(self.scope.get('user').id))
             await self.accept()
-            # data = {"message": "Welcome to WSS-web, {} !".format(self.scope.get('user').username),
-            #         "duration": 3000,
-            #         "style": "gradient"}
-            # await self.send(text_data=json.dumps(data))
+            await self.channel_layer.group_add(self.group_name, self.channel_name)
+
+            data = {"message": "Welcome to WSS-web, {} !".format(self.scope.get('user').username),
+                    "duration": 3000,
+                    "style": "gradient"}
+            await self.send(text_data=json.dumps(data))
 
     async def disconnect(self, close_code):
-        # await self.channel_layer.group_discard(str(self.scope.get('user')) + 'notification', self.channel_name)
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
         print("Websocket:connection closed, close code={}".format(close_code))
 
     async def receive(self, text_data=None, bytes_data=None):

@@ -107,6 +107,10 @@ if DEBUG:
 else:
     DATABASES = key_define.DATABASE_INFO
 
+CACHES = key_define.CACHES
+
+CHANNEL_LAYERS = key_define.CHANNEL_LAYERS
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -175,59 +179,3 @@ DEFAULT_FROM_EMAIL = key_define.EMAIL_HOST_USER
 
 GITHUB_CLIENT_ID = key_define.GITHUB_CLIENT_ID
 GITHUB_CLIENT_SECRET = key_define.GITHUB_CLIENT_SECRET
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'formatters': {
-        'standard': {
-            'format': '%(asctime)s [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'}
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        }
-    },
-    'handlers': {
-        'null': {
-            'level': 'DEBUG',
-            'class': 'logging.NullHandler',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'filters': ['require_debug_false'],
-            'include_html': True,
-        },
-        'debug': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, "logs", 'debug.log'),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 5,
-            'formatter': 'standard',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False
-        },
-        'django.request': {
-            'handlers': ['debug', 'mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-
-        'django.security.DisallowedHost': {
-            'handlers': ['null'],
-            'propagate': False,
-        },
-    }
-}
