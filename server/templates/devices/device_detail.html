@@ -4,6 +4,10 @@
 
 {% block title %} Device detail | WSS{% endblock %}
 
+{% block css %}
+
+    <link rel="stylesheet" href="{% static 'common/libs/glightbox/css/glightbox.min.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="page-content">
@@ -73,7 +77,7 @@
                             <h6 class="card-title mb-3 flex-grow-1 text-start">RUNNING STATUS</h6>
                             {% if device.is_active %}
                                 <div class="mb-2">
-                                    <lord-icon src="https://cdn.lordicon.com/qghrdngw.json" trigger="loop" delay="500" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
+                                    <lord-icon src="https://cdn.lordicon.com/qghrdngw.json" trigger="loop" delay="1000" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
                                 </div>
                                 <h3 class="mb-1">{{ device.last_online|time_diff_now }}</h3>
                                 <h5 class="fs-14 mb-4">Online time</h5>
@@ -82,7 +86,7 @@
                                 </div>
                             {% else %}
                                 <div class="mb-2">
-                                    <lord-icon src="https://cdn.lordicon.com/ensnyqet.json" trigger="morph" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
+                                    <lord-icon src="https://cdn.lordicon.com/nmgjlgnk.json" trigger="morph" colors="primary:#405189,secondary:#02a8b5" style="width:120px;height:120px"></lord-icon>
                                 </div>
                                 <h3 class="mb-1 fs-17">Last login</h3>
                                 <h5 class="fs-14 mb-4">{{ device.last_online }}</h5>
@@ -153,78 +157,34 @@
                         </div><!-- end card header -->
 
                         <div class="card-body">
-                            <div id="cpu-used-area" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
-                            <div id="memory-used-area" data-colors='["--vz-warning"]' class="apex-charts" dir="ltr"></div>
-                            <div id="disk-used-area" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
+                            {% if device.is_active %}
+                                <div id="cpu-used-area" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
+                                <div id="memory-used-area" data-colors='["--vz-warning"]' class="apex-charts" dir="ltr"></div>
+                                <div id="disk-used-area" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
+                            {% else %}
+                                <div class="noresult">
+                                    <div class="text-center">
+                                        <lord-icon src="https://cdn.lordicon.com/gqdnbnwt.json" trigger="loop" delay="500" colors="primary:#121331,secondary:#08a88a" style="width:180px;height:180px"></lord-icon>
+                                        <h4 class="mt-2">Device is Offline</h4>
+                                        <p class="text-muted mb-0 fs-16">Connect device to trace operation status</p>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div><!-- end card-body -->
                     </div>
                     <!-- end card -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="text-muted">
-                                <h6 class="mb-3 fw-semibold text-uppercase">Summary</h6>
-                                <p>It will be as simple as occidental in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary. The languages only differ in their grammar, their pronunciation and their most common words.</p>
-
-                                <h6 class="mb-3 fw-semibold text-uppercase">Sub-tasks</h6>
-                                <ul class=" ps-3 list-unstyled vstack gap-2">
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="productTask">
-                                            <label class="form-check-label" for="productTask">
-                                                Product Design, Figma (Software), Prototype
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="dashboardTask" checked>
-                                            <label class="form-check-label" for="dashboardTask">
-                                                Dashboards : Ecommerce, Analytics, Project,etc.
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="calenderTask">
-                                            <label class="form-check-label" for="calenderTask">
-                                                Create calendar, chat and email app pages
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="authenticationTask">
-                                            <label class="form-check-label" for="authenticationTask">
-                                                Add authentication pages
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                                <div class="pt-3 border-top border-top-dashed mt-4">
-                                    <h6 class="mb-3 fw-semibold text-uppercase">Tasks Tags</h6>
-                                    <div class="hstack flex-wrap gap-2 fs-15">
-                                        <div class="badge fw-medium badge-soft-info">UI/UX</div>
-                                        <div class="badge fw-medium badge-soft-info">Dashboard</div>
-                                        <div class="badge fw-medium badge-soft-info">Design</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end card-->
                     <div class="card">
                         <div class="card-header">
                             <div>
                                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" data-bs-toggle="tab" href="#profile-1" role="tab">
-                                            Device Log (30)
+                                            Event Log (30)
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-bs-toggle="tab" href="#messages-1" role="tab">
-                                            Attachments File (4)
+                                            Operation Log (4)
                                         </a>
                                     </li>
                                 </ul>
@@ -438,6 +398,106 @@
                         </div>
                     </div>
                     <!--end card-->
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Event Imgae Capture</h4>
+                        </div><!-- end card header -->
+                        <div class="card-body">
+                            <div class="row gallery-wrapper">
+
+                                <div class="element-item col-xl-4 col-sm-6 project designing development" data-category="designing development">
+                                    <div class="gallery-box card">
+                                        <div class="gallery-container">
+                                            <a class="image-popup" href="{{ MEDIA_URL }}devices/log_img/test.jpg" title="">
+                                                <img class="gallery-img img-fluid mx-auto" src="{{ MEDIA_URL }}devices/log_img/test.jpg" alt="" />
+                                                <div class="gallery-overlay">
+                                                    <h5 class="overlay-caption">Glasses and laptop from above</h5>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                        <div class="box-content">
+                                            <div class="d-flex align-items-center mt-1">
+                                                <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Ron Mackie</a></div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="d-flex gap-3">
+                                                        <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 shadow-none">
+                                                            <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 2.2K
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 shadow-none">
+                                                            <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 1.3K
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+
+                                <div class="element-item col-xl-4 col-sm-6 photography" data-category="photography">
+                                    <div class="gallery-box card">
+                                        <div class="gallery-container">
+                                            <a class="image-popup" href="{{ MEDIA_URL }}devices/log_img/test.jpg" title="">
+                                                <img class="gallery-img img-fluid mx-auto" src="{{ MEDIA_URL }}devices/log_img/test.jpg" alt="" />
+                                                <div class="gallery-overlay">
+                                                    <h5 class="overlay-caption">Working at a coffee shop</h5>
+                                                </div>
+                                            </a>
+
+                                        </div>
+
+                                        <div class="box-content">
+                                            <div class="d-flex align-items-center mt-1">
+                                                <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Nancy Martino</a></div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="d-flex gap-3">
+                                                        <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 shadow-none">
+                                                            <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 3.2K
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 shadow-none">
+                                                            <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 1.1K
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+
+                                <div class="element-item col-xl-4 col-sm-6 project development" data-category="development">
+                                    <div class="gallery-box card">
+                                        <div class="gallery-container">
+                                            <a class="image-popup" href="{{ MEDIA_URL }}devices/log_img/test.jpg" title="">
+                                                <img class="gallery-img img-fluid mx-auto" src="{{ MEDIA_URL }}devices/log_img/test.jpg" alt="" />
+                                                <div class="gallery-overlay">
+                                                    <h5 class="overlay-caption">Photo was taken in Beach</h5>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                        <div class="box-content">
+                                            <div class="d-flex align-items-center mt-1">
+                                                <div class="flex-grow-1 text-muted">by <a href="" class="text-body text-truncate">Elwood Arter</a></div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="d-flex gap-3">
+                                                        <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 shadow-none">
+                                                            <i class="ri-thumb-up-fill text-muted align-bottom me-1"></i> 2.1K
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm fs-12 btn-link text-body text-decoration-none px-0 shadow-none">
+                                                            <i class="ri-question-answer-fill text-muted align-bottom me-1"></i> 1K
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end col -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!--end row-->
@@ -517,6 +577,23 @@
 {% block js %}
     <script src="{% static 'common/libs/apexcharts/apexcharts.min.js' %}"></script>
     <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
+    <script src="{% static 'common/libs/glightbox/js/glightbox.min.js' %}"></script>
+    <script src="{% static 'common/libs/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+        let GalleryWrapper = document.querySelector('.gallery-wrapper');
+        if (GalleryWrapper) {
+            let iso = new Isotope('.gallery-wrapper', {
+                itemSelector: '.element-item',
+                layoutMode: 'fitRows'
+            });
+        }
+        let lightbox = GLightbox({
+            selector: '.image-popup',
+            title: false,
+        });
+    })
+    </script>
     <script>
         function getChartColorsArray(chartId) {
             if (document.getElementById(chartId) !== null) {
