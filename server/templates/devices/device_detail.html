@@ -33,15 +33,17 @@
             <div class="row">
                 <div class="col-xxl-3">
                     <div class="card mb-3">
-                        <div class="card-body">
-                            <div class="d-flex mb-3">
-                                <h6 class="card-title mb-0 flex-grow-1">INFORMATION</h6>
+                        <div class="card-header">
+                            <div class="d-flex">
+                                <h6 class="card-title mb-0 flex-grow-1">Information</h6>
                                 <div class="flex-shrink-0">
                                     <button type="button" class="btn btn-soft-secondary btn-sm shadow-none" data-bs-toggle="modal" data-bs-target="#editDevice">
                                         <i class="ri-share-line me-1 align-bottom"></i> Edit
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-body">
                             <div class="table-card">
                                 <table class="table mb-0">
                                     <tbody>
@@ -73,8 +75,10 @@
                     </div>
                     <!--end card-->
                     <div class="card">
+                        <div class="card-header">
+                            <h6 class="card-title mb-0">Device status</h6>
+                        </div>
                         <div class="card-body text-center">
-                            <h6 class="card-title mb-3 flex-grow-1 text-start">RUNNING STATUS</h6>
                             {% if device.is_active %}
                                 <div class="mb-2">
                                     <lord-icon src="https://cdn.lordicon.com/qghrdngw.json" trigger="loop" delay="1000" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
@@ -93,6 +97,26 @@
                                 <div class="hstack gap-2 justify-content-center">
                                     <button class="btn btn-danger"><i class="ri-stop-circle-line align-bottom me-1"></i> OFFLINE</button>
                                 </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!--end card-->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Operation</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if device.is_active %}
+                                <div class="d-flex mb-3 justify-content-center">
+                                    <div class="flex-grow-1 me-3" style="text-align: right">
+                                        <h4 class="mb-1 mt-2">Restart</h4>
+                                    </div>
+                                    <div class="flex-grow-1 mb-2">
+                                        <button type="button" class="btn btn-danger waves-effect waves-light">Confirm</button>
+                                     </div>
+                                </div>
+                            {% else %}
+                                <h2 class="mb-1 fs-20" style="text-align: center">Device is offline</h2>
                             {% endif %}
                         </div>
                     </div>
@@ -153,7 +177,7 @@
                 <div class="col-xxl-9">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Operating Status</h4>
+                            <h4 class="card-title mb-0">Device Operating Status</h4>
                         </div><!-- end card header -->
 
                         <div class="card-body">
