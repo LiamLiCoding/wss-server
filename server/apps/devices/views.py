@@ -1,7 +1,9 @@
-import os.path
 import secrets
 from django.conf import settings
+from rest_framework import status
 from django.views.generic import View
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.http import JsonResponse, FileResponse, Http404
 from apps.accounts.mixins import UserSettingsMixin
 from django.views.generic.list import ListView
@@ -13,7 +15,8 @@ from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-from .models import Devices
+from .models import Devices, Performance
+from apps.devices.serializers import PerformanceSerializer
 
 
 class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
@@ -157,3 +160,16 @@ def download_sdk(request, sdk):
     response['Content-Type'] = 'application/octet-stream'
     response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
     return response
+
+
+class GetPerformanceDataAPI(LoginRequiredMixin, APIView):
+    def get(self, request, device_id):
+        try:
+            device = Devices.objects.get(id=device_id)
+            if device:
+                performance = Performance.objects.filter(device=device)
+                performance_serializer = PerformanceSerializer(performance, many=True)
+                return Response(performance_serializer.data)
+        except ObjectDoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
