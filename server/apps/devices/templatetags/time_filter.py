@@ -14,6 +14,8 @@ register = template.Library()
 @register.filter(is_safe=True)
 def time_diff_now(value):
     time_delta = timezone.now() - value
-    return "{} day {} min".format(int(time_delta.seconds / 3600), int(time_delta.seconds / 60))
+    hours = int(time_delta.seconds / 3600)
+    minutes = int((time_delta.seconds - hours * 3600) / 60)
+    return "{} hour {} min".format(hours, minutes)
 
 

@@ -14,3 +14,7 @@ def init_websocket_client(url):
 
 def get_websocket_client():
 	return websocket_client.get_websocket_client()
+
+
+def websock_send(message, message_type):
+	websocket_client.get_websocket_client().send(message, message_type)

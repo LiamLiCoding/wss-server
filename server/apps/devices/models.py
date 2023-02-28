@@ -1,4 +1,3 @@
-from django.utils import timezone
 from django.db import models
 from apps.accounts.models import Users
 
@@ -36,8 +35,26 @@ class Devices(models.Model):
 
     class Meta:
         ordering = ("-created_time",)
-        verbose_name = "Devices"
-        verbose_name_plural = "Devices"
+        verbose_name = "devices"
+        verbose_name_plural = "devices"
 
     def __str__(self) -> str:
         return str(self.device_name)
+
+
+class Performance(models.Model):
+    device = models.ForeignKey(Devices, on_delete=models.CASCADE)
+    cpu_rate = models.DecimalField(max_digits=5, decimal_places=1)
+    mem_rate = models.DecimalField(max_digits=5, decimal_places=1)
+    disk_write_io = models.IntegerField(default=0)
+    disk_read_io = models.IntegerField(default=0)
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-created_time",)
+        verbose_name = "performance"
+        verbose_name_plural = "performance"
+
+    def __str__(self) -> str:
+        return str(self.device)
+

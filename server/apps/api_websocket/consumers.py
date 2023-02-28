@@ -12,7 +12,7 @@ from channels.layers import get_channel_layer
 from channels.db import database_sync_to_async
 from django.db.models import ObjectDoesNotExist
 
-from apps.devices.models import Devices
+from apps.devices.models import Devices, Performance
 
 
 async def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
@@ -29,6 +29,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
     api_key = ''
     device = None
     device_name = ''
+    device_enable = False
     user_id = 0
 
     async def connect(self):
@@ -36,7 +37,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         self.device = await self.get_device()
         if self.device and self.device.is_enable:
             await self.accept()
-            await self.update_device(active=True)
+            await self.update_device_status(active=True)
             message = "Device: {} is online now.".format(self.device.device_name)
             await send_notification(self.user_id, message=message, duration=5000,
                                     jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
@@ -50,12 +51,13 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             if device:
                 self.device = device
                 self.user_id = device.user.id
+                self.device_enable = device.is_enable
                 return device
         except ObjectDoesNotExist:
             return
 
     @database_sync_to_async
-    def update_device(self, active=True):
+    def update_device_status(self, active=True):
         if self.device:
             self.device.last_online = timezone.now()
             self.device.is_activated = True
@@ -64,19 +66,36 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                 self.device.suc_conv_num += 1
             self.device.save()
 
+    @database_sync_to_async
+    def update_device_performance(self, performance_dict):
+        if self.device:
+            performance = Performance()
+            performance.device = self.device
+            performance.cpu_rate = performance_dict['cpu_used_rate']
+            performance.mem_rate = performance_dict['mem_used_rate']
+            performance.disk_write_io = performance_dict['disk_io_read']
+            performance.disk_read_io = performance_dict['disk_io_write']
+            performance.save()
+
     async def disconnect(self, close_code):
-        await self.update_device(active=False)
+        await self.update_device_status(active=False)
         message = "Device: {} is offline now.".format(self.device.device_name)
         await send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
 
     async def receive(self, text_data=None, bytes_data=None):
-        self.device = await self.get_device()   # get the newest database info
-        if self.device and self.device.is_enable:
-            print('Websocket:Receive message:{}'.format(text_data))
-            await self.send(text_data=text_data)
-        else:
-            await self.disconnect(close_code=3003)
-            await self.close(code=3003)
+        parsed_data = json.loads(text_data)
+        message_type = parsed_data.get('message_type')
+        message = parsed_data.get('message')
+
+        self.get_device()   # get newest device info
+
+        if self.device_enable:
+            if message_type and message and self.device_enable:
+                if message_type == 'running_performance':
+                    await self.update_device_performance(message)
+                return
+        await self.disconnect(close_code=3003)
+        await self.close(code=3003)
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):

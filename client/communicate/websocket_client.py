@@ -1,3 +1,4 @@
+import json
 import threading
 import websocket
 
@@ -68,6 +69,11 @@ class WebsocketClient:
 			self.m_thread.daemon = True
 			self.m_thread.start()
 
-	def send(self, text_data):
-		self.m_ws.send(text_data)
+	def send(self, message, message_type):
+		data = {'message': message,
+		        'message_type': message_type}
+		try:
+			self.m_ws.send(json.dumps(data))
+		except websocket.WebSocketConnectionClosedException as error:
+			print('Websocket connect failed')
 
