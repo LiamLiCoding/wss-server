@@ -148,6 +148,18 @@
                 <!---end col-->
                 <div class="col-xxl-9">
                     <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title mb-0">Operating Status</h4>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div id="cpu-used-area" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
+                            <div id="memory-used-area" data-colors='["--vz-warning"]' class="apex-charts" dir="ltr"></div>
+                            <div id="disk-used-area" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
+                        </div><!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+                    <div class="card">
                         <div class="card-body">
                             <div class="text-muted">
                                 <h6 class="mb-3 fw-semibold text-uppercase">Summary</h6>
@@ -427,15 +439,14 @@
                     </div>
                     <!--end card-->
                 </div>
-                <!--end col-->
             </div>
             <!--end row-->
 
-            <div class="modal fade zoomIn" id="editDevice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade zoomIn" id="editDevice" tabindex="-1" aria-labelledby="EditDeviceModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0">
                         <div class="modal-header p-3">
-                            <h5 class="modal-title" id="exampleModalLabel">Edit Device</h5>
+                            <h5 class="modal-title" id="EditDeviceModalLabel">Edit Device</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                         </div>
 
@@ -504,5 +515,289 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'common/libs/apexcharts/apexcharts.min.js' %}"></script>
     <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
+    <script>
+        function getChartColorsArray(chartId) {
+            if (document.getElementById(chartId) !== null) {
+                let colors = document.getElementById(chartId).getAttribute("data-colors");
+                if (colors) {
+                    colors = JSON.parse(colors);
+                    return colors.map(function(value) {
+                        let newValue = value.replace(" ", "");
+                        if (newValue.indexOf(",") === -1) {
+                            let color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
+                            if (color) return color;
+                            else return newValue;;
+                        } else {
+                            let val = value.split(',');
+                            if (val.length == 2) {
+                                let rgbaColor = getComputedStyle(document.documentElement).getPropertyValue(val[0]);
+                                rgbaColor = "rgba(" + rgbaColor + "," + val[1] + ")";
+                                return rgbaColor;
+                            } else {
+                                return newValue;
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        function generateDayWiseTimeSeriesline(baseval, count, yrange) {
+            let i = 0;
+            let series = [];
+            while (i < count) {
+                let x = baseval;
+                let y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+        
+                series.push([x, y]);
+                baseval += 86400000;
+                i++;
+            }
+            return series;
+        }
+
+        let cpuUsedArea = getChartColorsArray("cpu-used-area");
+        if (cpuUsedArea) {
+            let optionsLine = {
+                series: [{
+                    data: generateDayWiseTimeSeriesline(new Date('11 Feb 2017').getTime(), 20, {
+                        min: 10,
+                        max: 60
+                    })
+                }],
+                chart: {
+                    id: 'fb',
+                    group: 'op_status',
+                    type: 'area',
+                    height: 200,
+                    toolbar: {
+                        show: false
+                    },
+                },
+                title: {
+                    text: 'CPU Used',
+                    align: 'center',
+                    style: {
+                        fontWeight: 500,
+                    },
+                },
+                colors: cpuUsedArea,
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3,
+                },
+                toolbar: {
+                    tools: {
+                        selection: false
+                    }
+                },
+                markers: {
+                    size: 0
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        inverseColors: false,
+                        opacityFrom: 0.5,
+                        opacityTo: 0,
+                        stops: [0, 90, 100]
+                    },
+                },
+                tooltip: {
+                    followCursor: false,
+                    x: {
+                        show: false
+                    },
+                    marker: {
+                        show: false
+                    },
+                    y: {
+                        title: {
+                            formatter: function () {
+                                return ''
+                            }
+                        }
+                    }
+                },
+                grid: {
+                    clipMarkers: false
+                },
+                yaxis: {
+                    tickAmount: 2
+                },
+                xaxis: {
+                    type: 'datetime'
+                }
+            };
+            let chartLine = new ApexCharts(document.querySelector("#cpu-used-area"), optionsLine);
+            chartLine.render();
+        }
+
+        let memoryUsedArea = getChartColorsArray("memory-used-area");
+        if (memoryUsedArea) {
+            let optionsLine2 = {
+                series: [{
+                    data: generateDayWiseTimeSeriesline(new Date('11 Feb 2017').getTime(), 20, {
+                        min: 10,
+                        max: 50
+                    })
+                }],
+                chart: {
+                    id: 'tw',
+                    group: 'op_status',
+                    type: 'area',
+                    height: 200,
+                    toolbar: {
+                        show: false
+                    },
+                },
+                title: {
+                    text: 'Memory Used',
+                    align: 'center',
+                    style: {
+                        fontWeight: 500,
+                    },
+                },
+                colors: memoryUsedArea,
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3,
+                },
+                toolbar: {
+                    tools: {
+                        selection: false
+                    }
+                },
+                markers: {
+                    size: 0
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        inverseColors: false,
+                        opacityFrom: 0.5,
+                        opacityTo: 0,
+                        stops: [0, 90, 100]
+                    },
+                },
+                tooltip: {
+                    followCursor: false,
+                    x: {
+                        show: false
+                    },
+                    marker: {
+                        show: false
+                    },
+                    y: {
+                        title: {
+                            formatter: function () {
+                                return ''
+                            }
+                        }
+                    }
+                },
+                grid: {
+                    clipMarkers: false
+                },
+                yaxis: {
+                    tickAmount: 2
+                },
+                xaxis: {
+                    type: 'datetime'
+                }
+            };
+            let chartLine2 = new ApexCharts(document.querySelector("#memory-used-area"), optionsLine2);
+            chartLine2.render();
+        }
+
+        let diskUsedArea = getChartColorsArray("disk-used-area");
+        if (diskUsedArea) {
+            let optionsArea = {
+                series: [{
+                    data: generateDayWiseTimeSeriesline(new Date('11 Feb 2017').getTime(), 20, {
+                        min: 10,
+                        max: 60
+                    })
+                }],
+                chart: {
+                    id: 'yt',
+                    group: 'op_status',
+                    type: 'area',
+                    height: 200,
+                    toolbar: {
+                        show: false
+                    },
+                },
+                title: {
+                    text: 'Disk Used',
+                    align: 'center',
+                    style: {
+                        fontWeight: 500,
+                    },
+                },
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        inverseColors: false,
+                        opacityFrom: 0.5,
+                        opacityTo: 0,
+                        stops: [0, 90, 100]
+                    },
+                },
+                colors: diskUsedArea,
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 3,
+                },
+                toolbar: {
+                    tools: {
+                        selection: false
+                    }
+                },
+                markers: {
+                    size: 0
+                },
+                tooltip: {
+                    followCursor: false,
+                    x: {
+                        show: false
+                    },
+                    marker: {
+                        show: false
+                    },
+                    y: {
+                        title: {
+                            formatter: function () {
+                                return ''
+                            }
+                        }
+                    }
+                },
+                grid: {
+                    clipMarkers: false
+                },
+                yaxis: {
+                    tickAmount: 2
+                },
+                xaxis: {
+                    type: 'datetime'
+                }
+            };
+            let chartArea = new ApexCharts(document.querySelector("#disk-used-area"), optionsArea);
+            chartArea.render();
+        }
+    </script>
 {% endblock %}
