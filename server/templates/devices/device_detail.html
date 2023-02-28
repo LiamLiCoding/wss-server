@@ -70,7 +70,7 @@
                     <!--end card-->
                     <div class="card">
                         <div class="card-body text-center">
-                            <h6 class="card-title mb-3 flex-grow-1 text-start">STATUS</h6>
+                            <h6 class="card-title mb-3 flex-grow-1 text-start">RUNNING STATUS</h6>
                             {% if device.is_active %}
                                 <div class="mb-2">
                                     <lord-icon src="https://cdn.lordicon.com/qghrdngw.json" trigger="loop" delay="500" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
@@ -84,7 +84,7 @@
                                 <div class="mb-2">
                                     <lord-icon src="https://cdn.lordicon.com/ensnyqet.json" trigger="morph" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
                                 </div>
-                                <h3 class="mb-1">Last login</h3>
+                                <h3 class="mb-1 fs-17">Last login</h3>
                                 <h5 class="fs-14 mb-4">{{ device.last_online }}</h5>
                                 <div class="hstack gap-2 justify-content-center">
                                     <button class="btn btn-danger"><i class="ri-stop-circle-line align-bottom me-1"></i> OFFLINE</button>
@@ -206,13 +206,13 @@
                             <div>
                                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#messages-1" role="tab">
-                                            Attachments File (4)
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#profile-1" role="tab">
+                                            Device Log (30)
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#profile-1" role="tab">
-                                            Device Log (500)
+                                        <a class="nav-link" data-bs-toggle="tab" href="#messages-1" role="tab">
+                                            Attachments File (4)
                                         </a>
                                     </li>
                                 </ul>
@@ -221,7 +221,7 @@
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="messages-1" role="tabpanel">
+                                <div class="tab-pane" id="messages-1" role="tabpanel">
                                     <div class="table-responsive table-card">
                                         <table class="table table-borderless align-middle mb-0">
                                             <thead class="table-light text-muted">
@@ -358,7 +358,7 @@
                                     </div>
                                 </div>
                                 <!--end tab-pane-->
-                                <div class="tab-pane" id="profile-1" role="tabpanel">
+                                <div class="tab-pane active" id="profile-1" role="tabpanel">
                                     <h6 class="card-title mb-4 pb-2">Device Log</h6>
                                     <div class="table-responsive table-card">
                                         <table class="table align-middle mb-0">

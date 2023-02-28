@@ -394,14 +394,17 @@
         let duration = data.duration;
         let style = data.style;
         let type = data.notification_type ? data.notification_type: 'success';
-        console.log(type);
+        let jump_url = data.jump_url ? 'http://' + window.location.host + data.jump_url : document.URL;
+
+        console.log(jump_url);
         Toastify({
-            newWindow: !0,
             text: message,
+            destination: jump_url,
+            newWindow: false,
             gravity: "top",
             position: "center",
             className: "bg-" + type,
-            stopOnFocus: !0,
+            stopOnFocus: true,
             offset: {x: 0, y: 0,},
             duration: duration,
             close: "close",
