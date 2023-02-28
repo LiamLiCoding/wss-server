@@ -1,6 +1,5 @@
 import time
 from rest_framework import serializers
-from cffi.backend_ctypes import long
 
 from .models import Devices, Performance
 
@@ -19,6 +18,10 @@ class PerformanceSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         created_time = data.get('created_time')
+        disk_write_io = data.get('disk_write_io')
+        disk_read_io = data.get('disk_read_io')
         created_time_stamp = time.mktime(time.strptime(created_time, '%Y-%m-%dT%H:%M:%S.%fZ'))
         data.update({"created_time": int(created_time_stamp) * 1000})
+        data.update({"disk_write_io": int(disk_write_io / 1000)})
+        data.update({"disk_read_io": int(disk_read_io / 1000)})
         return data

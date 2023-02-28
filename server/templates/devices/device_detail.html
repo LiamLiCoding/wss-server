@@ -627,349 +627,307 @@
     })
     </script>
     <script>
-        function getChartColorsArray(chartId) {
-            if (document.getElementById(chartId) !== null) {
-                let colors = document.getElementById(chartId).getAttribute("data-colors");
-                if (colors) {
-                    colors = JSON.parse(colors);
-                    return colors.map(function(value) {
-                        let newValue = value.replace(" ", "");
-                        if (newValue.indexOf(",") === -1) {
-                            let color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
-                            if (color) return color;
-                            else return newValue;;
-                        } else {
-                            let val = value.split(',');
-                            if (val.length == 2) {
-                                let rgbaColor = getComputedStyle(document.documentElement).getPropertyValue(val[0]);
-                                rgbaColor = "rgba(" + rgbaColor + "," + val[1] + ")";
-                                return rgbaColor;
-                            } else {
-                                return newValue;
-                            }
-                        }
-                    });
-                }
+    let labelPercentFormatter = function(value) {
+      return value + "%";
+    };
+    let optionsCPUUsedArea = {
+        series: [],
+        chart: {
+            id: 'cpu',
+            group: 'op_status',
+            type: 'area',
+            height: 200,
+            zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
+            },
+            toolbar: {
+                autoSelected: 'zoom'
             }
-        }
-        function generateDayWiseTimeSeriesline(baseval, count, yrange) {
-            let i = 0;
-            let series = [];
-            while (i < count) {
-                let x = baseval;
-                let y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-        
-                series.push([x, y]);
-                baseval += 86400000;
-                i++;
+        },
+        title: {
+            text: 'CPU Used',
+            align: 'center',
+            style: {
+                fontWeight: 500,
+            },
+        },
+        colors: ['#4B38AA'],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'straight',
+            width: 3,
+        },
+        toolbar: {
+            tools: {
+                selection: false
             }
-            return series;
-        }
-
-        var lastDate = 0;
-        var data = [];
-        var TICKINTERVAL = 86400000;
-        var XAXISRANGE = 777600000;
-
-        function getDayWiseTimeSeries(baseval, count, yrange) {
-            var i = 0;
-            while (i < count) {
-                var x = baseval;
-                var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-                data.push({
-                    'x': x,
-                    'y': y
-                });
-                lastDate = baseval
-                baseval += TICKINTERVAL;
-                i++;
-            }
-        }
-        function getNewSeries(baseval, yrange) {
-            var newDate = baseval + TICKINTERVAL;
-            lastDate = newDate
-
-            for (var i = 0; i < data.length - 10; i++) {
-                data[i].x = newDate - XAXISRANGE - TICKINTERVAL
-                data[i].y = 0
-            }
-
-            data.push({
-                x: newDate,
-                y: Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min
-            })
-        }
-
-        let cpuUsedArea = getChartColorsArray("cpu-used-area");
-        if (cpuUsedArea) {
-            let optionsLine = {
-                series: [{
-                    data: data.slice()
-                }],
-                chart: {
-                    id: 'cpu',
-                    group: 'op_status',
-                    type: 'area',
-                    height: 200,
-                    toolbar: {
-                        show: false
-                    },
-                    animations: {
-                        enabled: true,
-                        easing: 'linear',
-                        dynamicAnimation: {
-                            speed: 1000
-                        }
-                    },
-                },
+        },
+        markers: {
+            size: 0
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100]
+            },
+        },
+        tooltip: {
+            followCursor: false,
+            x: {
+                show: false
+            },
+            marker: {
+                show: false
+            },
+            y: {
                 title: {
-                    text: 'CPU Used',
-                    align: 'center',
-                    style: {
-                        fontWeight: 500,
-                    },
-                },
-                colors: cpuUsedArea,
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'straight',
-                    width: 3,
-                },
-                toolbar: {
-                    tools: {
-                        selection: false
+                    formatter: function () {
+                        return ''
                     }
-                },
-                markers: {
-                    size: 0
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        inverseColors: false,
-                        opacityFrom: 0.5,
-                        opacityTo: 0,
-                        stops: [0, 90, 100]
-                    },
-                },
-                tooltip: {
-                    followCursor: false,
-                    x: {
-                        show: false
-                    },
-                    marker: {
-                        show: false
-                    },
-                    y: {
-                        title: {
-                            formatter: function () {
-                                return ''
-                            }
-                        }
-                    }
-                },
-                grid: {
-                    clipMarkers: false
-                },
-                yaxis: {
-                    min:0,
-                    max:100,
-                    tickAmount: 2,
-                    title: {text:"Utilization Rate(%)"},
-                },
-                xaxis: {
-                    type: 'datetime'
                 }
-            };
-            let chartLine = new ApexCharts(document.querySelector("#cpu-used-area"), optionsLine);
-            chartLine.render();
-            window.setInterval(function () {
-                getNewSeries(lastDate, {
-                    min: 10,
-                    max: 90
-                })
-
-                chartLine.updateSeries([{
-                    data: data
-                }])
-            }, 1000)
+            }
+        },
+        grid: {
+            clipMarkers: false
+        },
+        yaxis: {
+            min:0,
+            max:100,
+            tickAmount: 2,
+            title: {text:"Utilization Rate(%)"},
+             labels: {
+                formatter: labelPercentFormatter
+             }
+        },
+        xaxis: {
+            type: 'datetime',
+            labels: {
+                formatter: function(value, timestamp, opts) {
+                  return opts.dateFormatter(new Date(timestamp), 'HH:mm:ss')
+                }
+            },
         }
+    };
+    let CPUUsedArea = new ApexCharts(document.querySelector("#cpu-used-area"), optionsCPUUsedArea);
+    CPUUsedArea.render();
 
-        let memoryUsedArea = getChartColorsArray("memory-used-area");
-        if (memoryUsedArea) {
-            let optionsLine2 = {
-                series: [{
-                    data: generateDayWiseTimeSeriesline(new Date('11 Feb 2017').getTime(), 20, {
-                        min: 10,
-                        max: 50
-                    })
-                }],
-                chart: {
-                    id: 'memory',
-                    group: 'op_status',
-                    type: 'area',
-                    height: 200,
-                    toolbar: {
-                        show: false
-                    },
-                },
+    let optionsMemUsedArea = {
+        series: [],
+        chart: {
+            id: 'memory',
+            group: 'op_status',
+            type: 'area',
+            height: 200,
+            zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
+            },
+            toolbar: {
+                autoSelected: 'zoom'
+            }
+        },
+        title: {
+            text: 'Memory Used',
+            align: 'center',
+            style: {
+                fontWeight: 500,
+            },
+        },
+        colors: ['#FFBE0B'],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 3,
+        },
+        toolbar: {
+            tools: {
+                selection: false
+            }
+        },
+        markers: {
+            size: 0
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100]
+            },
+        },
+        tooltip: {
+            followCursor: false,
+            x: {
+                show: false
+            },
+            marker: {
+                show: false
+            },
+            y: {
                 title: {
-                    text: 'Memory Used',
-                    align: 'center',
-                    style: {
-                        fontWeight: 500,
-                    },
-                },
-                colors: memoryUsedArea,
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: 3,
-                },
-                toolbar: {
-                    tools: {
-                        selection: false
+                    formatter: function () {
+                        return ''
                     }
-                },
-                markers: {
-                    size: 0
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        inverseColors: false,
-                        opacityFrom: 0.5,
-                        opacityTo: 0,
-                        stops: [0, 90, 100]
-                    },
-                },
-                tooltip: {
-                    followCursor: false,
-                    x: {
-                        show: false
-                    },
-                    marker: {
-                        show: false
-                    },
-                    y: {
-                        title: {
-                            formatter: function () {
-                                return ''
-                            }
-                        }
-                    }
-                },
-                grid: {
-                    clipMarkers: false
-                },
-                yaxis: {
-                    min:0,
-                    max:100,
-                    tickAmount: 2,
-                    title: {text:"Utilization Rate(%)"},
-                },
-                xaxis: {
-                    type: 'datetime'
                 }
-            };
-            let chartLine2 = new ApexCharts(document.querySelector("#memory-used-area"), optionsLine2);
-            chartLine2.render();
+            }
+        },
+        grid: {
+            clipMarkers: false
+        },
+        yaxis: {
+            min:0,
+            max:100,
+            tickAmount: 2,
+            title: {text:"Utilization Rate(%)"},
+            labels: {
+                formatter: labelPercentFormatter
+            }
+        },
+        xaxis: {
+            type: 'datetime',
+            labels: {
+                formatter: function(value, timestamp, opts) {
+                  return opts.dateFormatter(new Date(timestamp), 'HH:mm:ss')
+                }
+            },
         }
+    };
+    let MemUsedArea = new ApexCharts(document.querySelector("#memory-used-area"), optionsMemUsedArea);
+    MemUsedArea.render();
 
-        let diskUsedArea = getChartColorsArray("disk-used-area");
-        if (diskUsedArea) {
-            let optionsArea = {
-                series: [{
-                    data: generateDayWiseTimeSeriesline(new Date('11 Feb 2017').getTime(), 20, {
-                        min: 10,
-                        max: 60
-                    })
-                }],
-                chart: {
-                    id: 'disk',
-                    group: 'op_status',
-                    type: 'area',
-                    height: 200,
-                    zoom: {
-                        type: 'x',
-                        enabled: true,
-                        autoScaleYaxis: true
-                    },
-                    toolbar: {
-                        autoSelected: 'zoom'
-                    }
-                },
-                title: {
-                    text: 'Disk Used',
-                    align: 'center',
-                    style: {
-                        fontWeight: 500,
-                    },
-                },
-                fill: {
-                    type: 'gradient',
-                    gradient: {
-                        shadeIntensity: 1,
-                        inverseColors: false,
-                        opacityFrom: 0.5,
-                        opacityTo: 0,
-                        stops: [0, 90, 100]
-                    },
-                },
-                colors: diskUsedArea,
-                dataLabels: {
-                    enabled: false
-                },
-                stroke: {
-                    curve: 'smooth',
-                    width: 3,
-                },
-                toolbar: {
-                    tools: {
-                        selection: false
-                    }
-                },
-                markers: {
-                    size: 0
-                },
-                tooltip: {
-                    followCursor: false,
-                    x: {
-                        show: false
-                    },
-                    marker: {
-                        show: false
-                    },
-                    y: {
-                        title: {
-                            formatter: function () {
-                                return ''
-                            }
-                        }
-                    }
-                },
-                grid: {
-                    clipMarkers: false
-                },
-                yaxis: {
-                    min:0,
-                    max:100,
-                    tickAmount: 2,
-                    title: {text:"Utilization Rate(%)"},
-                },
-                xaxis: {
-                    type: 'datetime'
-                }
-            };
-            let chartArea = new ApexCharts(document.querySelector("#disk-used-area"), optionsArea);
-            chartArea.render();
+    let labelUnitFormatter = function(value) {
+        if (value >= 1048576) {
+            value = Math.ceil(value / 1048576) + " MB";
         }
+        else if(value >= 1024){
+            value = Math.ceil(value / 1024) + " KB";
+        }
+      return value;
+    };
+
+    let optionsDiskIOArea = {
+        series: [],
+        chart: {
+            id: 'disk',
+            group: 'op_status',
+            type: 'area',
+            height: 200,
+            zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true
+            },
+            toolbar: {
+                autoSelected: 'zoom'
+            }
+        },
+        title: {
+            text: 'Disk Used',
+            align: 'center',
+            style: {
+                fontWeight: 500,
+            },
+        },
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100]
+            },
+        },
+        colors: ['#45CB85', '#F06548'],
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 3,
+        },
+        toolbar: {
+            tools: {
+                selection: false
+            }
+        },
+        markers: {
+            size: 0
+        },
+        tooltip: {
+            followCursor: false,
+            x: {
+                show: false
+            },
+            marker: {
+                show: false
+            },
+            y: {
+                title: {
+                    formatter: function () {
+                        return ''
+                    }
+                }
+            }
+        },
+        grid: {
+            clipMarkers: false
+        },
+        yaxis: {
+            tickAmount: 2,
+            title: {text:"Disk IO(K)"},
+             labels: {
+                formatter: labelUnitFormatter
+              }
+        },
+        xaxis: {
+            type: 'datetime'
+        }
+    };
+    let diskIOArea = new ApexCharts(document.querySelector("#disk-used-area"), optionsDiskIOArea);
+    diskIOArea.render();
+
+    let updateChartData = function () {
+        $.getJSON('{% url 'get_performance' device.id %}', function(response) {
+            let cpu_data = [];
+            let mem_data = [];
+            let disk_write_io_data = [];
+            let disk_read_io_data = [];
+            for(let each_data of response){
+                cpu_data.push({x:each_data['created_time'], y:each_data['cpu_rate']});
+                mem_data.push({x:each_data['created_time'], y:each_data['mem_rate']});
+                disk_write_io_data.push({x:each_data['created_time'], y:each_data['disk_write_io']});
+                disk_read_io_data.push({x:each_data['created_time'], y:each_data['disk_read_io']});
+            }
+            CPUUsedArea.updateSeries([{data: cpu_data}]);
+            MemUsedArea.updateSeries([{data: mem_data}]);
+            diskIOArea.updateSeries([
+                {
+                    name: 'Write IO',
+                    data: disk_write_io_data,
+                },
+                {
+                    name: 'Read IO',
+                    data: disk_read_io_data,
+                },
+            ]);});
+    };
+    updateChartData()
+
+    window.setInterval("updateChartData()", 5000)
+
     </script>
 {% endblock %}
