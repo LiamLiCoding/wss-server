@@ -4,8 +4,8 @@
 # @Author : Haozheng Li (Liam)
 # @Email : hxl1119@case.edu
 
-import websocket_client
-from api_define import *
+from . import websocket_client
+from .api_define import *
 
 
 def init_websocket_client(url):

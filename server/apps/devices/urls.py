@@ -15,4 +15,5 @@ urlpatterns = [
 	path('delete/<pk>', views.DeleteDeviceView.as_view(), name='delete_device'),
 	path('update/<pk>', views.UpdateDeviceStatusView.as_view(), name='update_device_status'),
 	path('edit_device/<pk>', views.UpdateDeviceStatusView.as_view(), name='edit_device'),
+	path('download_sdk/<str:sdk>', views.download_sdk, name='download_sdk'),
 ]

@@ -1,5 +1,6 @@
 {% extends 'common/base.html' %}
 {% load static %}
+{% load time_filter %}
 
 {% block title %} Device detail | WSS{% endblock %}
 
@@ -30,7 +31,7 @@
                     <div class="card mb-3">
                         <div class="card-body">
                             <div class="d-flex mb-3">
-                                <h6 class="card-title mb-0 flex-grow-1">Information</h6>
+                                <h6 class="card-title mb-0 flex-grow-1">INFORMATION</h6>
                                 <div class="flex-shrink-0">
                                     <button type="button" class="btn btn-soft-secondary btn-sm shadow-none" data-bs-toggle="modal" data-bs-target="#editDevice">
                                         <i class="ri-share-line me-1 align-bottom"></i> Edit
@@ -54,21 +55,11 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Protocol</td>
-                                            <td><span class="badge badge-soft-primary">{{ device.protocol }}</span></td>
+                                            <td><span class="badge badge-soft-success">{{ device.protocol|upper }}</span></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">SDK</td>
-                                            <td><span class="badge badge-soft-secondary">{{ device.sdk }}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-medium">Last online</td>
-                                            <td>
-                                                {% if device.last_online %}
-                                                    {{ device.last_online }}
-                                                {% else %}
-                                                    Not activated
-                                                {% endif %}
-                                            </td>
+                                            <td><span class="badge badge-soft-secondary">{{ device.sdk|title }}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -79,119 +70,80 @@
                     <!--end card-->
                     <div class="card">
                         <div class="card-body text-center">
-                            <h6 class="card-title mb-3 flex-grow-1 text-start">Time Tracking</h6>
-                            <div class="mb-2">
-                                <lord-icon src="https://cdn.lordicon.com/kbtmbyzy.json" trigger="loop" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
-                            </div>
-                            <h3 class="mb-1">9 hrs 13 min</h3>
-                            <h5 class="fs-14 mb-4">Online time</h5>
-{#                            <div class="hstack gap-2 justify-content-center">#}
-{#                                <button class="btn btn-danger btn-sm"><i class="ri-stop-circle-line align-bottom me-1"></i> Stop</button>#}
-{#                                <button class="btn btn-success btn-sm"><i class="ri-play-circle-line align-bottom me-1"></i> Start</button>#}
-{#                            </div>#}
+                            <h6 class="card-title mb-3 flex-grow-1 text-start">STATUS</h6>
+                            {% if device.is_active %}
+                                <div class="mb-2">
+                                    <lord-icon src="https://cdn.lordicon.com/qghrdngw.json" trigger="loop" delay="500" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
+                                </div>
+                                <h3 class="mb-1">{{ device.last_online|time_diff_now }}</h3>
+                                <h5 class="fs-14 mb-4">Online time</h5>
+                                <div class="hstack gap-2 justify-content-center">
+                                    <button class="btn btn-success"><i class="ri-play-circle-line align-bottom me-1"></i> ONLINE </button>
+                                </div>
+                            {% else %}
+                                <div class="mb-2">
+                                    <lord-icon src="https://cdn.lordicon.com/ensnyqet.json" trigger="morph" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
+                                </div>
+                                <h3 class="mb-1">Last login</h3>
+                                <h5 class="fs-14 mb-4">{{ device.last_online }}</h5>
+                                <div class="hstack gap-2 justify-content-center">
+                                    <button class="btn btn-danger"><i class="ri-stop-circle-line align-bottom me-1"></i> OFFLINE</button>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                     <!--end card-->
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title mb-3">Attachments</h5>
+                            <h5 class="card-title mb-3">SDK FILES</h5>
                             <div class="vstack gap-2">
                                 <div class="border rounded border-dashed p-2">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar-sm">
-                                                <div class="avatar-title bg-light text-secondary rounded fs-24">
-                                                    <i class="ri-folder-zip-line"></i>
+                                                <div class="avatar-title bg-soft-info text-secondary rounded fs-24">
+                                                    <i class="ri-file-code-fill"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 overflow-hidden">
-                                            <h5 class="fs-13 mb-1"><a href="javascript:void(0);" class="text-body text-truncate d-block">App pages.zip</a></h5>
-                                            <div>2.2MB</div>
+                                            <h5 class="fs-13 mb-1"><a href="{% url 'download_sdk' 'python' %}" class="text-body text-truncate d-block">Python SDK</a></h5>
+                                            <div>10KB</div>
                                         </div>
                                         <div class="flex-shrink-0 ms-2">
                                             <div class="d-flex gap-1">
-                                                <button type="button" class="btn btn-icon text-muted btn-sm fs-18 shadow-none"><i class="ri-download-2-line"></i></button>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-icon text-muted btn-sm fs-18 dropdown shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-more-fill"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
-                                                    </ul>
-                                                </div>
+                                                <a href="{% url 'download_sdk' 'python' %}" class="text-muted fs-18 shadow-none"><i class="ri-download-2-line"></i></a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
+                            </div>
+                            <div class="vstack gap-2">
                                 <div class="border rounded border-dashed p-2">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 me-3">
                                             <div class="avatar-sm">
-                                                <div class="avatar-title bg-light text-secondary rounded fs-24 shadow">
-                                                    <i class="ri-file-ppt-2-line"></i>
+                                                <div class="avatar-title bg-soft-primary text-primary rounded fs-24">
+                                                    <i class="ri-file-code-fill"></i>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 overflow-hidden">
-                                            <h5 class="fs-13 mb-1"><a href="javascript:void(0);" class="text-body text-truncate d-block">Velzon admin.ppt</a></h5>
-                                            <div>2.4MB</div>
+                                            <h5 class="fs-13 mb-1"><a href="{% url 'download_sdk' 'c++' %}" class="text-body text-truncate d-block">C++ SDK</a></h5>
+                                            <div>8KB</div>
                                         </div>
                                         <div class="flex-shrink-0 ms-2">
                                             <div class="d-flex gap-1">
-                                                <button type="button" class="btn btn-icon text-muted btn-sm fs-18 shadow-none"><i class="ri-download-2-line"></i></button>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-icon text-muted btn-sm fs-18 dropdown shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-more-fill"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
-                                                    </ul>
-                                                </div>
+                                                <a href="{% url 'download_sdk' 'c++' %}" class="text-muted fs-18 shadow-none"><i class="ri-download-2-line"></i></a>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="border rounded border-dashed p-2">
-                                    <div class="d-flex align-items-center">
-                                        <div class="flex-shrink-0 me-3">
-                                            <div class="avatar-sm">
-                                                <div class="avatar-title bg-light text-secondary rounded fs-24 shadow">
-                                                    <i class="ri-folder-zip-line"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 overflow-hidden">
-                                            <h5 class="fs-13 mb-1"><a href="javascript:void(0);" class="text-body text-truncate d-block">Images.zip</a></h5>
-                                            <div>1.2MB</div>
-                                        </div>
-                                        <div class="flex-shrink-0 ms-2">
-                                            <div class="d-flex gap-1">
-                                                <button type="button" class="btn btn-icon text-muted btn-sm fs-18 shadow-none"><i class="ri-download-2-line"></i></button>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-icon text-muted btn-sm fs-18 dropdown shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="ri-more-fill"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu">
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-pencil-fill align-bottom me-2 text-muted"></i> Rename</a></li>
-                                                        <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i> Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="mt-2 text-center">
-                                    <button type="button" class="btn btn-success">View more</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!--end card-->
+
                 </div>
                 <!---end col-->
                 <div class="col-xxl-9">

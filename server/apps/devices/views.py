@@ -1,15 +1,16 @@
+import os.path
 import secrets
+from django.conf import settings
 from django.views.generic import View
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse, Http404
 from apps.accounts.mixins import UserSettingsMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.db.models import ObjectDoesNotExist
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import HttpResponse
 
 
 from .models import Devices
@@ -140,3 +141,19 @@ class UpdateDeviceStatusView(LoginRequiredMixin, View):
                 pass
         return redirect('/devices/')
 
+
+def download_sdk(request, sdk):
+    if sdk == 'python':
+        sdk_path = settings.BASE_DIR / 'media/devices/sdk/python_sdk.py'
+        file_name = 'python_sdk.py'
+    elif sdk == 'c++':
+        sdk_path = settings.BASE_DIR / 'media/devices/sdk/cpp_sdk.cpp'
+        file_name = 'cpp_sdk.cpp'
+    else:
+        return Http404
+
+    file = open(sdk_path, 'rb')
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
+    return response
