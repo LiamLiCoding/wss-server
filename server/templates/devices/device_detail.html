@@ -567,7 +567,7 @@
                     })
                 }],
                 chart: {
-                    id: 'fb',
+                    id: 'cpu',
                     group: 'op_status',
                     type: 'area',
                     height: 200,
@@ -628,7 +628,10 @@
                     clipMarkers: false
                 },
                 yaxis: {
-                    tickAmount: 2
+                    min:0,
+                    max:100,
+                    tickAmount: 2,
+                    title: {text:"Utilization Rate(%)"},
                 },
                 xaxis: {
                     type: 'datetime'
@@ -648,7 +651,7 @@
                     })
                 }],
                 chart: {
-                    id: 'tw',
+                    id: 'memory',
                     group: 'op_status',
                     type: 'area',
                     height: 200,
@@ -709,7 +712,10 @@
                     clipMarkers: false
                 },
                 yaxis: {
-                    tickAmount: 2
+                    min:0,
+                    max:100,
+                    tickAmount: 2,
+                    title: {text:"Utilization Rate(%)"},
                 },
                 xaxis: {
                     type: 'datetime'
@@ -729,7 +735,7 @@
                     })
                 }],
                 chart: {
-                    id: 'yt',
+                    id: 'disk',
                     group: 'op_status',
                     type: 'area',
                     height: 200,
@@ -790,7 +796,10 @@
                     clipMarkers: false
                 },
                 yaxis: {
-                    tickAmount: 2
+                    min:0,
+                    max:100,
+                    tickAmount: 2,
+                    title: {text:"Utilization Rate(%)"},
                 },
                 xaxis: {
                     type: 'datetime'
