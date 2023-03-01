@@ -83,7 +83,7 @@ class WebsocketClient:
 
 	def reconnect(self):
 		self.m_ws.close()
-		time.sleep(2)
+		time.sleep(5)
 		print("Websocket client - reconnect ...")
 		self.start()
 
