@@ -1,17 +1,3 @@
-document.addEventListener("DOMContentLoaded", function (event) {
-    let GalleryWrapper = document.querySelector('.gallery-wrapper');
-    if (GalleryWrapper) {
-        let iso = new Isotope('.gallery-wrapper', {
-            itemSelector: '.element-item',
-            layoutMode: 'fitRows'
-        });
-    }
-    let lightbox = GLightbox({
-        selector: '.image-popup',
-        title: false,
-    });
-})
-
 let labelPercentFormatter = function(value) {
     return value + "%";
 };
@@ -349,14 +335,14 @@ let updateEventLog = function () {
             if(data.count === 0){
                 $('#event-log-noresult').css("display", "inline");
                 $('#event-log-table').css("display", "none");
-                // $('#event-image-noresult').css("display", "inline");
-                // $('#event-image').css("display", "none");
+                $('#event-image-noresult').css("display", "inline");
+                $('#event-image').css("display", "none");
             }
             else{
                 $('#event-log-noresult').css("display", "none");
                 $('#event-log-table').css("display", "inline");
-                // $('#event-image-noresult').css("display", "none");
-                // $('#event-image').css("display", "inline");
+                $('#event-image-noresult').css("display", "none");
+                $('#event-image').css("display", "inline");
 
                 let event_table_html = ''
                 let event_image_html = '';
@@ -365,14 +351,14 @@ let updateEventLog = function () {
                         <th scope="row"><span class="badge text-bg-primary">Event${each_log.event}</span></th>
                         <td>${each_log.message}</td>
                         <td>${each_log.action}</td>
-                        <td><a class="image-popup" href="${each_log.image_url}">Preview</a></td>
+                        <td><a target="_blank" href="${each_log.image_url}">Preview</a></td>
                         <td>${each_log.created_time}</td>
                     </tr>`
                     event_image_html += `
                         <div class="col-xl-4 col-sm-6">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
-                                    <a class="image-popup" href="${each_log.image_url}">
+                                    <a class="event-image-gallery" href="${each_log.image_url}">
                                         <img class="gallery-img img-fluid mx-auto" src="${each_log.image_url}" alt="" />
                                         <div class="gallery-overlay">
                                             <h5 class="overlay-caption">Event${each_log.event}</h5>
@@ -393,6 +379,11 @@ let updateEventLog = function () {
                 }
                 $('#event-log-tbody').html(event_table_html);
                 $('#event-image-container').html(event_image_html);
+                // Image pop up initial
+                const  event_image_gallery = GLightbox({
+                    selector: '.event-image-gallery',
+                    title: false,
+                });
             }
         }
     });

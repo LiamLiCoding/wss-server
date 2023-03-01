@@ -5,8 +5,7 @@
 {% block title %} Device detail | WSS{% endblock %}
 
 {% block css %}
-
-    <link rel="stylesheet" href="{% static 'common/libs/glightbox/css/glightbox.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 {% endblock %}
 
 {% block content %}
@@ -196,7 +195,7 @@
                             {% else %}
                                 <div class="noresult" id="performance-no-result">
                                     <div class="text-center">
-                                        <lord-icon src="https://cdn.lordicon.com/gqdnbnwt.json" trigger="loop" delay="500" colors="primary:#121331,secondary:#08a88a" style="width:180px;height:180px"></lord-icon>
+                                        <lord-icon src="https://cdn.lordicon.com/gqdnbnwt.json" trigger="loop" delay="500" colors="primary:#405189,secondary:#02a8b5" style="width:180px;height:180px"></lord-icon>
                                         <h4 class="mt-2">Device is Offline</h4>
                                         <p class="text-muted mb-0 fs-16">Connect device to trace operation status</p>
                                     </div>
@@ -229,7 +228,7 @@
                                     <div class="card-body" id="event-log-noresult">
                                         <div class="noresult" style="display: inline">
                                             <div class="text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"  colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="hover"  colors="primary:#405189,secondary:#02a8b5" style="width:100px;height:100px"></lord-icon>
                                                 <h5 class="mt-2">No Event Log Found</h5>
                                             </div>
                                         </div>
@@ -269,7 +268,7 @@
                                     <div class="card-body" id="operation-log-noresult"  style="display: inline">
                                         <div class="noresult">
                                             <div class="text-center">
-                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#121331,secondary:#08a88a" style="width:75px;height:75px"></lord-icon>
+                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="hover" colors="primary:#405189,secondary:#02a8b5" style="width:100px;height:100px"></lord-icon>
                                                 <h5 class="mt-2">No Operation Log Found</h5>
                                             </div>
                                         </div>
@@ -316,7 +315,7 @@
                         <div class="card-body">
                             <div class="noresult" id="event-image-noresult" style="display:none;">
                                 <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/tyounuzx.json" trigger="hover" colors="primary:#121331,secondary:#08a88a" style="width:120px;height:120px"></lord-icon>
+                                    <lord-icon src="https://cdn.lordicon.com/tyounuzx.json" trigger="hover" colors="primary:#405189,secondary:#02a8b5" style="width:120px;height:120px"></lord-icon>
                                     <h5 class="mt-2">No Event Image Capture Found</h5>
                                 </div>
                             </div>
@@ -403,9 +402,8 @@
 {% endblock %}
 
 {% block js %}
-    <script src="{% static 'common/libs/isotope-layout/isotope.pkgd.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <script src="{% static 'common/libs/apexcharts/apexcharts.min.js' %}"></script>
     <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
-    <script src="{% static 'common/libs/glightbox/js/glightbox.min.js' %}"></script>
     <script src="{% static 'devices/js/device_detail.js' %}"></script>
 {% endblock %}
