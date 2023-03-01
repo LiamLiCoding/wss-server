@@ -1,3 +1,4 @@
+import json
 import secrets
 from django.conf import settings
 from rest_framework import status
@@ -171,5 +172,4 @@ class GetPerformanceDataAPI(LoginRequiredMixin, APIView):
                 performance_serializer = PerformanceSerializer(performance, many=True)
                 return Response(performance_serializer.data)
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
+            return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)

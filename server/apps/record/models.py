@@ -4,15 +4,17 @@ from apps.devices.models import Devices
 
 class EventLog(models.Model):
     EVENT_TYPE = (
-        ('1', 'Event1'),
-        ('2', 'Event2'),
-        ('3', 'Event3'),
-        ('4', 'Event4'),
+        (1, 'Event1'),
+        (2, 'Event2'),
+        (3, 'Event3'),
+        (4, 'Event4'),
     )
 
     device = models.ForeignKey(Devices, on_delete=models.CASCADE)
-    event = models.CharField(max_length=50, choices=EVENT_TYPE, default='1')
-    message = models.TextField(null=True, default=True)
+    event = models.IntegerField(choices=EVENT_TYPE, default=1)
+    message = models.TextField(null=True, blank=True)
+    action = models.TextField(null=True, blank=True)
+    image_url = models.ImageField(upload_to='devices/log_img', null=True, blank=True, default='devices/log_img/test.jpg')
     created_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:

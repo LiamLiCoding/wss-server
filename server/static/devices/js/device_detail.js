@@ -13,8 +13,18 @@ document.addEventListener("DOMContentLoaded", function (event) {
 })
 
 let labelPercentFormatter = function(value) {
-  return value + "%";
+    return value + "%";
 };
+let labelUnitFormatter = function(value) {
+    if (value >= 1048576) {
+        value = Math.ceil(value / 1048576) + " MB";
+    }
+    else if(value >= 1024){
+        value = Math.ceil(value / 1024) + " KB";
+    }
+  return value;
+};
+
 let optionsCPUUsedArea = {
     series: [],
     chart: {
@@ -102,7 +112,6 @@ let optionsCPUUsedArea = {
     }
 };
 let CPUUsedArea = new ApexCharts(document.querySelector("#cpu-used-area"), optionsCPUUsedArea);
-CPUUsedArea.render();
 
 let optionsMemUsedArea = {
     series: [],
@@ -191,17 +200,6 @@ let optionsMemUsedArea = {
     }
 };
 let MemUsedArea = new ApexCharts(document.querySelector("#memory-used-area"), optionsMemUsedArea);
-MemUsedArea.render();
-
-let labelUnitFormatter = function(value) {
-    if (value >= 1048576) {
-        value = Math.ceil(value / 1048576) + " MB";
-    }
-    else if(value >= 1024){
-        value = Math.ceil(value / 1024) + " KB";
-    }
-  return value;
-};
 
 let optionsDiskIOArea = {
     series: [],
@@ -283,12 +281,11 @@ let optionsDiskIOArea = {
     }
 };
 let diskIOArea = new ApexCharts(document.querySelector("#disk-used-area"), optionsDiskIOArea);
-diskIOArea.render();
 
-let url = $("#performance-chart").data("urls");
+let performance_url = $("#performance-chart").data("urls");
 
 let updateChartData = function () {
-    $.getJSON(url, function(response) {
+    $.getJSON(performance_url, function(response) {
         let cpu_data = [];
         let mem_data = [];
         let disk_write_io_data = [];
@@ -310,8 +307,131 @@ let updateChartData = function () {
                 name: 'Read IO',
                 data: disk_read_io_data,
             },
-        ]);});
+        ]);
+    });
 };
-updateChartData()
 
-window.setInterval("updateChartData()", 5000)
+// Performance charts
+if ($('#performance-no-result').length === 0) {
+    CPUUsedArea.render();
+    MemUsedArea.render();
+    diskIOArea.render();
+    updateChartData()
+    window.setInterval("updateChartData()", 5000);
+}
+
+// Event log and Operation log table
+let event_log_url= $("#event-log").data("urls");
+let operation_log_url= $("#operation-log").data("urls");
+
+let updateEventLog = function () {
+    $.ajax({
+        type: 'get',
+        url: event_log_url,
+        data: {page: even_log_page.current},
+        success: function (data) {
+            if(data.next){
+                even_log_page.next=true;
+                $('#event-log-next').removeClass("disabled");
+            }
+            else{
+                even_log_page.next=false;
+                $('#event-log-next').addClass("disabled");
+            }
+            if(data.previous){
+                even_log_page.previous=true;
+                $('#event-log-previous').removeClass("disabled");
+            }
+            else{
+                even_log_page.previous=false;
+                $('#event-log-previous').addClass("disabled");
+            }
+            if(data.count === 0){
+                $('#event-log-noresult').css("display", "inline");
+                $('#event-log-table').css("display", "none");
+            }
+            else{
+                $('#event-log-noresult').css("display", "none");
+                $('#event-log-table').css("display", "inline");
+                let table_html = '';
+                for(let each_log of data.results){
+                    table_html += `<tr>
+                        <th scope="row"><span class="badge text-bg-primary">Event${each_log.event}</span></th>
+                        <td>${each_log.message}</td>
+                        <td>${each_log.action}</td>
+                        <td><a target="_blank" href="${each_log.image_url}" title="">Preview</a></td>
+                        <td>${each_log.created_time}</td>
+                    </tr>`
+                }
+                $('#event-log-tbody').html(table_html);
+            }
+        }
+    });
+}
+
+let updateOperationLog = function () {
+    $.ajax({
+        type: 'get',
+        url: operation_log_url,
+        data: {page: operation_log_page.current},
+        success: function (data) {
+            if(data.next){
+                operation_log_page.next=true;
+                $('#operation-log-next').removeClass("disabled");
+            }
+            else{
+                operation_log_page.next=false;
+                $('#operation-log-next').addClass("disabled");
+            }
+            if(data.previous){
+                operation_log_page.previous=true;
+                $('#operation-log-previous').removeClass("disabled");
+            }
+            else{
+                operation_log_page.previous=false;
+                $('#operation-log-previous').addClass("disabled");
+            }
+            if(data.count === 0){
+                $('#operation-log-noresult').css("display", "inline");
+                $('#operation-log-table').css("display", "none");
+            }
+            else{
+                $('#operation-log-noresult').css("display", "none");
+                $('#operation-log-table').css("display", "inline");
+                let table_html = '';
+                for(let each_log of data.results){
+                    table_html += `<tr>
+                        <th scope="row"><span class="badge text-bg-danger fs-15">${each_log.operation}</span></th>
+                        <td>${each_log.message}</td>
+                        <td>${each_log.created_time}</td>
+                    </tr>`
+                }
+                $('#operation-log-tbody').html(table_html);
+            }
+        }
+    });
+}
+
+let even_log_page = {current:1, next:false, previous:false, func:updateEventLog};
+let operation_log_page = {current:1, next:false, previous:false, func:updateOperationLog};
+
+function page_change(type, is_add) {
+    let page = type === 'event' ? even_log_page : operation_log_page;
+    if(is_add && page.next){
+        page.current += 1;
+        page.func();
+    }
+    else if(!is_add && page.previous){
+        page.current -= 1;
+        page.func();
+    }
+    return true
+}
+
+updateEventLog();
+updateOperationLog();
+
+
+
+
+
