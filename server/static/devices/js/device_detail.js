@@ -349,21 +349,50 @@ let updateEventLog = function () {
             if(data.count === 0){
                 $('#event-log-noresult').css("display", "inline");
                 $('#event-log-table').css("display", "none");
+                // $('#event-image-noresult').css("display", "inline");
+                // $('#event-image').css("display", "none");
             }
             else{
                 $('#event-log-noresult').css("display", "none");
                 $('#event-log-table').css("display", "inline");
-                let table_html = '';
+                // $('#event-image-noresult').css("display", "none");
+                // $('#event-image').css("display", "inline");
+
+                let event_table_html = ''
+                let event_image_html = '';
                 for(let each_log of data.results){
-                    table_html += `<tr>
+                    event_table_html += `<tr>
                         <th scope="row"><span class="badge text-bg-primary">Event${each_log.event}</span></th>
                         <td>${each_log.message}</td>
                         <td>${each_log.action}</td>
-                        <td><a target="_blank" href="${each_log.image_url}" title="">Preview</a></td>
+                        <td><a class="image-popup" href="${each_log.image_url}">Preview</a></td>
                         <td>${each_log.created_time}</td>
                     </tr>`
+                    event_image_html += `
+                        <div class="col-xl-4 col-sm-6">
+                            <div class="gallery-box card">
+                                <div class="gallery-container">
+                                    <a class="image-popup" href="${each_log.image_url}">
+                                        <img class="gallery-img img-fluid mx-auto" src="${each_log.image_url}" alt="" />
+                                        <div class="gallery-overlay">
+                                            <h5 class="overlay-caption">Event${each_log.event}</h5>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="box-content">
+                                    <div class="d-flex align-items-center mt-1">
+                                        <div class="flex-grow-1 text-body text-truncate">${each_log.message}</div>
+                                        <div class="flex-shrink-0 text-body text-truncate">${each_log.created_time}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end col -->
+                    `
                 }
-                $('#event-log-tbody').html(table_html);
+                $('#event-log-tbody').html(event_table_html);
+                $('#event-image-container').html(event_image_html);
             }
         }
     });
@@ -398,15 +427,15 @@ let updateOperationLog = function () {
             else{
                 $('#operation-log-noresult').css("display", "none");
                 $('#operation-log-table').css("display", "inline");
-                let table_html = '';
+                let operation_table_html = '';
                 for(let each_log of data.results){
-                    table_html += `<tr>
+                    operation_table_html += `<tr>
                         <th scope="row"><span class="badge text-bg-danger fs-15">${each_log.operation}</span></th>
                         <td>${each_log.message}</td>
                         <td>${each_log.created_time}</td>
                     </tr>`
                 }
-                $('#operation-log-tbody').html(table_html);
+                $('#operation-log-tbody').html(operation_table_html);
             }
         }
     });
