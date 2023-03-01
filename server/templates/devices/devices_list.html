@@ -315,10 +315,10 @@
                             <h4>You are about to delete a device ?</h4>
                             <p class="text-muted fs-14 mb-4">Deleting your device will remove all device information from our database.</p>
                             <div class="hstack gap-2 justify-content-center remove">
+                                <button class="btn btn-link btn-ghost-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
+                                    <i class="ri-close-line me-1 align-middle"></i> Close</button>
                                 <form method="post" id="delete_device" name="delete_device">
                                     {% csrf_token %}
-                                    <button class="btn btn-link btn-ghost-success fw-medium text-decoration-none" id="deleteRecord-close" data-bs-dismiss="modal">
-                                        <i class="ri-close-line me-1 align-middle"></i> Close</button>
                                     <button class="btn btn-danger" id="delete-record" type="submit">Yes, Delete It</button>
                                 </form>
                             </div>

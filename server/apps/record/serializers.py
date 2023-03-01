@@ -1,3 +1,4 @@
+from datetime import datetime
 from rest_framework import serializers
 from .models import EventLog, OperationLog
 
@@ -12,3 +13,10 @@ class OperationLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = OperationLog
         fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        created_time = data.get('created_time')
+        created_time = datetime.strptime(created_time, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%b.%d, %Y %H:%M:%S')
+        data.update({"created_time": created_time})
+        return data

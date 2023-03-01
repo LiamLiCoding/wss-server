@@ -2,6 +2,7 @@ import json
 import secrets
 from django.conf import settings
 from rest_framework import status
+from django.utils import timezone
 from django.views.generic import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -17,6 +18,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from .models import Devices, Performance
+from apps.record.models import OperationLog
+from apps.api_websocket.consumers import send_device_message, send_notification
 from apps.devices.serializers import PerformanceSerializer
 
 
@@ -171,5 +174,30 @@ class GetPerformanceDataAPI(LoginRequiredMixin, APIView):
                 performance = Performance.objects.filter(device=device)
                 performance_serializer = PerformanceSerializer(performance, many=True)
                 return Response(performance_serializer.data)
+        except ObjectDoesNotExist:
+            return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)
+
+
+class DeviceOperationAPI(LoginRequiredMixin, APIView):
+    def post(self, request, device_id):
+        try:
+            device = Devices.objects.get(id=device_id)
+            if device:
+                user = self.request.user
+                operation = request.POST.get('operation')
+
+                message = '{} restart the device at {}' if operation == 'restart' else '{} stop motion detection at {}'
+                message = message.format(user.username, timezone.now().strftime('%b.%d, %Y %H:%M:%S'))
+
+                send_device_message(device_id, operation, 'operation')
+                send_notification(user.id, message, notification_type='danger', duration=10000)
+
+                operation_log = OperationLog()
+                operation_log.operation = operation
+                operation_log.device = device
+
+                operation_log.message = message
+                operation_log.save()
+                return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)

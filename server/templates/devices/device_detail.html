@@ -6,6 +6,7 @@
 
 {% block css %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <link href="{% static 'common/libs/sweetalert2/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block content %}
@@ -112,11 +113,11 @@
                                             <tbody>
                                                 <tr>
                                                     <td><h4 class="mt-2" style="text-align: left">Restart</h4></td>
-                                                    <td style="text-align: center"><button type="button" class="btn btn-danger waves-effect waves-light">Confirm</button></td>
+                                                    <td style="text-align: center"><button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation="restart" class="btn btn-danger waves-effect waves-light">Confirm</button></td>
                                                 </tr>
                                                 <tr>
                                                     <td><h4 class="mt-2" style="text-align: left">Stop Motion Detection</h4></td>
-                                                    <td style="text-align: center"><button type="button" class="btn btn-danger waves-effect waves-light">Confirm</button></td>
+                                                    <td style="text-align: center"><button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation="stop_motion_detection" class="btn btn-danger waves-effect waves-light">Confirm</button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -395,6 +396,26 @@
             </div>
             <!--end modal-->
 
+            <div class="modal fade flip" id="operation_modal" data-urls='{% url 'operation' device.id %}' aria-labelledby="OperationModalLabel" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body p-5 text-center">
+                            <lord-icon id="operation-modal-icon" src="https://cdn.lordicon.com/wrprwmwt.json" trigger="loop" colors="primary:#405189,secondary:#f06548" style="width:120px;height:120px"></lord-icon>
+                            <div class="mt-2 text-center">
+                                <h4 id="operation-modal-title">You are about to delete a device ?</h4>
+                                <p class="text-muted fs-14 mb-4">Make sure your operation is correct!</p>
+                                <div class="hstack gap-2 justify-content-center remove">
+                                    <button class="btn btn-link btn-ghost-success fw-medium text-decoration-none" id="operation-close" data-bs-dismiss="modal">
+                                            <i class="ri-close-line me-1 align-middle"></i> Close
+                                    </button>
+                                    <button class="btn btn-danger" id="operation_confirm" data-bs-dismiss="modal">Confirm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--end operation modal -->
         </div>
         <!-- container-fluid -->
     </div>
@@ -402,8 +423,34 @@
 {% endblock %}
 
 {% block js %}
+    <script src="{% static 'common/js/csrf.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <script src="{% static 'common/libs/apexcharts/apexcharts.min.js' %}"></script>
     <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
     <script src="{% static 'devices/js/device_detail.js' %}"></script>
+    <script>
+        let urls = '';
+        let operation = '';
+        $('#operation_modal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget);
+            operation = button.data('operation');
+            urls = $(this).data('urls');
+            if (operation === 'restart'){
+                $('#operation-modal-title').text("You are about to restart the device");
+                $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/wrprwmwt.json");
+            }
+            else if(operation === 'stop_motion_detection'){
+                $('#operation-modal-title').text("You are about to stop motion detect");
+                $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
+            }
+        })
+        $('#operation_confirm').click(function (){
+            $.ajax({
+                type: 'post',
+                url: urls,
+                data: {'operation': operation},
+            })
+        })
+
+    </script>
 {% endblock %}

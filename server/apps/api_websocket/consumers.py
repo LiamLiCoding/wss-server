@@ -5,6 +5,7 @@
 # @Email : hxl1119@case.edu
 
 import json
+from asgiref.sync import async_to_sync
 from django.utils import timezone
 from django.shortcuts import reverse
 from channels.generic.websocket import AsyncWebsocketConsumer
@@ -15,7 +16,7 @@ from django.db.models import ObjectDoesNotExist
 from apps.devices.models import Devices, Performance
 
 
-async def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
+async def _send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
     channel_layer = get_channel_layer()
     await channel_layer.group_send('notification_{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
@@ -25,7 +26,25 @@ async def send_notification(user_id, message, notification_type="success", style
                                                                        "jump_url": jump_url})
 
 
+def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)('notification_{}'.format(user_id), {"type": "group_message",
+                                                                       "message": message,
+                                                                       "notification_type": notification_type,
+                                                                       "style": style,
+                                                                       "duration": duration,
+                                                                       "jump_url": jump_url})
+
+
+def send_device_message(device_id, message, message_type="operation"):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)('device_{}'.format(device_id), {"type": "group_message",
+                                                                            "message": message,
+                                                                            "message_type": message_type})
+
+
 class DeviceConsumer(AsyncWebsocketConsumer):
+    group_name = ''
     api_key = ''
     device = None
     device_name = ''
@@ -37,9 +56,11 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         self.device = await self.get_device()
         if self.device and self.device.is_enable:
             await self.accept()
+            self.group_name = 'device_{}'.format(self.device.id)
+            await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.update_device_status(active=True)
             message = "Device: {} is online now.".format(self.device.device_name)
-            await send_notification(self.user_id, message=message, duration=5000,
+            await _send_notification(self.user_id, message=message, duration=5000,
                                     jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
         else:
             await self.close(code=3003)
@@ -79,8 +100,9 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         await self.update_device_status(active=False)
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
         message = "Device: {} is offline now.".format(self.device.device_name)
-        await send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
+        await _send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
 
     async def receive(self, text_data=None, bytes_data=None):
         parsed_data = json.loads(text_data)
@@ -96,6 +118,13 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                 return
         await self.disconnect(close_code=3003)
         await self.close(code=3003)
+
+    async def group_message(self, event):
+        print("send device message {}".format(event))
+        message_type = event.get('message_type', 'operation')
+        data = {"message": event['message'],
+                "message_type": message_type}
+        await self.send(text_data=json.dumps(data))
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):

@@ -17,4 +17,5 @@ urlpatterns = [
 	path('edit_device/<pk>', views.UpdateDeviceStatusView.as_view(), name='edit_device'),
 	path('download_sdk/<str:sdk>', views.download_sdk, name='download_sdk'),
 	path('get_performance/<int:device_id>', views.GetPerformanceDataAPI.as_view(), name='get_performance'),
+	path('operation/<int:device_id>', views.DeviceOperationAPI.as_view(), name='operation'),
 ]
