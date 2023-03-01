@@ -157,24 +157,11 @@
                             <div class="row g-3">
                                 <div class="col-xxl-5 col-sm-12">
                                     <div class="search-box">
-                                        <input type="text" class="form-control search bg-light border-light" placeholder="Search for devices">
+                                        <input type="search" class="form-control search bg-light border-light table-filter" data-table="table-device" placeholder="Search for devices">
                                         <i class="ri-search-line search-icon"></i>
                                     </div>
                                 </div>
                                 <!--end col-->
-
-                                <div class="col-xxl-3 col-sm-4">
-                                    <div class="input-light">
-                                        <select class="form-control" name="choices-single-default" id="idStatus">
-                                            <option value="">Status</option>
-                                            <option value="all" selected>All</option>
-                                            <option value="New">New</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Inprogress">Inprogress</option>
-                                            <option value="Completed">Completed</option>
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
                             <!--end row-->
                         </form>
@@ -182,7 +169,7 @@
                     <!--end card-body-->
                     <div class="card-body">
                         <div class="table-responsive table-card mb-4">
-                            <table class="table align-middle table-nowrap mb-0" id="tasksTable">
+                            <table class="table align-middle table-nowrap mb-0 table-device" id="tasksTable">
                                 <thead class="table-light text-muted">
                                     <tr>
                                         <th>Device name</th>
@@ -197,7 +184,7 @@
                                 <tbody class="list">
                                     {% for device in devices %}
                                         <tr id="{{ device.id }}">
-                                            <td><a href="{% url 'device_detail' device.id %}" class="fw-medium link-primary">{{ device.device_name }}</a></td>
+                                            <th scope="row"><a href="{% url 'device_detail' device.id %}" class="fw-medium link-primary">{{ device.device_name }}</a></th>
                                             <td><span class="badge badge-soft-secondary text-uppercase">{{ device.node_type }}</span></td>
                                             <td>
                                                 <input type="text" class="form-control" readonly value="{{ device.api_key }}">
@@ -223,9 +210,9 @@
                                             <td>
                                                 <div class="form-check form-switch form-switch-md ms-2">
                                                     {% if device.is_enable %}
-                                                        <input type="checkbox" class="form-check-input status_change" data-device-id="{{ device.id }}" checked>
+                                                        <input type="checkbox" class="form-check-input status_change" data-url="{% url 'update_device_status' device.id %}" checked>
                                                     {% else %}
-                                                        <input type="checkbox" class="form-check-input status_change" data-device-id="{{ device.id }}">
+                                                        <input type="checkbox" class="form-check-input status_change" data-url="{% url 'update_device_status' device.id %}">
                                                     {% endif %}
                                                 </div>
                                             </td>
@@ -238,7 +225,7 @@
                                                             </a>
                                                         </li>
                                                         <li class="list-inline-item">
-                                                            <a class="remove-item-btn" data-bs-toggle="modal" href="#deleteDevice" data-device-id="{{ device.id }}">
+                                                            <a class="remove-item-btn" data-bs-toggle="modal" href="#deleteDevice" data-device-id="{{ device.id }}" data-url="{% url 'delete_device' device.id %}">
                                                                 <i class="ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                             </a>
                                                         </li>
@@ -387,7 +374,6 @@
                             <div class="hstack gap-2 justify-content-end">
                                 <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-success" id="add-btn">Add Task</button>
-                                <!-- <button type="button" class="btn btn-success" id="edit-btn">Update Task</button> -->
                             </div>
                         </div>
                     </form>
@@ -408,49 +394,6 @@
 <script src="{% static 'common/libs/list.js/list.min.js' %}"></script>
 <script src="{% static 'common/libs/list.pagination.js/list.pagination.min.js' %}"></script>
 <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
+<script src="{% static 'devices/js/device_list.js' %}"></script>
 
-<script>
-$('#deleteDevice').on('show.bs.modal', function (event) {
-    let button = $(event.relatedTarget);
-    let device_id = button.data('device-id');
-
-    let action_url = "{% url 'delete_device' 'device-pk' %}";
-    action_url = action_url.replace('device-pk', device_id);
-    document.delete_device.action = action_url;
-})
-</script>
-
-<script>
-$(".status_change").change(function() {
-    let enable_status = $(this).prop('checked');
-    let device_id = $(this).data('device-id');
-    let action_url = "{% url 'update_device_status' 'device-pk' %}";
-    action_url = action_url.replace('device-pk', device_id);
-    let data_obj={'enable':enable_status};
-    $.ajax({
-        url:action_url,
-        type:'post',
-        data:data_obj,
-        success:function (data) {
-            let target_id = data.target_id;
-            let is_enable = data.is_enable;
-            let status = data.device_status;
-            let target_status_node = $("#" + target_id + "_status");
-            let status_inner_html = '';
-            if (status === 'active'){
-                status_inner_html = `<span class="badge bg-success text-uppercase">${status}</span>`
-            }
-            else if(status === 'inactive'){
-                status_inner_html = `<span class="badge bg-warning text-uppercase">${status}</span>`
-            }
-            else if(status === 'inactivated'){
-                status_inner_html = `<span class="badge bg-primary text-uppercase">${status}</span>`
-            }
-            else {
-                status_inner_html = `<span class="badge bg-danger text-uppercase">${status}</span>`
-            }
-            target_status_node.html(status_inner_html);
-        }});
-});
-</script>
 {% endblock %}
