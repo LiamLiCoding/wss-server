@@ -188,7 +188,7 @@
                             <h4 class="card-title mb-0">Device Operating Status</h4>
                         </div><!-- end card header -->
 
-                        <div class="card-body">
+                        <div class="card-body" id="performance-chart" data-urls="{% url 'get_performance' device.id %}">
                             {% if device.is_active %}
                                 <div id="cpu-used-area" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
                                 <div id="memory-used-area" data-colors='["--vz-warning"]' class="apex-charts" dir="ltr"></div>
@@ -210,12 +210,12 @@
                             <div>
                                 <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-bs-toggle="tab" href="#profile-1" role="tab">
+                                        <a class="nav-link active" data-bs-toggle="tab" href="#event-log" role="tab">
                                             Event Log (30)
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-bs-toggle="tab" href="#messages-1" role="tab">
+                                        <a class="nav-link" data-bs-toggle="tab" href="#operation-log" role="tab">
                                             Operation Log (4)
                                         </a>
                                     </li>
@@ -225,198 +225,26 @@
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="tab-pane" id="messages-1" role="tabpanel">
-                                    <div class="table-responsive table-card">
-                                        <table class="table table-borderless align-middle mb-0">
-                                            <thead class="table-light text-muted">
-                                                <tr>
-                                                    <th scope="col">File Name</th>
-                                                    <th scope="col">Type</th>
-                                                    <th scope="col">Size</th>
-                                                    <th scope="col">Upload Date</th>
-                                                    <th scope="col">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm">
-                                                                <div class="avatar-title bg-soft-primary text-primary rounded fs-20">
-                                                                    <i class="ri-file-zip-fill"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="ms-3 flex-grow-1">
-                                                                <h6 class="fs-15 mb-0"><a href="javascript:void(0)" class="text-body">App pages.zip</a></h6>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>Zip File</td>
-                                                    <td>2.22 MB</td>
-                                                    <td>21 Dec, 2021</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink1" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                <i class="ri-equalizer-fill"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink1" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                <li class="dropdown-divider"></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm">
-                                                                <div class="avatar-title bg-soft-danger text-danger rounded fs-20">
-                                                                    <i class="ri-file-pdf-fill"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="ms-3 flex-grow-1">
-                                                                <h6 class="fs-15 mb-0"><a href="javascript:void(0);" class="text-body">Velzon admin.ppt</a></h6>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>PPT File</td>
-                                                    <td>2.24 MB</td>
-                                                    <td>25 Dec, 2021</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink2" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                <i class="ri-equalizer-fill"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink2" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                <li class="dropdown-divider"></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm">
-                                                                <div class="avatar-title bg-soft-info text-info rounded fs-20">
-                                                                    <i class="ri-folder-line"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="ms-3 flex-grow-1">
-                                                                <h6 class="fs-15 mb-0"><a href="javascript:void(0);" class="text-body">Images.zip</a></h6>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>ZIP File</td>
-                                                    <td>1.02 MB</td>
-                                                    <td>28 Dec, 2021</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink3" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                <i class="ri-equalizer-fill"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink3" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle"></i>View</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle"></i>Download</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle"></i>Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm">
-                                                                <div class="avatar-title bg-soft-danger text-danger rounded fs-20">
-                                                                    <i class="ri-image-2-fill"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="ms-3 flex-grow-1">
-                                                                <h6 class="fs-15 mb-0"><a href="javascript:void(0);" class="text-body">Bg-pattern.png</a></h6>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>PNG File</td>
-                                                    <td>879 KB</td>
-                                                    <td>02 Nov 2021</td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink4" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                <i class="ri-equalizer-fill"></i>
-                                                            </a>
-                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink4" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(0px, 23px);">
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle"></i>View</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle"></i>Download</a></li>
-                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle"></i>Delete</a></li>
-                                                            </ul>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <!--end table-->
-                                    </div>
-                                </div>
-                                <!--end tab-pane-->
-                                <div class="tab-pane active" id="profile-1" role="tabpanel">
-                                    <h6 class="card-title mb-4 pb-2">Device Log</h6>
+                                <div class="tab-pane active" id="event-log" role="tabpanel">
+                                    <h6 class="card-title mb-4 pb-2">Event Log</h6>
                                     <div class="table-responsive table-card">
                                         <table class="table align-middle mb-0">
                                             <thead class="table-light text-muted">
                                                 <tr>
-                                                    <th scope="col">Member</th>
-                                                    <th scope="col">Date</th>
-                                                    <th scope="col">Duration</th>
-                                                    <th scope="col">Timer Idle</th>
-                                                    <th scope="col">Tasks Title</th>
+                                                    <th scope="col">Event</th>
+                                                    <th scope="col">Message</th>
+                                                    <th scope="col">Image Capture</th>
+                                                    <th scope="col">Action</th>
+                                                    <th scope="col">Time</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <th scope="row">
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="assets/images/users/avatar-8.jpg" alt="" class="rounded-circle avatar-xxs">
-                                                            <div class="flex-grow-1 ms-2">
-                                                                <a href="pages-profile.html" class="fw-medium text-body">Thomas Taylor</a>
-                                                            </div>
-                                                        </div>
-                                                    </th>
-                                                    <td>02 Jan, 2022</td>
+                                                    <th scope="row"><span class="badge text-bg-primary">Event2</span></th>
+                                                    <td>Someone is approaching</td>
+                                                    <td><a class="image-popup" href="{{ MEDIA_URL }}devices/log_img/test.jpg" title="">Preview</a></td>
+                                                    <td>Enter Mode 3</td>
                                                     <td>3 hrs 12 min</td>
-                                                    <td>05 min</td>
-                                                    <td>Apps Pages</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="assets/images/users/avatar-10.jpg" alt="" class="rounded-circle avatar-xxs">
-                                                            <div class="flex-grow-1 ms-2">
-                                                                <a href="pages-profile.html" class="fw-medium text-body">Tonya Noble</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>28 Dec, 2021</td>
-                                                    <td>1 hrs 35 min</td>
-                                                    <td>-</td>
-                                                    <td>Profile Page Design</td>
-                                                </tr>
-                                                <tr>
-                                                    <th scope="row">
-                                                        <div class="d-flex align-items-center">
-                                                            <img src="assets/images/users/avatar-10.jpg" alt="" class="rounded-circle avatar-xxs">
-                                                            <div class="flex-grow-1 ms-2">
-                                                                <a href="pages-profile.html" class="fw-medium text-body">Tonya Noble</a>
-                                                            </div>
-                                                        </div>
-                                                    </th>
-                                                    <td>27 Dec, 2021</td>
-                                                    <td>4 hrs 26 min</td>
-                                                    <td>03 min</td>
-                                                    <td>Ecommerce Dashboard</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -424,6 +252,28 @@
                                     </div>
                                 </div>
                                 <!--edn tab-pane-->
+                                <div class="tab-pane" id="operation-log" role="tabpanel">
+                                    <div class="table-responsive table-card">
+                                        <table class="table table-borderless align-middle mb-0">
+                                            <thead class="table-light text-muted">
+                                                <tr>
+                                                    <th scope="col">Operation</th>
+                                                    <th scope="col">Message</th>
+                                                    <th scope="col">Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row"><span class="badge text-bg-danger fs-15">Restart</span></th>
+                                                    <td>No Message</td>
+                                                    <td>3 hrs 12 min</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <!--end table-->
+                                    </div>
+                                </div>
+                                <!--end tab-pane-->
 
                             </div>
                             <!--end tab-content-->
@@ -611,323 +461,5 @@
     <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
     <script src="{% static 'common/libs/glightbox/js/glightbox.min.js' %}"></script>
     <script src="{% static 'common/libs/isotope-layout/isotope.pkgd.min.js' %}"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function (event) {
-        let GalleryWrapper = document.querySelector('.gallery-wrapper');
-        if (GalleryWrapper) {
-            let iso = new Isotope('.gallery-wrapper', {
-                itemSelector: '.element-item',
-                layoutMode: 'fitRows'
-            });
-        }
-        let lightbox = GLightbox({
-            selector: '.image-popup',
-            title: false,
-        });
-    })
-    </script>
-    <script>
-    let labelPercentFormatter = function(value) {
-      return value + "%";
-    };
-    let optionsCPUUsedArea = {
-        series: [],
-        chart: {
-            id: 'cpu',
-            group: 'op_status',
-            type: 'area',
-            height: 200,
-            zoom: {
-                type: 'x',
-                enabled: true,
-                autoScaleYaxis: true
-            },
-            toolbar: {
-                autoSelected: 'zoom'
-            }
-        },
-        title: {
-            text: 'CPU Used',
-            align: 'center',
-            style: {
-                fontWeight: 500,
-            },
-        },
-        colors: ['#4B38AA'],
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'straight',
-            width: 3,
-        },
-        toolbar: {
-            tools: {
-                selection: false
-            }
-        },
-        markers: {
-            size: 0
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.5,
-                opacityTo: 0,
-                stops: [0, 90, 100]
-            },
-        },
-        tooltip: {
-            followCursor: false,
-            x: {
-                show: false
-            },
-            marker: {
-                show: false
-            },
-            y: {
-                title: {
-                    formatter: function () {
-                        return ''
-                    }
-                }
-            }
-        },
-        grid: {
-            clipMarkers: false
-        },
-        yaxis: {
-            min:0,
-            max:100,
-            tickAmount: 2,
-            title: {text:"Utilization Rate(%)"},
-             labels: {
-                formatter: labelPercentFormatter
-             }
-        },
-        xaxis: {
-            type: 'datetime',
-            labels: {
-                formatter: function(value, timestamp, opts) {
-                  return opts.dateFormatter(new Date(timestamp), 'HH:mm:ss')
-                }
-            },
-        }
-    };
-    let CPUUsedArea = new ApexCharts(document.querySelector("#cpu-used-area"), optionsCPUUsedArea);
-    CPUUsedArea.render();
-
-    let optionsMemUsedArea = {
-        series: [],
-        chart: {
-            id: 'memory',
-            group: 'op_status',
-            type: 'area',
-            height: 200,
-            zoom: {
-                type: 'x',
-                enabled: true,
-                autoScaleYaxis: true
-            },
-            toolbar: {
-                autoSelected: 'zoom'
-            }
-        },
-        title: {
-            text: 'Memory Used',
-            align: 'center',
-            style: {
-                fontWeight: 500,
-            },
-        },
-        colors: ['#FFBE0B'],
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 3,
-        },
-        toolbar: {
-            tools: {
-                selection: false
-            }
-        },
-        markers: {
-            size: 0
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.5,
-                opacityTo: 0,
-                stops: [0, 90, 100]
-            },
-        },
-        tooltip: {
-            followCursor: false,
-            x: {
-                show: false
-            },
-            marker: {
-                show: false
-            },
-            y: {
-                title: {
-                    formatter: function () {
-                        return ''
-                    }
-                }
-            }
-        },
-        grid: {
-            clipMarkers: false
-        },
-        yaxis: {
-            min:0,
-            max:100,
-            tickAmount: 2,
-            title: {text:"Utilization Rate(%)"},
-            labels: {
-                formatter: labelPercentFormatter
-            }
-        },
-        xaxis: {
-            type: 'datetime',
-            labels: {
-                formatter: function(value, timestamp, opts) {
-                  return opts.dateFormatter(new Date(timestamp), 'HH:mm:ss')
-                }
-            },
-        }
-    };
-    let MemUsedArea = new ApexCharts(document.querySelector("#memory-used-area"), optionsMemUsedArea);
-    MemUsedArea.render();
-
-    let labelUnitFormatter = function(value) {
-        if (value >= 1048576) {
-            value = Math.ceil(value / 1048576) + " MB";
-        }
-        else if(value >= 1024){
-            value = Math.ceil(value / 1024) + " KB";
-        }
-      return value;
-    };
-
-    let optionsDiskIOArea = {
-        series: [],
-        chart: {
-            id: 'disk',
-            group: 'op_status',
-            type: 'area',
-            height: 200,
-            zoom: {
-                type: 'x',
-                enabled: true,
-                autoScaleYaxis: true
-            },
-            toolbar: {
-                autoSelected: 'zoom'
-            }
-        },
-        title: {
-            text: 'Disk Used',
-            align: 'center',
-            style: {
-                fontWeight: 500,
-            },
-        },
-        fill: {
-            type: 'gradient',
-            gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.5,
-                opacityTo: 0,
-                stops: [0, 90, 100]
-            },
-        },
-        colors: ['#45CB85', '#F06548'],
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 3,
-        },
-        toolbar: {
-            tools: {
-                selection: false
-            }
-        },
-        markers: {
-            size: 0
-        },
-        tooltip: {
-            followCursor: false,
-            x: {
-                show: false
-            },
-            marker: {
-                show: false
-            },
-            y: {
-                title: {
-                    formatter: function () {
-                        return ''
-                    }
-                }
-            }
-        },
-        grid: {
-            clipMarkers: false
-        },
-        yaxis: {
-            tickAmount: 2,
-            title: {text:"Disk IO(K)"},
-             labels: {
-                formatter: labelUnitFormatter
-              }
-        },
-        xaxis: {
-            type: 'datetime'
-        }
-    };
-    let diskIOArea = new ApexCharts(document.querySelector("#disk-used-area"), optionsDiskIOArea);
-    diskIOArea.render();
-
-    let updateChartData = function () {
-        $.getJSON('{% url 'get_performance' device.id %}', function(response) {
-            let cpu_data = [];
-            let mem_data = [];
-            let disk_write_io_data = [];
-            let disk_read_io_data = [];
-            for(let each_data of response){
-                cpu_data.push({x:each_data['created_time'], y:each_data['cpu_rate']});
-                mem_data.push({x:each_data['created_time'], y:each_data['mem_rate']});
-                disk_write_io_data.push({x:each_data['created_time'], y:each_data['disk_write_io']});
-                disk_read_io_data.push({x:each_data['created_time'], y:each_data['disk_read_io']});
-            }
-            CPUUsedArea.updateSeries([{data: cpu_data}]);
-            MemUsedArea.updateSeries([{data: mem_data}]);
-            diskIOArea.updateSeries([
-                {
-                    name: 'Write IO',
-                    data: disk_write_io_data,
-                },
-                {
-                    name: 'Read IO',
-                    data: disk_read_io_data,
-                },
-            ]);});
-    };
-    updateChartData()
-
-    window.setInterval("updateChartData()", 5000)
-
-    </script>
+    <script src="{% static 'devices/js/device_detail.js' %}"></script>
 {% endblock %}

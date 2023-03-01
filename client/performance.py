@@ -30,6 +30,7 @@ class PerformanceMonitor:
 		self.m_cpu_count = 0
 		self.m_disk_usage = 0
 
+		self.m_interval = 5
 		self.m_thread = None
 		self.m_thread_lock = threading.Lock()
 		self.m_event = None
@@ -55,6 +56,9 @@ class PerformanceMonitor:
 	def register_callback(self, event, func):
 		pass
 
+	def set_interval(self, interval):
+		self.m_interval = interval
+
 	def enable_upload(self, status):
 		self.m_enable_upload = status
 
@@ -64,7 +68,7 @@ class PerformanceMonitor:
 			return
 
 		with self.m_thread_lock:
-			self.m_cpu_used_rate = psutil.cpu_percent(interval=1)
+			self.m_cpu_used_rate = psutil.cpu_percent(interval=self.m_interval)
 			self.m_mem_used_rate = psutil.virtual_memory().percent
 			self.m_disk_io_read = psutil.disk_io_counters().read_bytes
 			self.m_disk_io_write = psutil.disk_io_counters().write_bytes
