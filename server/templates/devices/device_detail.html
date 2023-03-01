@@ -83,7 +83,7 @@
                                 <div class="mb-2">
                                     <lord-icon src="https://cdn.lordicon.com/qghrdngw.json" trigger="loop" delay="1000" colors="primary:#405189,secondary:#02a8b5" style="width:90px;height:90px"></lord-icon>
                                 </div>
-                                <h3 class="mb-1">{{ device.last_online|time_diff_now }}</h3>
+                                <h3 class="mb-1" id="device_online_time" data-online-time="{{ device.last_online|date:"c" }}"></h3>
                                 <h5 class="fs-14 mb-4">Online time</h5>
                                 <div class="hstack gap-2 justify-content-center">
                                     <button class="btn btn-success"><i class="ri-play-circle-line align-bottom me-1"></i> ONLINE </button>
@@ -429,28 +429,6 @@
     <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
     <script src="{% static 'devices/js/device_detail.js' %}"></script>
     <script>
-        let urls = '';
-        let operation = '';
-        $('#operation_modal').on('show.bs.modal', function (event) {
-            let button = $(event.relatedTarget);
-            operation = button.data('operation');
-            urls = $(this).data('urls');
-            if (operation === 'restart'){
-                $('#operation-modal-title').text("You are about to restart the device");
-                $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/wrprwmwt.json");
-            }
-            else if(operation === 'stop_motion_detection'){
-                $('#operation-modal-title').text("You are about to stop motion detect");
-                $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
-            }
-        })
-        $('#operation_confirm').click(function (){
-            $.ajax({
-                type: 'post',
-                url: urls,
-                data: {'operation': operation},
-            })
-        })
 
     </script>
 {% endblock %}

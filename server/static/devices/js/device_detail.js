@@ -451,7 +451,57 @@ function page_change(type, is_add) {
 updateEventLog();
 updateOperationLog();
 
+// Operation Modals
+let urls = '';
+let operation = '';
+$('#operation_modal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    operation = button.data('operation');
+    urls = $(this).data('urls');
+    if (operation === 'restart'){
+        $('#operation-modal-title').text("You are about to restart the device");
+        $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/wrprwmwt.json");
+    }
+    else if(operation === 'stop_motion_detection'){
+        $('#operation-modal-title').text("You are about to stop motion detect");
+        $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
+    }
+})
+$('#operation_confirm').click(function (){
+    $.ajax({
+        type: 'post',
+        url: urls,
+        data: {'operation': operation},
+    })
+})
 
+// Device Online time
+let onlineTimeNode = $('#device_online_time');
+if (onlineTimeNode.length !== 0){
+    let timeString = onlineTimeNode.data('online-time');
+    let timeLogin = new Date(timeString).getTime();
+    let resultString = '';
+    let updateOnlineTime = setInterval(function () {
 
+        let currentTime = new Date().getTime();
+        let distance = currentTime - timeLogin;
 
+        console.log(distance)
+        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        if (days >= 1){
+            resultString = days + ' Day ' + hours + ' Hour ' + minutes + ' Min ';
+        }
+        if(hours >= 1){
+            resultString = hours + ' Hour ' + minutes + ' Min ' + seconds +' sec ';
+        }
+        else{
+            resultString =  minutes + ' min ' + seconds +' sec ';
+        }
+
+        onlineTimeNode.html(resultString);
+    }, 1000)
+}
 
