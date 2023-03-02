@@ -8,8 +8,8 @@ from . import websocket_client
 from .api_define import *
 
 
-def init_websocket_client(url):
-	return websocket_client.init_websocket_client(url)
+def init_websocket_client(url, use_ssl=True):
+	return websocket_client.init_websocket_client(url, use_ssl)
 
 
 def get_websocket_client():

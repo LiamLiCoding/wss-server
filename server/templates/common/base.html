@@ -396,7 +396,6 @@
         let type = data.notification_type ? data.notification_type: 'success';
         let jump_url = data.jump_url ? 'https://' + window.location.host + data.jump_url : document.URL;
 
-        console.log(jump_url);
         Toastify({
             text: message,
             destination: jump_url,
