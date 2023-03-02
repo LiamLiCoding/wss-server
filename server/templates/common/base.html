@@ -294,7 +294,7 @@
                             </div>
                         </li>
 
-
+                        {% comment %}
                         <li class="menu-title">
                             <i class="ri-more-fill"></i>
                             <span data-key="t-components">Records</span>
@@ -311,7 +311,7 @@
                                 <i class="mdi mdi-hammer-wrench"></i> <span>Operations</span>
                             </a>
                         </li>
-
+                        {% endcomment %}
                     </ul>
                 </div>
                 <!-- Sidebar -->
@@ -341,7 +341,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">
-                                    Develop by Haozheng Li
+                                    Developed by Haozheng Li
                                 </div>
                             </div>
                         </div>
@@ -394,14 +394,17 @@
         let duration = data.duration;
         let style = data.style;
         let type = data.notification_type ? data.notification_type: 'success';
-        console.log(type);
+        let jump_url = data.jump_url ? 'http://' + window.location.host + data.jump_url : document.URL;
+
+        console.log(jump_url);
         Toastify({
-            newWindow: !0,
             text: message,
+            destination: jump_url,
+            newWindow: false,
             gravity: "top",
             position: "center",
             className: "bg-" + type,
-            stopOnFocus: !0,
+            stopOnFocus: true,
             offset: {x: 0, y: 0,},
             duration: duration,
             close: "close",

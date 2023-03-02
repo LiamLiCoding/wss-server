@@ -1,18 +1,26 @@
+import json
 import secrets
+from django.conf import settings
+from rest_framework import status
+from django.utils import timezone
 from django.views.generic import View
-from django.http import JsonResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.http import JsonResponse, FileResponse, Http404
 from apps.accounts.mixins import UserSettingsMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, redirect
 from django.db.models import ObjectDoesNotExist
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import HttpResponse
 
 
-from .models import Devices
+from .models import Devices, Performance
+from apps.record.models import OperationLog
+from apps.api_websocket.consumers import send_device_message, send_notification
+from apps.devices.serializers import PerformanceSerializer
 
 
 class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
@@ -140,3 +148,56 @@ class UpdateDeviceStatusView(LoginRequiredMixin, View):
                 pass
         return redirect('/devices/')
 
+
+def download_sdk(request, sdk):
+    if sdk == 'python':
+        sdk_path = settings.BASE_DIR / 'media/devices/sdk/python_sdk.py'
+        file_name = 'python_sdk.py'
+    elif sdk == 'c++':
+        sdk_path = settings.BASE_DIR / 'media/devices/sdk/cpp_sdk.cpp'
+        file_name = 'cpp_sdk.cpp'
+    else:
+        return Http404
+
+    file = open(sdk_path, 'rb')
+    response = FileResponse(file)
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
+    return response
+
+
+class GetPerformanceDataAPI(LoginRequiredMixin, APIView):
+    def get(self, request, device_id):
+        try:
+            device = Devices.objects.get(id=device_id)
+            if device:
+                performance = Performance.objects.filter(device=device)
+                performance_serializer = PerformanceSerializer(performance, many=True)
+                return Response(performance_serializer.data)
+        except ObjectDoesNotExist:
+            return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)
+
+
+class DeviceOperationAPI(LoginRequiredMixin, APIView):
+    def post(self, request, device_id):
+        try:
+            device = Devices.objects.get(id=device_id)
+            if device:
+                user = self.request.user
+                operation = request.POST.get('operation')
+
+                message = '{} restart the device at {}' if operation == 'restart' else '{} stop motion detection at {}'
+                message = message.format(user.username, timezone.now().strftime('%b.%d, %Y %H:%M:%S'))
+
+                send_device_message(device_id, operation, 'operation')
+                send_notification(user.id, message, notification_type='danger', duration=10000)
+
+                operation_log = OperationLog()
+                operation_log.operation = operation
+                operation_log.device = device
+
+                operation_log.message = message
+                operation_log.save()
+                return Response(status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)
