@@ -18,7 +18,7 @@ from apps.devices.models import Devices, Performance
 
 async def _send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
     channel_layer = get_channel_layer()
-    await channel_layer.group_send('notification_{}'.format(user_id), {"type": "group_message",
+    await channel_layer.group_send('notification-{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
                                                                        "notification_type": notification_type,
                                                                        "style": style,
@@ -28,7 +28,7 @@ async def _send_notification(user_id, message, notification_type="success", styl
 
 def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
     channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)('notification_{}'.format(user_id), {"type": "group_message",
+    async_to_sync(channel_layer.group_send)('notification-{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
                                                                        "notification_type": notification_type,
                                                                        "style": style,
@@ -38,7 +38,7 @@ def send_notification(user_id, message, notification_type="success", style='', d
 
 def send_device_message(device_id, message, message_type="operation"):
     channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)('device_{}'.format(device_id), {"type": "group_message",
+    async_to_sync(channel_layer.group_send)('device-{}'.format(device_id), {"type": "group_message",
                                                                             "message": message,
                                                                             "message_type": message_type})
 
@@ -56,7 +56,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         self.device = await self.get_device()
         if self.device and self.device.is_enable:
             await self.accept()
-            self.group_name = 'device_{}'.format(self.device.id)
+            self.group_name = 'device-{}'.format(self.device.id)
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.update_device_status(active=True)
             message = "Device: {} is online now.".format(self.device.device_name)
@@ -134,7 +134,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         if not self.scope.get('user'):
             await self.close()
         else:
-            self.group_name = 'notification_{}'.format(str(self.scope.get('user').id))
+            self.group_name = 'notification-{}'.format(str(self.scope.get('user').id))
             await self.accept()
             await self.channel_layer.group_add(self.group_name, self.channel_name)
 
