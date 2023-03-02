@@ -386,7 +386,7 @@
     </script>
 
 <script>
-    const notificationSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
+    const notificationSocket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
 
     notificationSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
@@ -394,7 +394,7 @@
         let duration = data.duration;
         let style = data.style;
         let type = data.notification_type ? data.notification_type: 'success';
-        let jump_url = data.jump_url ? 'http://' + window.location.host + data.jump_url : document.URL;
+        let jump_url = data.jump_url ? 'https://' + window.location.host + data.jump_url : document.URL;
 
         console.log(jump_url);
         Toastify({
