@@ -486,7 +486,6 @@ if (onlineTimeNode.length !== 0){
         let currentTime = new Date().getTime();
         let distance = currentTime - timeLogin;
 
-        console.log(distance)
         let days = Math.floor(distance / (1000 * 60 * 60 * 24));
         let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
