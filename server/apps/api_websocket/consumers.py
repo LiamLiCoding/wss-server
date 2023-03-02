@@ -38,7 +38,7 @@ def send_notification(user_id, message, notification_type="success", style='', d
 
 def send_device_message(device_id, message, message_type="operation"):
     channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)('device-{}'.format(device_id), {"type": "group_message",
+    async_to_sync(channel_layer.group_send)('device{}'.format(device_id), {"type": "group_message",
                                                                             "message": message,
                                                                             "message_type": message_type})
 
@@ -56,7 +56,8 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         self.device = await self.get_device()
         if self.device and self.device.is_enable:
             await self.accept()
-            self.group_name = 'device-{}'.format(self.device.id)
+            self.group_name = 'device{}'.format(self.device.id)
+            print("This is a test print", self.group_name)
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.update_device_status(active=True)
             message = "Device: {} is online now.".format(self.device.device_name)
