@@ -100,10 +100,12 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             performance.save()
 
     async def disconnect(self, close_code):
+        print("This is a test print", self.group_name)
         await self.update_device_status(active=False)
-        await self.channel_layer.group_discard(self.group_name, self.channel_name)
-        message = "Device: {} is offline now.".format(self.device.device_name)
-        await _send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
+        if self.device:
+            await self.channel_layer.group_discard(self.group_name, self.channel_name)
+            message = "Device: {} is offline now.".format(self.device.device_name)
+            await _send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
 
     async def receive(self, text_data=None, bytes_data=None):
         parsed_data = json.loads(text_data)

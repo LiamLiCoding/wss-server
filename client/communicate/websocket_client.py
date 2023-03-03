@@ -1,6 +1,7 @@
 import json
 import threading
 import time
+import ssl
 
 import websocket
 
@@ -8,10 +9,10 @@ websocket.enableTrace(True)	 # Only on development env
 g_WEBSOCKET_CLIENT = None
 
 
-def init_websocket_client(url):
+def init_websocket_client(url, use_ssl=True):
 	global g_WEBSOCKET_CLIENT
 	if not g_WEBSOCKET_CLIENT:
-		g_WEBSOCKET_CLIENT = WebsocketClient(url)
+		g_WEBSOCKET_CLIENT = WebsocketClient(url, use_ssl)
 	g_WEBSOCKET_CLIENT.start()
 	return g_WEBSOCKET_CLIENT
 
@@ -24,9 +25,10 @@ def get_websocket_client():
 
 
 class WebsocketClient:
-	def __init__(self, url):
+	def __init__(self, url, use_ssl=True):
 		self.m_ws = None
 		self.m_url = url
+		self.m_use_ssl = use_ssl
 		self.m_thread = None
 		self.m_connected = False
 		self.m_thread_lock = threading.Lock()
@@ -67,8 +69,10 @@ class WebsocketClient:
 			on_open=self.on_open,
 			on_message=self.on_message,
 			on_close=self.on_close)
-
-		self.m_thread = threading.Thread(target=self.m_ws.run_forever)
+		if self.m_use_ssl:
+			self.m_thread = threading.Thread(target=self.m_ws.run_forever, kwargs={'sslopt': {"cert_reqs": ssl.CERT_NONE}})
+		else:
+			self.m_thread = threading.Thread(target=self.m_ws.run_forever)
 		self.m_thread.daemon = True
 		self.m_thread.start()
 
@@ -86,5 +90,6 @@ class WebsocketClient:
 		time.sleep(5)
 		print("Websocket client - reconnect ...")
 		self.start()
+
 
 
