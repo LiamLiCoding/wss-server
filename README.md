@@ -1,3 +1,5 @@
+![license](https://img.shields.io/github/license/Haozheng-Li/wss-client)
+
 # warehouse-surveillance-system
 
 Website: [Wss-web](https://wssweb.net/)

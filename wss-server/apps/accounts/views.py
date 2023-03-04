@@ -10,7 +10,7 @@ from django.shortcuts import HttpResponse, redirect
 
 from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
 from .models import Users
-from apps.email_control.models import VerifyCode
+from apps.email.models import VerifyCode
 
 
 def redirect_to_login(request):
@@ -175,7 +175,7 @@ class RegisterView(View):
                 return render(request, 'accounts/register.html', self.get_context_data(message))
 
             self.model.objects.create_user(username=username, password=password, email=email)
-            return redirect('/email_control/email_verify/' + email)
+            return redirect('/email/email_verify/' + email)
 
         return render(request, self.template_name, self.get_context_data(message))
 
