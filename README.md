@@ -2,13 +2,6 @@
 
 Website: [Wss-web](https://wssweb.net/)
 
-The project is divided into two parts: client and server
-
-## Client
-
-Use the Raspberry Pi as the terminal node to collect video data. Use opencv as image recognition in Raspberry Pi to detect whether there are strangers approaching the warehouse. If so, the system will start different modes according to the movement trajectory, behavior, and facial features of the person.
-
-## Server
 ### WSS-web
 
 A device management and data visualization platform built with Django+MySQL.
