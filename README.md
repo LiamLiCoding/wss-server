@@ -1,4 +1,4 @@
-# warehouse-surveillance-system
+# WSS-Server
 
 Website: [Wss-web](https://wssweb.net/)
 
