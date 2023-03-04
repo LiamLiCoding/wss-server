@@ -2,17 +2,16 @@
 
 # wss-server
 
+Based on Django, wss-server is high customization web and IOT server. 
+
 Website: [Wss-web](https://wssweb.net/)
+Documentation: [provide in future](https://haozhengblog.com)
 
-The project is divided into two parts: client and server
+## Features
 
-## Client
+wss-server provides functions such as log storage, data visualization, device management, user authentication management.
 
-Use the Raspberry Pi as the terminal node to collect video data. Use opencv as image recognition in Raspberry Pi to detect whether there are strangers approaching the warehouse. If so, the system will start different modes according to the movement trajectory, behavior, and facial features of the person.
-
-## Server
-
-### WSS-web
+# 
 
 A device management and data visualization platform built with Django+MySQL.
 
