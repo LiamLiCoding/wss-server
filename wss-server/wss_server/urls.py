@@ -26,7 +26,7 @@ urlpatterns = [
     path('', dashboard_views.redirect_to_dashboard),
     path('dashboard/', include('apps.dashboard.urls')),
     path('api-control/', include('apps.api_control.urls')),
-    path('email_control/', include('apps.email_control.urls')),
+    path('email/', include('apps.email.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('devices/', include('apps.devices.urls')),

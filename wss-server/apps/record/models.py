@@ -40,8 +40,8 @@ class OperationLog(models.Model):
 
     class Meta:
         ordering = ("-created_time",)
-        verbose_name = "operationlog"
-        verbose_name_plural = "operationlog"
+        verbose_name = "operation_log"
+        verbose_name_plural = "operation_log"
 
     def __str__(self) -> str:
         return str(self.operation)

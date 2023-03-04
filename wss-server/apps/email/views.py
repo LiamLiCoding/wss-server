@@ -1,5 +1,4 @@
 import datetime
-from django.contrib import auth
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
@@ -176,7 +175,7 @@ class ForgetPasswordView(TemplateView):
         try:
             Users.objects.get(email=email)
             send_email.send_reset_password_link_email(email, 'reset_password')
-            return redirect('/email_control/reset_link_sent/')
+            return redirect('/email/reset_link_sent/')
         except ObjectDoesNotExist:
             return render(request, self.template_name, self.get_context_data({
                 'message': 'Account does not exist!',
