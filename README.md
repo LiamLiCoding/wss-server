@@ -6,8 +6,6 @@ Based on Django, wss-server is high customization web and IOT server.
 
 Website: [Wss-web](https://wssweb.net/)
 
-Documentation: [provide in future](https://haozhengblog.com)
-
 ## Features
 
 1. Provide Websocket long-live API and Restful HTTP API for data communication with client.
