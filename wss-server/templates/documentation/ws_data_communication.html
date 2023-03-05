@@ -1,0 +1,128 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %} Documentation | WSS{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">Websocket Access</h4>
+
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Documentation</a></li>
+                                <li class="breadcrumb-item active">Websocket Access</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-1">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md">
+                                    <div class="row align-items-center">
+                                        <!--end col-->
+                                        <div class="col-md">
+                                            <h1 class="fw-semibold" id="ticket-title">Data communication</h1>
+                                            <div class="hstack gap-3 flex-wrap">
+                                                <div class="text-muted"><i class="ri-user-line align-bottom me-1"></i><span id="ticket-client">Haozheng Li</span></div>
+                                                <div class="vr"></div>
+                                                <div class="text-muted">Create Date : <span class="fw-medium " id="create-date">4 Mar, 2023</span></div>
+                                                <div class="vr"></div>
+                                                <div class="badge rounded-pill bg-primary fs-12">Websocket</div>
+                                            </div>
+                                        </div>
+                                        <!--end col-->
+                                    </div>
+                                    <!--end row-->
+                                </div>
+                                <!--end col-->
+                            </div>
+                            <!--end row-->
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+            </div><!-- end row -->
+            <div class="row">
+                <div class="col-xxl-9">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="fw-semibold text-uppercase mb-3">Ticket Discripation</h6>
+                            <p class="text-muted">It would also help to know what the errors are - it could be something simple like a message saying delivery is not available which could be a problem with your shipping templates. Too much or too little spacing, as in the example below, can make things unpleasant for the reader. The goal is to make your text as comfortable to read as possible. On the note of consistency, color consistency is a MUST. If you’re not trying to create crazy contrast in your design, then a great idea would be for you to use a color palette throughout your entire design. It will subconsciously interest viewers and also is very pleasing to look at. <a href="javascript:void(0);" class="link-secondary text-decoration-underline">Example</a></p>
+                            <h6 class="fw-semibold text-uppercase mb-3">Create an Excellent UI for a Dashboard</h6>
+                            <ul class="text-muted vstack gap-2 mb-4">
+                                <li>Pick a Dashboard Type</li>
+                                <li>Categorize information when needed</li>
+                                <li>Provide Context</li>
+                                <li>On using colors</li>
+                                <li>On using the right graphs</li>
+                            </ul>
+                            <div class="mt-4">
+                                <h6 class="fw-semibold text-uppercase mb-3">Here is the code you've requsted</h6>
+                                <div>
+                                    <pre class="language-markup rounded-2"><code>var app = document.getElementById(&quot;app&quot;);
+var run = (model) =&gt; get(model, &quot;users&quot;, () =&gt;
+get(model, &quot;posts&quot;,
+() =&gt; {
+model.users.forEach(user =&gt; model.userIdx[user.id] = user);
+app.innerText = '';
+model.posts.forEach(post =&gt;
+app.appendChild(renderPost(post, model.userIdx[post.userId])));
+}));
+app.appendChild(Wrapper.generate(&quot;button&quot;, &quot;Load&quot;).click(() =&gt; run({
+userIdx: {}
+})).element);</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end card-body-->
+                    </div>
+                    <!--end card-->
+                </div>
+                <!--end col-->
+                <div class="col-xxl-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Catalog</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                <table class="table table-borderless align-middle mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="fw-medium"><a href="#">Instructions for use</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium"><a href="#">Access process</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="fw-medium"><a href="#">Example</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!--end card-body-->
+                    </div>
+                </div>
+                <!--end col-->
+            </div>
+            <!--end row-->
+
+        </div><!-- container-fluid -->
+    </div><!-- End Page-content -->
+{% endblock %}
+
+{% block js %}
+
+
+{% endblock %}

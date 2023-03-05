@@ -173,7 +173,7 @@
                                         <img class="rounded-circle header-profile-user" src="{{ avatar }}" alt="Header Avatar">
                                     {% else %}
                                         <div class="header-profile-user bg-soft-success text-white rounded-circle">
-                                            <h3>
+                                            <h3 class="mt-1">
                                                 {{ username|title|slice:":1" }}
                                             </h3>
                                         </div>
@@ -294,6 +294,37 @@
                             </div>
                         </li>
 
+                        <li class="menu-title">
+                            <i class="ri-more-fill"></i>
+                            <span data-key="t-components">Documentation</span>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link collapsed" href="#DeviceAccess" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="DeviceAccess">
+                                <i class="mdi mdi-file-document"></i>
+                                <span data-key="t-multi-level">Device Access</span>
+                            </a>
+                            <div class="menu-dropdown collapse" id="DeviceAccess" style="">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="#Websocket" class="nav-link collapsed" data-bs-toggle="collapse" role="button"
+                                           aria-expanded="false" aria-controls="Websocket" data-key="t-level-1.2"> Websocket
+                                        </a>
+                                        <div class="menu-dropdown collapse" id="Websocket">
+                                            <ul class="nav nav-sm flex-column">
+                                                <li class="nav-item">
+                                                    <a href="#" class="nav-link" data-key="t-level-2.1"> Protocol Specification </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="{% url 'doc_websocket_data_com' %}" class="nav-link collapsed" data-key="t-level-2.1"> Data Communication </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
                         {% comment %}
                         <li class="menu-title">
                             <i class="ri-more-fill"></i>
@@ -376,11 +407,22 @@
     <!-- App js -->
     <script src="{% static 'common/js/app.js' %}"></script>
     <script>
+        let activeParentMenuItem = function(li_node){
+            let menu_dropdown_node = li_node.parent().parent();
+            if (menu_dropdown_node.is("div") && menu_dropdown_node.hasClass('menu-dropdown')){
+                menu_dropdown_node.addClass('show');
+                menu_dropdown_node.prev().addClass('active');
+                return activeParentMenuItem(menu_dropdown_node.parent());
+            }
+            else return true;
+        }
+        let top_url = '/' + '{{ request.path }}'.split('/')[1] + '/';
+        let full_url = '{{ request.path }}';
         $('ul.navbar-nav li.nav-item').each(function(i){
-            let top_url = '/' + '{{ request.path }}'.split('/')[1] + '/';
-            if($(this).children().first().attr('href')===top_url){
-                $(this).children().first().addClass('active');
-				$(this).parent().parent().prev().addClass('active');
+            let target_a_tag = $(this).children().first();
+            if(target_a_tag.attr('href')===top_url || target_a_tag.attr('href')===full_url){
+                target_a_tag.addClass('active');
+                activeParentMenuItem($(this));
             }
     });
     </script>

@@ -25,12 +25,12 @@ from apps.dashboard import views as dashboard_views
 urlpatterns = [
     path('', dashboard_views.redirect_to_dashboard),
     path('dashboard/', include('apps.dashboard.urls')),
-    path('api-control/', include('apps.api_control.urls')),
     path('email/', include('apps.email.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('devices/', include('apps.devices.urls')),
     path('record/', include('apps.record.urls')),
+    path('documentation/', include('apps.documentation.urls')),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
 ]
