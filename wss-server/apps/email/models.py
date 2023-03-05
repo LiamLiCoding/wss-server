@@ -25,22 +25,3 @@ class VerifyCode(models.Model):
         verbose_name = "verify_code"
         verbose_name_plural = "verify_code"
 
-
-class SubscriptionEmail(models.Model):
-    SUBSCRIPTION_TYPE_CHOICE = (
-        ('new_function', 'New Function'),
-    )
-
-    email = models.EmailField(max_length=50)
-    sub_type = models.CharField(max_length=20, choices=SUBSCRIPTION_TYPE_CHOICE, default='verify_email')
-    sub_time = models.DateTimeField(default=timezone.now)
-    is_activated = models.BooleanField(default=True)
-
-    def __unicode__(self):
-        return self.email
-
-    class Meta:
-        ordering = ["-sub_time"]
-        verbose_name = "subscription_email"
-        verbose_name_plural = "subscription_email"
-
