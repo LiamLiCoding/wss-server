@@ -78,7 +78,7 @@
                                 <tbody>
                                     <tr>
                                         <td class="fw-medium">message_type</td>
-                                        <td class="fw-medium">should be one of: &lt;performance, event&gt;</td>
+                                        <td class="fw-medium">should be one of: &lt;text, performance, event&gt;</td>
                                     </tr>
                                     <tr>
                                         <td class="fw-medium"><a href="#">message</a></td>
@@ -88,7 +88,23 @@
                             </table>
 
                             <h4 class="fw-semibold text-uppercase mb-3">Example</h4>
-                            <p class="text-muted">For an example of using an Websocket client to access the WSS, see <a href="https://github.com/Haozheng-Li/wss-client">wss-client</a>.</p>
+                            <p class="text-muted">Here is a Python client instance with websocket-client. Please install <a target="_blank" href="https://github.com/websocket-client/websocket-client"><ins>websocket-client</ins></a> first</p>
+                            <div class="mt-4">
+                                <div>
+                                    <pre class="language-markup rounded-2"><code>import websocket
+import json
+def on_message(wsapp, message):
+    print(message)
+
+wsapp = websocket.WebSocketApp("wss://wssweb.net/ws/device/&lt;api-key&gt;", on_message=on_message)
+test_message = {'message_type': 'text', 'message': 'Hello WSS'}
+wsapp.send(json.dumps(test_message))
+wsapp.run_forever() </code>
+                                    </pre>
+                                    <p class="text-muted mt-2">For more example of using an Websocket client to access the WSS, see <a href="https://github.com/Haozheng-Li/wss-client"><ins>wss-client</ins></a>.</p>
+                                </div>
+                            </div>
+
                         </div>
                         <!--end card-body-->
                     </div>
@@ -105,7 +121,7 @@
                                 <table class="table table-borderless align-middle mb-0">
                                     <tbody>
                                         <tr>
-                                            <td class="fw-medium"><a href="#">Restriction</a></td>
+                                            <td class="fw-medium"><a href="#">Instructions for use</a></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium"><a href="#">Access process</a></td>
