@@ -56,16 +56,15 @@
                 <div class="col-xxl-9">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="fw-semibold text-uppercase mb-3">Ticket Discripation</h6>
-                            <p class="text-muted">It would also help to know what the errors are - it could be something simple like a message saying delivery is not available which could be a problem with your shipping templates. Too much or too little spacing, as in the example below, can make things unpleasant for the reader. The goal is to make your text as comfortable to read as possible. On the note of consistency, color consistency is a MUST. If you’re not trying to create crazy contrast in your design, then a great idea would be for you to use a color palette throughout your entire design. It will subconsciously interest viewers and also is very pleasing to look at. <a href="javascript:void(0);" class="link-secondary text-decoration-underline">Example</a></p>
-                            <h6 class="fw-semibold text-uppercase mb-3">Create an Excellent UI for a Dashboard</h6>
+                            <p class="text-muted">WSS platform supports access to devices with Websocket protocol. This article introduces the access process of using Websocket connection communication.</p>
+                            <h4 class="fw-semibold text-uppercase mb-3">Use and Restrictions</h4>
                             <ul class="text-muted vstack gap-2 mb-4">
-                                <li>Pick a Dashboard Type</li>
-                                <li>Categorize information when needed</li>
-                                <li>Provide Context</li>
-                                <li>On using colors</li>
-                                <li>On using the right graphs</li>
+                                <li>Only <mark>directly connected devices</mark> support communication using the Websocket protocol. Gateway devices and gateway sub-devices do not support communication using the Websocket protocol.</li>
+                                <li>Websocket protocol access only supports Websocket request paths with <mark>TLS</mark> encryption.</li>
+                                <li>The size of data transmitted by the data uplink interface is limited to <mark>128 KB</mark>.</li>
                             </ul>
+                            <h4 class="fw-semibold text-uppercase mb-3">Access process</h4>
+                            <p class="text-muted">The access process mainly includes: performing device authentication to obtain a device token, and using the obtained token for continuous data reporting.</p>
                             <div class="mt-4">
                                 <h6 class="fw-semibold text-uppercase mb-3">Here is the code you've requsted</h6>
                                 <div>
