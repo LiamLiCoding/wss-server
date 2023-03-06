@@ -19,7 +19,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Devices, Performance
 from apps.record.models import OperationLog
-from apps.api_websocket.consumers import send_device_message, send_notification
+from apps.api_websocket.notification_consumer import send_notification
+from apps.api_websocket.device_consumer import send_device_message
 from apps.devices.serializers import PerformanceSerializer
 
 

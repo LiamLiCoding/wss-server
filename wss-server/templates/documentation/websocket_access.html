@@ -12,12 +12,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0">Websocket Access</h4>
+                        <h4 class="mb-sm-0">Device Access</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="javascript: void(0);">Documentation</a></li>
-                                <li class="breadcrumb-item active">Websocket Access</li>
+                                <li class="breadcrumb-item">Documentation</li>
+                                <li class="breadcrumb-item">Device Access</li>
+                                <li class="breadcrumb-item active">Websocket</li>
                             </ol>
                         </div>
                     </div>
@@ -32,13 +33,13 @@
                                     <div class="row align-items-center">
                                         <!--end col-->
                                         <div class="col-md">
-                                            <h1 class="fw-semibold" id="ticket-title">Data communication</h1>
+                                            <h1 class="fw-semibold" id="ticket-title">Websocket</h1>
                                             <div class="hstack gap-3 flex-wrap">
                                                 <div class="text-muted"><i class="ri-user-line align-bottom me-1"></i><span id="ticket-client">Haozheng Li</span></div>
                                                 <div class="vr"></div>
                                                 <div class="text-muted">Create Date : <span class="fw-medium " id="create-date">4 Mar, 2023</span></div>
                                                 <div class="vr"></div>
-                                                <div class="badge rounded-pill bg-primary fs-12">Websocket</div>
+                                                <div class="badge rounded-pill bg-info fs-12">New</div>
                                             </div>
                                         </div>
                                         <!--end col-->
@@ -55,12 +56,12 @@
             <div class="row">
                 <div class="col-xxl-9">
                     <div class="card">
-                        <div class="card-body">
+                        <div class="card-body fs-14">
                             <p class="text-muted">WSS platform supports access to devices with Websocket protocol. This article introduces the access process of using Websocket connection communication.</p>
-                            <h4 class="fw-semibold text-uppercase mb-3">Use and Restrictions</h4>
+                            <h4 class="fw-semibold text-uppercase mb-3">Restrictions</h4>
                             <ul class="text-muted vstack gap-2 mb-4">
                                 <li>Only <mark>directly connected devices</mark> support communication using the Websocket protocol. Gateway devices and gateway sub-devices do not support communication using the Websocket protocol.</li>
-                                <li>Websocket protocol access only supports Websocket request paths with <mark>TLS</mark> encryption.</li>
+                                <li>Websocket protocol access only supports Websocket request paths with <mark>TLS</mark> encryption. (e.g: wss://)</li>
                                 <li>The size of data transmitted by the data uplink interface is limited to <mark>128 KB</mark>.</li>
                             </ul>
                             <h4 class="fw-semibold text-uppercase mb-3">Access process</h4>

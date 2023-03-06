@@ -1,8 +1,3 @@
-#!/usr/bin/env python 
-# -*- coding:utf-8 -*-
-# @Time : 2023/2/24 14:40
-# @Author : Haozheng Li (Liam)
-# @Email : hxl1119@case.edu
 
 import json
 from asgiref.sync import async_to_sync
@@ -14,26 +9,10 @@ from channels.db import database_sync_to_async
 from django.db.models import ObjectDoesNotExist
 
 from apps.devices.models import Devices, Performance
+from .notification_consumer import _async_send_notification
 
 
-async def _send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
-    channel_layer = get_channel_layer()
-    await channel_layer.group_send('notification-{}'.format(user_id), {"type": "group_message",
-                                                                       "message": message,
-                                                                       "notification_type": notification_type,
-                                                                       "style": style,
-                                                                       "duration": duration,
-                                                                       "jump_url": jump_url})
-
-
-def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)('notification-{}'.format(user_id), {"type": "group_message",
-                                                                       "message": message,
-                                                                       "notification_type": notification_type,
-                                                                       "style": style,
-                                                                       "duration": duration,
-                                                                       "jump_url": jump_url})
+__all__ = ['send_device_message']
 
 
 def send_device_message(device_id, message, message_type="operation"):
@@ -61,7 +40,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.update_device_status(active=True)
             message = "Device: {} is online now.".format(self.device.device_name)
-            await _send_notification(self.user_id, message=message, duration=5000,
+            await _async_send_notification(self.user_id, message=message, duration=5000,
                                     jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
         else:
             await self.close(code=3003)
@@ -105,7 +84,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         if self.device:
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             message = "Device: {} is offline now.".format(self.device.device_name)
-            await _send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
+            await _async_send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
 
     async def receive(self, text_data=None, bytes_data=None):
         parsed_data = json.loads(text_data)
@@ -128,32 +107,3 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         data = {"message": event['message'],
                 "message_type": message_type}
         await self.send(text_data=json.dumps(data))
-
-
-class NotificationConsumer(AsyncWebsocketConsumer):
-    group_name = ''
-
-    async def connect(self):
-        if not self.scope.get('user'):
-            await self.close()
-        else:
-            self.group_name = 'notification-{}'.format(str(self.scope.get('user').id))
-            await self.accept()
-            await self.channel_layer.group_add(self.group_name, self.channel_name)
-
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard(self.group_name, self.channel_name)
-
-    async def group_message(self, event):
-        style = event.get('style', '')
-        duration = event.get('duration', 3000)
-        notification_type = event.get('notification_type', 'success')
-        jump_url = event.get('jump_url', '')
-        data = {"message": event['message'],
-                "duration": duration,
-                "style": style,
-                "notification_type": notification_type,
-                "jump_url": jump_url}
-        await self.send(text_data=json.dumps(data))
-
-

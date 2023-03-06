@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class DocWsDataCommunicationView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
-    template_name = "documentation/ws_data_communication.html"
+    template_name = "documentation/websocket_access.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)

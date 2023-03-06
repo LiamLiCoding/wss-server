@@ -6,9 +6,10 @@
 
 from django.urls import path
 
-from . import consumers
+from .notification_consumer import NotificationConsumer
+from .device_consumer import DeviceConsumer
 
 websocket_urlpatterns = [
-    path("ws/device/<str:api_key>", consumers.DeviceConsumer.as_asgi()),
-    path("ws/notification/", consumers.NotificationConsumer.as_asgi()),
+    path("ws/device/<str:api_key>", DeviceConsumer.as_asgi()),
+    path("ws/notification/", NotificationConsumer.as_asgi()),
 ]
