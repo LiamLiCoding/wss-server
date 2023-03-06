@@ -65,24 +65,30 @@
                                 <li>The size of data transmitted by the data uplink interface is limited to <mark>128 KB</mark>.</li>
                             </ul>
                             <h4 class="fw-semibold text-uppercase mb-3">Access process</h4>
-                            <p class="text-muted">The access process mainly includes: performing device authentication to obtain a device token, and using the obtained token for continuous data reporting.</p>
-                            <div class="mt-4">
-                                <h6 class="fw-semibold text-uppercase mb-3">Here is the code you've requsted</h6>
-                                <div>
-                                    <pre class="language-markup rounded-2"><code>var app = document.getElementById(&quot;app&quot;);
-var run = (model) =&gt; get(model, &quot;users&quot;, () =&gt;
-get(model, &quot;posts&quot;,
-() =&gt; {
-model.users.forEach(user =&gt; model.userIdx[user.id] = user);
-app.innerText = '';
-model.posts.forEach(post =&gt;
-app.appendChild(renderPost(post, model.userIdx[post.userId])));
-}));
-app.appendChild(Wrapper.generate(&quot;button&quot;, &quot;Load&quot;).click(() =&gt; run({
-userIdx: {}
-})).element);</code></pre>
-                                </div>
-                            </div>
+
+                            <h6 class="fw-semibold text-uppercase mb-3">1. Connection verification </h6>
+                            <p class="text-muted">Put the api-key parameter that can verify the device into the websocket request header, and make a websocket connection with the WSS server </p>
+                            <ul class="text-muted vstack gap-2 mb-4">
+                                <li>URL:  wss://wssweb.net/ws/device/&lt;api-key&gt;</li>
+                                <li>Replace &lt;api-key&gt; to your <a href="{% url 'devices_list' %}">device api key</a></li>
+                            </ul>
+
+                            <h6 class="fw-semibold text-uppercase mb-3">2. message body format </h6>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-medium">message_type</td>
+                                        <td class="fw-medium">should be one of: &lt;performance, event&gt;</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-medium"><a href="#">message</a></td>
+                                        <td class="fw-medium"><a href="#">json data</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4 class="fw-semibold text-uppercase mb-3">Example</h4>
+                            <p class="text-muted">For an example of using an Websocket client to access the WSS, see <a href="https://github.com/Haozheng-Li/wss-client">wss-client</a>.</p>
                         </div>
                         <!--end card-body-->
                     </div>
@@ -99,7 +105,7 @@ userIdx: {}
                                 <table class="table table-borderless align-middle mb-0">
                                     <tbody>
                                         <tr>
-                                            <td class="fw-medium"><a href="#">Instructions for use</a></td>
+                                            <td class="fw-medium"><a href="#">Restriction</a></td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium"><a href="#">Access process</a></td>

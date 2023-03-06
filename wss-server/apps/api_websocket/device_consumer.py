@@ -12,9 +12,6 @@ from apps.devices.models import Devices, Performance
 from .notification_consumer import _async_send_notification
 
 
-__all__ = ['send_device_message']
-
-
 def send_device_message(device_id, message, message_type="operation"):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)('device{}'.format(device_id), {"type": "group_message",

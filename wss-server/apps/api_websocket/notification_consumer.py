@@ -10,9 +10,6 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
 
 
-__all__ = ['send_notification', '_async_send_notification']
-
-
 async def _async_send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
     channel_layer = get_channel_layer()
     await channel_layer.group_send('notification-{}'.format(user_id), {"type": "group_message",
