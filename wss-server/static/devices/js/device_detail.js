@@ -471,7 +471,8 @@ $('#operation_confirm').click(function (){
     $.ajax({
         type: 'post',
         url: urls,
-        data: {'operation': operation},
+        data: {'operation': operation,
+        'message':$('#operation_message').val()},
     })
 })
 

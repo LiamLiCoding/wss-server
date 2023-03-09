@@ -1,4 +1,4 @@
-import time
+from datetime import datetime
 from rest_framework import serializers
 
 from .models import Devices, Performance
@@ -20,8 +20,8 @@ class PerformanceSerializer(serializers.ModelSerializer):
         created_time = data.get('created_time')
         disk_write_io = data.get('disk_write_io')
         disk_read_io = data.get('disk_read_io')
-        created_time_stamp = time.mktime(time.strptime(created_time, '%Y-%m-%dT%H:%M:%S.%fZ'))
-        data.update({"created_time": int(created_time_stamp) * 1000})
+        created_time = datetime.fromisoformat(created_time).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        data.update({"created_time": created_time})
         data.update({"disk_write_io": int(disk_write_io / 1000)})
         data.update({"disk_read_io": int(disk_read_io / 1000)})
         return data

@@ -17,6 +17,6 @@ class OperationLogSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
         created_time = data.get('created_time')
-        created_time = datetime.strptime(created_time, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%b.%d, %Y %H:%M:%S')
+        created_time = datetime.fromisoformat(created_time).strftime('%b.%d, %Y %H:%M:%S')
         data.update({"created_time": created_time})
         return data

@@ -186,9 +186,9 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
             if device:
                 user = self.request.user
                 operation = request.POST.get('operation')
-
-                message = '{} restart the device at {}' if operation == 'restart' else '{} stop motion detection at {}'
-                message = message.format(user.username, timezone.now().strftime('%b.%d, %Y %H:%M:%S'))
+                ori_message = request.POST.get('message')
+                message = 'Device {} {}, message: {}'.format(device.device_name, operation, ori_message) if ori_message \
+                    else 'Device {} {}'.format(device.device_name, operation)
 
                 send_device_message(device_id, operation, 'operation')
                 send_notification(user.id, message, notification_type='danger', duration=10000)

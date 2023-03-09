@@ -11,7 +11,7 @@ class Devices(models.Model):
         ('raspberry_pi', 'Raspberry Pi'),
     )
     PROTOCOL_CHOICES = (
-        ('HTTP', 'HTTP'),
+        ('Websocket', 'Websocket'),
     )
     SDK_CHOICES = (
         ('Python', 'Python'),

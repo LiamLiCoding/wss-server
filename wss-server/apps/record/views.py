@@ -23,6 +23,6 @@ class EventLogAPI(LoginRequiredMixin, DeviceLogAPIView, APIView):
 	serializer = EventLogSerializer
 
 
-class OperationLogAPI(LoginRequiredMixin, APIView):
+class OperationLogAPI(LoginRequiredMixin, DeviceLogAPIView, APIView):
 	model = OperationLog
 	serializer = OperationLogSerializer
