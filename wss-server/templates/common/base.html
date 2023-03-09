@@ -10,7 +10,13 @@
     <meta content="Warehouse surveillance system" name="description" />
     <meta content="Haozheng Li" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'common/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'common/favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'common/favicon/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'common/favicon/site.webmanifest' %}">
+    <link rel="mask-icon" href="{% static 'common/favicon/safari-pinned-tab.svg' %}" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 
     <!-- Layout config Js -->
     <script src="{% static 'common/js/layout.js' %}"></script>
@@ -37,19 +43,19 @@
                         <div class="navbar-brand-box horizontal-logo">
                             <a href="{% url 'dashboard' %}" class="logo logo-dark">
                                 <span class="logo-sm">
-                                    <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="22">
+                                    <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'common/img/logo/logo-text.png' %}" alt="" height="17">
+                                    <img src="{% static 'common/img/logo/logo-dark.png' %}" alt="" height="17">
                                 </span>
                             </a>
 
                             <a href="{% url 'dashboard' %}" class="logo logo-light">
                                 <span class="logo-sm">
-                                    <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="22">
+                                    <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="32">
                                 </span>
                                 <span class="logo-lg">
-                                    <img src="{% static 'common/img/logo/logo-text.png' %}" alt="" height="17">
+                                    <img src="{% static 'common/img/logo/logo-light.png' %}" alt="" height="24">
                                 </span>
                             </a>
                         </div>
@@ -232,7 +238,7 @@
                 <!-- Dark Logo-->
                 <a href="{% url 'dashboard' %}" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="22">
+                        <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="32">
                     </span>
                     <span class="logo-lg">
                         <img src="{% static 'common/img/logo/logo-dark.png' %}" alt="" height="25">
@@ -241,7 +247,7 @@
                 <!-- Light Logo-->
                 <a href="{% url 'dashboard' %}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="22">
+                        <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="32">
                     </span>
                     <span class="logo-lg">
                         <img src="{% static 'common/img/logo/logo-dark.png' %}" alt="" height="25">
@@ -416,7 +422,7 @@
     </script>
 
 <script>
-    const notificationSocket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
+    const notificationSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
 
     notificationSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);

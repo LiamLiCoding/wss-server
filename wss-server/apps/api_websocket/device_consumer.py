@@ -33,7 +33,6 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         if self.device and self.device.is_enable:
             await self.accept()
             self.group_name = 'device{}'.format(self.device.id)
-            print("This is a test print", self.group_name)
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.update_device_status(active=True)
             message = "Device: {} is online now.".format(self.device.device_name)
@@ -76,7 +75,6 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             performance.save()
 
     async def disconnect(self, close_code):
-        print("This is a test print", self.group_name)
         await self.update_device_status(active=False)
         if self.device:
             await self.channel_layer.group_discard(self.group_name, self.channel_name)

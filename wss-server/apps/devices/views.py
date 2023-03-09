@@ -10,7 +10,7 @@ from django.http import JsonResponse, FileResponse, Http404
 from apps.accounts.mixins import UserSettingsMixin
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.db.models import ObjectDoesNotExist
 from django.views.generic.edit import DeleteView
