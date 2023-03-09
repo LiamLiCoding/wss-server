@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.accounts',
     'apps.devices',
-    'apps.email',
     'apps.api_websocket',
     'apps.record',
 ]
