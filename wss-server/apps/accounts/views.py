@@ -1,7 +1,10 @@
 import requests
+import datetime
 from django.contrib import auth
+from django.urls import reverse
 from django.conf import settings
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.generic import View
 from django.views.generic import TemplateView
 from django.db.models import ObjectDoesNotExist
@@ -9,8 +12,8 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import HttpResponse, redirect
 
 from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
-from .models import Users
-from apps.email.models import VerifyCode
+from .models import Users, VerifyCode
+from . import send_email
 
 
 def redirect_to_login(request):
@@ -175,7 +178,7 @@ class RegisterView(View):
                 return render(request, 'accounts/register.html', self.get_context_data(message))
 
             self.model.objects.create_user(username=username, password=password, email=email)
-            return redirect('/email/email_verify/' + email)
+            return redirect('/accounts/email_verify/' + email)
 
         return render(request, self.template_name, self.get_context_data(message))
 
@@ -240,7 +243,7 @@ class ResetPasswordView(TemplateView):
 
 
 class EmailVerify(TemplateView):
-    template_name = 'email_control/two_step_verify.html'
+    template_name = 'accounts/two_step_verify.html'
     model = VerifyCode
 
     def __init__(self, *args, **kwargs):
@@ -317,7 +320,7 @@ class EmailVerify(TemplateView):
 
 
 class ResendEmailVerify(EmailVerify):
-    template_name = 'email_control/two_step_verify.html'
+    template_name = 'accounts/two_step_verify.html'
     model = VerifyCode
 
     def get(self, request, *args, **kwargs):
@@ -369,11 +372,11 @@ class ResendEmailVerify(EmailVerify):
 
 
 class EmailVerifySuccessView(TemplateView):
-    template_name = 'email_control/email_verify_success.html'
+    template_name = 'accounts/email_verify_success.html'
 
 
 class ForgetPasswordView(TemplateView):
-    template_name = 'email_control/forget_password.html'
+    template_name = 'accounts/forget_password.html'
     model = VerifyCode
 
     def get_context_data(self, *args):
@@ -405,7 +408,7 @@ class ForgetPasswordView(TemplateView):
         try:
             Users.objects.get(email=email)
             send_email.send_reset_password_link_email(email, 'reset_password')
-            return redirect('/email/reset_link_sent/')
+            return redirect(reverse('reset_link_sent'))
         except ObjectDoesNotExist:
             return render(request, self.template_name, self.get_context_data({
                 'message': 'Account does not exist!',
@@ -413,7 +416,7 @@ class ForgetPasswordView(TemplateView):
 
 
 class ResetLinkSentView(TemplateView):
-    template_name = 'email_control/reset_link_sent.html'
+    template_name = 'accounts/reset_link_sent.html'
 
 
 

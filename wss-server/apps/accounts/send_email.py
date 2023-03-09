@@ -1,9 +1,3 @@
-#!/usr/bin/env python 
-# -*- coding:utf-8 -*-
-# @Time : 2023/2/3 18:01
-# @Author : Haozheng Li (Liam)
-# @Email : hxl1119@case.edu
-
 import datetime
 from django.conf import settings
 from django.utils import timezone
@@ -11,7 +5,7 @@ from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
 from apps.utils.gen_verify_code import generate_digit_verification_code, generate_str_verification_code
 
-from .models import VerifyCode
+from apps.accounts.models import VerifyCode
 
 
 def send_digit_code_email(email, code_type="verify_email"):

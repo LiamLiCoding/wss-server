@@ -25,7 +25,6 @@ from apps.dashboard import views as dashboard_views
 urlpatterns = [
     path('', dashboard_views.redirect_to_dashboard),
     path('dashboard/', include('apps.dashboard.urls')),
-    path('email/', include('apps.email.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('apps.accounts.urls')),
     path('devices/', include('apps.devices.urls')),
