@@ -46,8 +46,8 @@ class Performance(models.Model):
     device = models.ForeignKey(Devices, on_delete=models.CASCADE)
     cpu_rate = models.DecimalField(max_digits=5, decimal_places=1)
     mem_rate = models.DecimalField(max_digits=5, decimal_places=1)
-    disk_write_io = models.IntegerField(default=0)
-    disk_read_io = models.IntegerField(default=0)
+    disk_write_io = models.BigIntegerField(default=0)
+    disk_read_io = models.BigIntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
