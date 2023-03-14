@@ -2,7 +2,7 @@
 
 # wss-server
 
-Based on Django, wss-server is high customization web and IOT server. 
+Based on Django, wss-server is high high performance web and IOT server. 
 
 Website: [Wss-web](https://wssweb.net/)
 
