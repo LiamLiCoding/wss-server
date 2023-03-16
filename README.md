@@ -6,6 +6,10 @@ Based on Django, wss-server is high high performance web and IOT server.
 
 Website: [WSS-Web](https://wssweb.net/)
 
+<img width="1440" alt="device_list" src="https://user-images.githubusercontent.com/47854126/225729290-502c222b-ee2b-4110-8275-37fb6fe5330d.png">
+
+<img width="1440" alt="device_detail_online" src="https://user-images.githubusercontent.com/47854126/225729313-f0fa58d8-6366-4d95-a914-00a8c588f4f0.png">
+
 ## Client
 
 It is recommended to use it with [wss-client](https://github.com/Haozheng-Li/wss-client). 
