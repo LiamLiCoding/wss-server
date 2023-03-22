@@ -27,7 +27,15 @@ Website: [WSS-Web](https://wssweb.net/)
 
 It is recommended to use it with [wss-client](https://github.com/Haozheng-Li/wss-client). 
 
-wss-client is an IoT endpoint client written in Python. It has functions such as terminal device operation performance monitoring, camera image recognition, and intrusion behavior detection. With wss-client, it can communicate with wss-server through websocket protocol to realize data mutual transmission.
+wss-client is multifunctional detection Python IoT client. 
+
+wss-client features:
+1. Support Websocket protocol data communication interface
+2. Device running performance monitoring
+3. Motion detection
+4. Intruder detection
+5. Low coupling development
+6. Singleton pattern and observer pattern development
 
 ## Requirements
 
