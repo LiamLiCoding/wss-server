@@ -14,7 +14,7 @@ Website: [WSS-Web](https://wssweb.net/)
 4. Complete user accounts system.
 5. User authentication management (developing)
 6. Device management and performance monitoring.
-7. Data analysis and visulization.
+7. Data analysis and visualization.
 8. SMS alert and email alert.
 
 ## Preview
