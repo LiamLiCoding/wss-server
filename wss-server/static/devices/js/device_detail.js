@@ -471,7 +471,7 @@ $('#operation_modal').on('show.bs.modal', function (event) {
         $('#operation-modal-title').text(`You are about to ${operation} Profiler`);
         $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
     }
-    else if(operation_type === 'intruder_detect'){
+    else if(operation_type === 'intruder_detection'){
         $('#operation-modal-title').text(`You are about to ${operation} Intruder detection`);
         $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
     }
