@@ -14,7 +14,7 @@ class EventLog(models.Model):
     event = models.IntegerField(choices=EVENT_TYPE, default=1)
     message = models.TextField(null=True, blank=True)
     action = models.TextField(null=True, blank=True)
-    image_url = models.ImageField(upload_to='devices/log_img', null=True, blank=True, default='devices/log_img/test.jpg')
+    image_url = models.FileField(upload_to='devices/log_img', null=True, blank=True, default='devices/log_img/test.jpg')
     created_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:

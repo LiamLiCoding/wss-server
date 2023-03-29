@@ -1,5 +1,7 @@
-
 import json
+import os
+import base64
+from django.conf import settings
 from asgiref.sync import async_to_sync
 from django.utils import timezone
 from django.shortcuts import reverse
@@ -9,6 +11,7 @@ from channels.db import database_sync_to_async
 from django.db.models import ObjectDoesNotExist
 
 from apps.devices.models import Devices, Performance
+from apps.record.models import EventLog
 from .notification_consumer import _async_send_notification
 
 
@@ -74,6 +77,26 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             performance.disk_read_io = performance_dict['disk_io_write']
             performance.save()
 
+    @database_sync_to_async
+    def save_detect_event(self, event_data):
+        data_type = event_data.get('data_type', '')
+        file_data = event_data.get('data_file', '')
+        intruder_type = event_data.get('intruder_type', 0)
+        data_file_name = event_data.get('data_file_name', 0)
+        if self.device and data_type and file_data and intruder_type:
+            file_data = base64.b64decode(file_data)
+            media_path = 'devices/log_img' + data_file_name
+            with open(settings.MEDIA_ROOT / media_path, "wb") as f:
+                f.write(file_data)
+
+            event_record = EventLog()
+            event_record.device = self.device
+            event_record.event = intruder_type
+            event_record.message = 'intruder event {}'.format(intruder_type)
+            event_record.action = 'enter mode'.format(intruder_type)
+            event_record.image_url = str(media_path)
+            event_record.save()
+
     async def disconnect(self, close_code):
         await self.update_device_status(active=False)
         if self.device:
@@ -88,13 +111,15 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
         self.get_device()   # get newest device info
 
-        if self.device_enable:
-            if message_type and message and self.device_enable:
-                if message_type == 'running_performance':
-                    await self.update_device_performance(message)
-                return
-        await self.disconnect(close_code=3003)
-        await self.close(code=3003)
+        if not (message_type and message and self.device_enable):
+            await self.disconnect(close_code=3003)
+            await self.close(code=3003)
+
+        # parse
+        if message_type == 'running_performance':
+            await self.update_device_performance(message)
+        elif message_type == 'detect_event':
+            await self.save_detect_event(message)
 
     async def group_message(self, event):
         print("send device message {}".format(event))
