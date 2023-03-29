@@ -27,14 +27,9 @@ class EventLog(models.Model):
 
 
 class OperationLog(models.Model):
-    OPERATION_TYPE = (
-        ('Shutdown', 'Shutdown'),
-        ('Restart', 'Restart'),
-        ('Other', 'Other'),
-    )
-
     device = models.ForeignKey(Devices, on_delete=models.CASCADE)
-    operation = models.CharField(max_length=50, choices=OPERATION_TYPE, default='1')
+    operation = models.CharField(max_length=50)
+    operation_type = models.CharField(max_length=50)
     message = models.TextField(null=True, default=True)
     created_time = models.DateTimeField(auto_now_add=True)
 

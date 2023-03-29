@@ -185,19 +185,23 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
             if device:
                 user = self.request.user
                 operation = request.POST.get('operation')
+                operation_type = request.POST.get('operation_type')
                 ori_message = request.POST.get('message')
-                message = 'Device {} {}, message: {}'.format(device.name, operation, ori_message) if ori_message \
-                    else 'Device {} {}'.format(device.name, operation)
 
-                send_device_message(device_id, operation, 'operation')
+                message = 'Device {} {} {}, message: {}'.format(device.name, operation, operation_type, ori_message) \
+                    if ori_message else 'Device {} {} {}'.format(device.name, operation, operation_type)
+
+                send_device_message(device_id, {'operation': operation, 'operation_type': operation_type}, 'operation')
                 send_notification(user.id, message, notification_type='danger', duration=10000)
 
                 operation_log = OperationLog()
                 operation_log.operation = operation
+                operation_log.operation_type = operation_type
                 operation_log.device = device
-
                 operation_log.message = message
                 operation_log.save()
+
                 return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)
+

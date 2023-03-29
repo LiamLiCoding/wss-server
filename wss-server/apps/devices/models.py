@@ -27,6 +27,9 @@ class Devices(models.Model):
     protocol = models.CharField(max_length=50, choices=PROTOCOL_CHOICES, default='Websocket')
     conversation_num = models.PositiveIntegerField(default=0)
 
+    enable_profiler = models.BooleanField(default=True)
+    enable_intruder_detection = models.BooleanField(default=True)
+
     created_time = models.DateTimeField(auto_now_add=True)
     last_online = models.DateTimeField(blank=True, null=True)
 

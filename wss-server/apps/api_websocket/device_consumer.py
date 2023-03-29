@@ -26,7 +26,6 @@ class DeviceConsumer(AsyncWebsocketConsumer):
     group_name = ''
     api_key = ''
     device = None
-    device_name = ''
     device_enable = False
     user_id = 0
 
@@ -38,7 +37,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             self.group_name = 'device{}'.format(self.device.id)
             await self.channel_layer.group_add(self.group_name, self.channel_name)
             await self.update_device_status(active=True)
-            message = "Device: {} is online now.".format(self.device.device_name)
+            message = "Device: {} is online now.".format(self.device.name)
             await _async_send_notification(self.user_id, message=message, duration=5000,
                                     jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
         else:
@@ -63,7 +62,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             self.device.is_activated = True
             self.device.is_active = active
             if active:
-                self.device.suc_conv_num += 1
+                self.device.conversation_num += 1
             self.device.save()
 
     @database_sync_to_async
@@ -101,7 +100,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         await self.update_device_status(active=False)
         if self.device:
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
-            message = "Device: {} is offline now.".format(self.device.device_name)
+            message = "Device: {} is offline now.".format(self.device.name)
             await _async_send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
 
     async def receive(self, text_data=None, bytes_data=None):

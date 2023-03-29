@@ -346,14 +346,16 @@ let updateEventLog = function () {
 
                 let event_table_html = ''
                 let event_image_html = '';
+                let event_type_color = {2: 'text-bg-info', 3: 'text-bg-primary', 4: 'text-bg-danger'};
                 for(let each_log of data.results){
                     event_table_html += `<tr>
-                        <th scope="row"><span class="badge text-bg-primary">Event${each_log.event}</span></th>
+                        <th scope="row"><span class="badge ${event_type_color[each_log.event]}">Event${each_log.event}</span></th>
                         <td>${each_log.message}</td>
                         <td>${each_log.action}</td>
-                        <td><a target="_blank" href="${each_log.image_url}">Preview</a></td>
+                        <td><a target="_blank" href="${each_log.image_url}"><u>Preview</u></a></td>
                         <td>${each_log.created_time}</td>
                     </tr>`
+
                     event_image_html += `
                         <div class="col-xl-4 col-sm-6">
                             <div class="gallery-box card">
@@ -452,27 +454,36 @@ updateEventLog();
 updateOperationLog();
 
 // Operation Modals
-let urls = '';
+let url = '';
 let operation = '';
+let operation_type = '';
+
 $('#operation_modal').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);
+    operation_type = button.data('operation_type');
     operation = button.data('operation');
-    urls = $(this).data('urls');
-    if (operation === 'restart'){
-        $('#operation-modal-title').text("You are about to restart the device");
+    url = $(this).data('urls');
+    if (operation_type === 'restart'){
+        $('#operation-modal-title').text(`You are about to restart the device`);
         $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/wrprwmwt.json");
     }
-    else if(operation === 'stop_motion_detection'){
-        $('#operation-modal-title').text("You are about to stop motion detect");
+    else if(operation_type === 'profiler'){
+        $('#operation-modal-title').text(`You are about to ${operation} Profiler`);
+        $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
+    }
+    else if(operation_type === 'intruder_detect'){
+        $('#operation-modal-title').text(`You are about to ${operation} Intruder detection`);
         $('#operation-modal-icon').attr("src", "https://cdn.lordicon.com/rivoakkk.json");
     }
 })
 $('#operation_confirm').click(function (){
     $.ajax({
         type: 'post',
-        url: urls,
-        data: {'operation': operation,
-        'message':$('#operation_message').val()},
+        url: url,
+        data: {
+            'operation': operation,
+            'operation_type': operation_type,
+            'message':$('#operation_message').val()},
     })
 })
 

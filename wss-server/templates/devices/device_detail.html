@@ -49,11 +49,11 @@
                                     <tbody>
                                         <tr>
                                             <td class="fw-medium">Device name</td>
-                                            <td class="fw-medium">{{ device.device_name }}</td>
+                                            <td class="fw-medium">{{ device.name }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Node Type</td>
-                                            <td>{{ device.device_type }}</td>
+                                            <td>{{ device.node_type }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Device Type</td>
@@ -62,10 +62,6 @@
                                         <tr>
                                             <td class="fw-medium">Protocol</td>
                                             <td><span class="badge badge-soft-success">{{ device.protocol|upper }}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="fw-medium">SDK</td>
-                                            <td><span class="badge badge-soft-secondary">{{ device.sdk|title }}</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -76,7 +72,7 @@
                     <!--end card-->
                     <div class="card">
                         <div class="card-header">
-                            <h6 class="card-title mb-0">Device status</h6>
+                            <h6 class="card-title mb-0">Online status</h6>
                         </div>
                         <div class="card-body text-center">
                             {% if device.is_active %}
@@ -90,9 +86,9 @@
                                 </div>
                             {% else %}
                                 <div class="mb-2">
-                                    <lord-icon src="https://cdn.lordicon.com/nmgjlgnk.json" trigger="morph" colors="primary:#405189,secondary:#02a8b5" style="width:120px;height:120px"></lord-icon>
+                                    <lord-icon src="https://cdn.lordicon.com/nmgjlgnk.json" trigger="click" colors="primary:#405189,secondary:#02a8b5" style="width:120px;height:120px"></lord-icon>
                                 </div>
-                                <h3 class="mb-1 fs-17">Last login</h3>
+                                <h3 class="mb-1 fs-17">Last online</h3>
                                 <h5 class="fs-14 mb-4">{{ device.last_online }}</h5>
                                 <div class="hstack gap-2 justify-content-center">
                                     <button class="btn btn-danger"><i class="ri-stop-circle-line align-bottom me-1"></i> OFFLINE</button>
@@ -101,6 +97,7 @@
                         </div>
                     </div>
                     <!--end card-->
+
                     <div class="card">
                         <div class="card-header">
                             <h5 class="card-title mb-0">Operation</h5>
@@ -112,23 +109,45 @@
                                         <table class="table mb-0">
                                             <tbody>
                                                 <tr>
-                                                    <td><h4 class="mt-2" style="text-align: left">Restart</h4></td>
-                                                    <td style="text-align: center"><button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation="restart" class="btn btn-danger waves-effect waves-light">Confirm</button></td>
+                                                    <td><h4 class="mt-2" style="text-align: left">Profiler <i class="mdi mdi-chart-areaspline"></i></h4></td>
+                                                    <td style="text-align: center">
+                                                        {% if device.enable_profiler %}
+                                                            <button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation_type="profiler" data-operation="disable" class="btn btn-danger waves-effect waves-light">Disable</button>
+                                                        {% else %}
+                                                            <button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation_type="profiler" data-operation="enable" class="btn btn-success waves-effect waves-light">Enable</button>
+                                                        {% endif %}
+                                                    </td>
                                                 </tr>
+
                                                 <tr>
-                                                    <td><h4 class="mt-2" style="text-align: left">Stop Motion Detection</h4></td>
-                                                    <td style="text-align: center"><button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation="stop_motion_detection" class="btn btn-danger waves-effect waves-light">Confirm</button></td>
+                                                    <td><h4 class="mt-2" style="text-align: left">Intruder Detection <i class="mdi mdi-smoke-detector-alert"></i></h4></td>
+                                                    <td style="text-align: center">
+                                                        {% if device.enable_intruder_detection %}
+                                                            <button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation_type="intruder_detect" data-operation="disable" class="btn btn-danger waves-effect waves-light">Disable</button>
+                                                        {% else %}
+                                                            <button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation_type="intruder_detect" data-operation="enable" class="btn btn-success waves-effect waves-light">Enable</button>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td><h4 class="mt-2" style="text-align: left">Restart Device <i class="mdi mdi-restart-alert"></i></h4></td>
+                                                    <td style="text-align: center"><button type="button" data-bs-toggle="modal" href="#operation_modal" data-operation="restart" class="btn btn-success waves-effect waves-light">Confirm</button></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             {% else %}
-                                <h2 class="mb-1 fs-20" style="text-align: center">Device is offline</h2>
+                                <div class="text-center">
+                                    <lord-icon src="https://cdn.lordicon.com/sbiheqdr.json" trigger="hover" colors="primary:#405189,secondary:#02a8b5" style="width:120px;height:120px"></lord-icon>
+                                    <h2 class="mb-1 fs-20">Device is offline</h2>
+                                </div>
                             {% endif %}
                         </div>
                     </div>
                     <!--end card-->
+
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title mb-3">SDK FILES</h5>
@@ -185,11 +204,11 @@
                 <div class="col-xxl-9">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title mb-0">Device Operating Status</h4>
+                            <h4 class="card-title mb-0">Device Profiler</h4>
                         </div><!-- end card header -->
 
                         <div class="card-body" id="performance-chart" data-urls="{% url 'get_performance' device.id %}">
-                            {% if device.is_active %}
+                            {% if device.is_active and device.enable_profiler %}
                                 <div id="cpu-used-area" data-colors='["--vz-primary"]' class="apex-charts" dir="ltr"></div>
                                 <div id="memory-used-area" data-colors='["--vz-warning"]' class="apex-charts" dir="ltr"></div>
                                 <div id="disk-used-area" data-colors='["--vz-success"]' class="apex-charts" dir="ltr"></div>
@@ -197,8 +216,13 @@
                                 <div class="noresult" id="performance-no-result">
                                     <div class="text-center">
                                         <lord-icon src="https://cdn.lordicon.com/gqdnbnwt.json" trigger="loop" delay="500" colors="primary:#405189,secondary:#02a8b5" style="width:180px;height:180px"></lord-icon>
-                                        <h4 class="mt-2">Device is Offline</h4>
-                                        <p class="text-muted mb-0 fs-16">Connect device to trace operation status</p>
+                                        {% if not device.is_active %}
+                                            <h4 class="mt-2">Device is Offline</h4>
+                                            <p class="text-muted mb-0 fs-16">Connect device to trace operation status</p>
+                                        {% else %}
+                                            <h4 class="mt-2">Device profiler is disabled</h4>
+                                            <p class="text-muted mb-0 fs-16">Enable profiler to trace operation status</p>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endif %}
@@ -344,7 +368,7 @@
                                 <div class="row g-3">
                                     <div class="col-lg-12">
                                         <label for="device_name" class="form-label">Device Name</label>
-                                        <input type="text" name= "device_name" id="device_name" class="form-control" placeholder="Device name" value="{{ device.device_name }}" required />
+                                        <input type="text" name= "device_name" id="device_name" class="form-control" placeholder="Device name" value="{{ device.name }}" required />
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-6">
