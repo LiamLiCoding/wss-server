@@ -364,7 +364,7 @@ class ResendEmailVerify(EmailVerify):
                 'request_email': self.request_email,
                 'message': message}))
         except ObjectDoesNotExist:
-            send_email.send_digit_code_email(self.request_email, 'register')
+            send_email.send_digit_code_email(self.request_email, 'verify_email')
 
         return render(request, self.template_name, self.get_context_data({
             'request_email': self.request_email,
