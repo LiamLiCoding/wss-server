@@ -11,9 +11,9 @@ from django.db.models import ObjectDoesNotExist
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import HttpResponse, redirect
 
-from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
-from .models import Users, VerifyCode
 from . import send_email
+from .models import Users, VerifyCode
+from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
 
 
 def redirect_to_login(request):

@@ -2,18 +2,18 @@ import json
 import secrets
 from django.conf import settings
 from rest_framework import status
+from django.urls import reverse_lazy
 from django.views.generic import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import JsonResponse, FileResponse, Http404
-from apps.accounts.mixins import UserSettingsMixin
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
+from django.views.generic.list import ListView
 from django.db.models import ObjectDoesNotExist
 from django.views.generic.edit import DeleteView
+from django.views.generic.detail import DetailView
+from apps.accounts.mixins import UserSettingsMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse, FileResponse, Http404
 
 
 from .models import Devices, Performance
@@ -27,7 +27,7 @@ class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
     model = Devices
     template_name = "devices/devices_list.html"
     context_object_name = "devices"
-    paginate_by = 6
+    paginate_by = 5
 
     def get_queryset(self):
         queryset = self.model.objects.filter(user=self.request.user)

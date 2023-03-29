@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.core.mail import EmailMultiAlternatives
-from apps.utils.gen_verify_code import generate_digit_verification_code, generate_str_verification_code
+from apps.utils.verification_code import generate_digit_verification_code, generate_str_verification_code
 
 from apps.accounts.models import VerifyCode
 
