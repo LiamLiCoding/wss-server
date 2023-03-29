@@ -184,7 +184,7 @@
                                 <tbody class="list">
                                     {% for device in devices %}
                                         <tr id="{{ device.id }}">
-                                            <th scope="row"><a href="{% url 'device_detail' device.id %}" class="fw-medium link-primary">{{ device.device_name }}</a></th>
+                                            <th scope="row"><a href="{% url 'device_detail' device.id %}" class="fw-medium link-primary">{{ device.name }}</a></th>
                                             <td><span class="badge badge-soft-secondary text-uppercase">{{ device.node_type }}</span></td>
                                             <td>
                                                 <input type="text" class="form-control" readonly value="{{ device.api_key }}">

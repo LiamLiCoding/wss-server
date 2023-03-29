@@ -52,7 +52,7 @@ class DeviceListView(LoginRequiredMixin, UserSettingsMixin, ListView):
                         active_devices_num += 1
                     else:
                         each_object.status = 'inactive'
-            total_conversation += each_object.suc_conv_num
+            total_conversation += each_object.conversation_num
 
         context['activated_devices_num'] = activated_devices_num
         context['active_devices_num'] = active_devices_num
@@ -92,13 +92,13 @@ class CreateDeviceView(LoginRequiredMixin, View):
         sdk = request.POST.get('sdk')
         if device_type and node_type and device_name and protocol and sdk:
             try:
-                device = self.model.objects.get(device_name=device_name)
+                device = self.model.objects.get(name=device_name)
                 if device:
                     render(request, self.template_name)
             except ObjectDoesNotExist:
                 pass
             new_device = self.model()
-            new_device.device_name = device_name
+            new_device.name = device_name
             new_device.node_type = node_type
             new_device.device_type = device_type
             new_device.protocol = protocol
@@ -186,8 +186,8 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
                 user = self.request.user
                 operation = request.POST.get('operation')
                 ori_message = request.POST.get('message')
-                message = 'Device {} {}, message: {}'.format(device.device_name, operation, ori_message) if ori_message \
-                    else 'Device {} {}'.format(device.device_name, operation)
+                message = 'Device {} {}, message: {}'.format(device.name, operation, ori_message) if ori_message \
+                    else 'Device {} {}'.format(device.name, operation)
 
                 send_device_message(device_id, operation, 'operation')
                 send_notification(user.id, message, notification_type='danger', duration=10000)
