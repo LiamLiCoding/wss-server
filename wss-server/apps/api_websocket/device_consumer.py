@@ -11,6 +11,7 @@ from django.db.models import ObjectDoesNotExist
 
 from apps.devices.models import Devices, Performance
 from apps.record.models import EventLog
+from apps.accounts.send_email import send_detection_warning_email
 from .notification_consumer import _async_send_notification, send_notification
 
 
@@ -27,6 +28,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
     device = None
     device_enable = False
     user_id = 0
+    user_email = ''
 
     async def connect(self):
         self.api_key = self.scope["url_route"]["kwargs"].get('api_key', '')
@@ -44,6 +46,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             if device:
                 self.device = device
                 self.user_id = device.user.id
+                self.user_email = device.user.email
                 self.device_enable = device.is_enable
                 return device
         except ObjectDoesNotExist:
@@ -69,11 +72,11 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
         # parse
         if message_type == 'profiler':
-            await self.update_device_performance(message)
+            await self.on_profiler_message(message)
         elif message_type == 'detect_event':
-            await self.save_detect_event(message)
+            await self.on_detect_event_message(message)
         elif message_type == 'operation_feedback':
-            await self.on_operation_feedback(message)
+            await self.on_operation_feedback_message(message)
 
     async def group_message(self, event):
         print("send device message {}".format(event))
@@ -93,7 +96,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             self.device.save()
 
     @database_sync_to_async
-    def update_device_performance(self, performance_dict):
+    def on_profiler_message(self, performance_dict):
         if self.device:
             performance = Performance()
             performance.device = self.device
@@ -123,27 +126,29 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                 await self.send(json.dumps(init_message))
 
     @database_sync_to_async
-    def save_detect_event(self, event_data):
+    def on_detect_event_message(self, event_data):
         data_type = event_data.get('data_type', '')
         file_data = event_data.get('data_file', '')
-        intruder_type = event_data.get('intruder_type', 0)
+        intruder_event_type = event_data.get('intruder_type', 0)
         data_file_name = event_data.get('data_file_name', 0)
-        if self.device and data_type and file_data and intruder_type:
+        if self.device and data_type and file_data and intruder_event_type:
             file_data = base64.b64decode(file_data)
-            media_path = 'devices/log_img' + data_file_name
+            media_path = 'record/detection_event/' + data_file_name
             with open(settings.MEDIA_ROOT / media_path, "wb") as f:
                 f.write(file_data)
 
             event_record = EventLog()
             event_record.device = self.device
-            event_record.event = intruder_type
-            event_record.message = 'intruder event {}'.format(intruder_type)
-            event_record.action = 'enter mode'.format(intruder_type)
+            event_record.event = intruder_event_type
+            event_record.message = 'intruder event {}'.format(intruder_event_type)
+            event_record.action = 'enter mode'.format(intruder_event_type)
             event_record.image_url = str(media_path)
             event_record.save()
 
+            send_detection_warning_email(self.user_email, intruder_event_type, "127.0.0.1:8000/media/{}".format(media_path))
+
     @database_sync_to_async
-    def on_operation_feedback(self, message):
+    def on_operation_feedback_message(self, message):
         operation = message.get('operation', '')
         operation_type = message.get('operation_type', '')
 

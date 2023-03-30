@@ -44,7 +44,7 @@ def send_reset_password_link_email(email, code_type="reset_password"):
     code = generate_str_verification_code(32)
     send_record.code = code
     send_record.email = email
-    send_record.code_type = 'reset_password'
+    send_record.code_type = code_type
     send_record.expiration_time = timezone.now() + datetime.timedelta(minutes=10)
     send_record.save()
 
@@ -114,6 +114,35 @@ WSS developer.
 </table>
 <!-- end table -->
     """.format(reset_link)
+    msg = EmailMultiAlternatives(email_title, text_content, settings.EMAIL_HOST_USER, [email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
+def send_detection_warning_email(email, detection_event_type, resource_url):
+    email_title= "[WSS] Intruder Detection Event"
+
+    text_content = """
+    Hey!
+
+    This is a intruder detection event from WSS!
+
+    WSS has detect an intruder at time {}, raise **EVENT{}**
+
+    Intruder detection resource url: {}
+
+    Thanks,
+    From WSS developer.
+    """.format(timezone.now(), detection_event_type, resource_url)
+    html_content = """
+<p>Hey!</p>
+<p>This is an intruder detection event from WSS!</p>
+<p>WSS has detected an intruder at time <b>{}</b>. Raised <b>EVENT{}</b></p>
+<p>System will enter <b>Mode{}</b></p>
+<p>Intruder detection resource url: <a href="http://{}" target="_blank"><b>Click here to view Detection image or video</b></a></p>
+<p>Thanks,</p>
+<p>From WSS developer.</p>
+    """.format(timezone.now(), detection_event_type, detection_event_type, resource_url)
     msg = EmailMultiAlternatives(email_title, text_content, settings.EMAIL_HOST_USER, [email])
     msg.attach_alternative(html_content, "text/html")
     msg.send()
