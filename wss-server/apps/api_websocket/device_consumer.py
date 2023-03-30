@@ -33,12 +33,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         self.device = await self.get_device()
         if self.device and self.device.is_enable:
             await self.accept()
-            self.group_name = 'device{}'.format(self.device.id)
-            await self.channel_layer.group_add(self.group_name, self.channel_name)
-            await self.update_device_status(active=True)
-            message = "Device: {} is online now.".format(self.device.name)
-            await _async_send_notification(self.user_id, message=message, duration=5000,
-                                    jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
+            await self.on_device_connect()
         else:
             await self.close(code=3003)
 
@@ -53,6 +48,39 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                 return device
         except ObjectDoesNotExist:
             return
+
+    async def disconnect(self, close_code):
+        await self.update_device_status(active=False)
+        if self.device:
+            await self.channel_layer.group_discard(self.group_name, self.channel_name)
+            message = "Device: {} is offline.".format(self.device.name)
+            await _async_send_notification(self.user_id, message=message, duration=8000, notification_type="warning")
+
+    async def receive(self, text_data=None, bytes_data=None):
+        parsed_data = json.loads(text_data)
+        message_type = parsed_data.get('message_type')
+        message = parsed_data.get('message')
+
+        self.get_device()   # get newest device info
+
+        if not (message_type and message and self.device_enable):
+            await self.disconnect(close_code=3003)
+            await self.close(code=3003)
+
+        # parse
+        if message_type == 'profiler':
+            await self.update_device_performance(message)
+        elif message_type == 'detect_event':
+            await self.save_detect_event(message)
+        elif message_type == 'operation_feedback':
+            await self.on_operation_feedback(message)
+
+    async def group_message(self, event):
+        print("send device message {}".format(event))
+        message_type = event.get('message_type', 'operation')
+        data = {"message": event['message'],
+                "message_type": message_type}
+        await self.send(text_data=json.dumps(data))
 
     @database_sync_to_async
     def update_device_status(self, active=True):
@@ -74,6 +102,21 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             performance.disk_write_io = performance_dict['disk_io_read']
             performance.disk_read_io = performance_dict['disk_io_write']
             performance.save()
+
+    async def on_device_connect(self):
+        if self.device:
+            await self.update_device_status(active=True)
+            self.group_name = 'device{}'.format(self.device.id)
+            await self.channel_layer.group_add(self.group_name, self.channel_name)
+
+            message = "Device: {} is online.".format(self.device.name)
+            await _async_send_notification(self.user_id, message=message, duration=8000,
+                                    jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
+
+            if self.device.enable_profiler:
+                send_device_message(self.device.id, {'operation': 'enable', 'operation_type': 'profiler'}, message_type='init')
+            if self.device.enable_intruder_detection:
+                send_device_message(self.device.id, {'operation': 'enable', 'operation_type': 'intruder_detection'}, message_type='init')
 
     @database_sync_to_async
     def save_detect_event(self, event_data):
@@ -106,46 +149,13 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             if operation_type == 'profiler':
                 self.device.enable_profiler = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
+                send_notification(self.user_id, message=operation_feedback_message, duration=8000,
                                   notification_type=notification_type, refresh=True)
             elif operation_type == 'intruder_detection':
                 self.device.enable_intruder_detection = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
+                send_notification(self.user_id, message=operation_feedback_message, duration=8000,
                                   notification_type=notification_type, refresh=False)
             elif operation_type == 'restart':
-                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
+                send_notification(self.user_id, message=operation_feedback_message, duration=8000,
                                   notification_type=notification_type, refresh=False)
-
-    async def disconnect(self, close_code):
-        await self.update_device_status(active=False)
-        if self.device:
-            await self.channel_layer.group_discard(self.group_name, self.channel_name)
-            message = "Device: {} is offline now.".format(self.device.name)
-            await _async_send_notification(self.user_id, message=message, duration=5000, notification_type="warning")
-
-    async def receive(self, text_data=None, bytes_data=None):
-        parsed_data = json.loads(text_data)
-        message_type = parsed_data.get('message_type')
-        message = parsed_data.get('message')
-
-        self.get_device()   # get newest device info
-
-        if not (message_type and message and self.device_enable):
-            await self.disconnect(close_code=3003)
-            await self.close(code=3003)
-
-        # parse
-        if message_type == 'profiler':
-            await self.update_device_performance(message)
-        elif message_type == 'detect_event':
-            await self.save_detect_event(message)
-        elif message_type == 'operation_feedback':
-            await self.on_operation_feedback(message)
-
-    async def group_message(self, event):
-        print("send device message {}".format(event))
-        message_type = event.get('message_type', 'operation')
-        data = {"message": event['message'],
-                "message_type": message_type}
-        await self.send(text_data=json.dumps(data))

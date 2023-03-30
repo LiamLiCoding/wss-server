@@ -182,7 +182,7 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
     def post(self, request, device_id):
         try:
             device = Devices.objects.get(id=device_id)
-            if device:
+            if device and device.is_active:
                 operation = request.POST.get('operation')
                 operation_type = request.POST.get('operation_type')
                 ori_message = request.POST.get('message')
@@ -198,8 +198,10 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
                 operation_log.device = device
                 operation_log.message = message
                 operation_log.save()
-
-                return Response(status=status.HTTP_200_OK)
+            else:
+                send_notification(self.request.user.id, message='Operation failed. Device is offline', duration=5000,
+                                  notification_type='danger', refresh=True)
+            return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)
 
