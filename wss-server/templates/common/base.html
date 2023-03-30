@@ -433,6 +433,14 @@
         let style = data.style;
         let type = data.notification_type ? data.notification_type: 'success';
         let jump_url = data.jump_url ? 'https://' + window.location.host + data.jump_url : document.URL;
+        let refresh = data.refresh;
+
+        if (refresh){
+            message += `, page will refresh in ${duration/1000}s`;
+            window.setTimeout(function(){
+                window.location.reload();
+            }, duration);
+        }
 
         Toastify({
             text: message,

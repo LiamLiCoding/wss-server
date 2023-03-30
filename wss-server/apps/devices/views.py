@@ -183,7 +183,6 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
         try:
             device = Devices.objects.get(id=device_id)
             if device:
-                user = self.request.user
                 operation = request.POST.get('operation')
                 operation_type = request.POST.get('operation_type')
                 ori_message = request.POST.get('message')
@@ -192,9 +191,6 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
                     if ori_message else 'Device {} {} {}'.format(device.name, operation, operation_type)
 
                 send_device_message(device_id, {'operation': operation, 'operation_type': operation_type}, 'operation')
-
-                notification_type = 'success' if operation == 'enable' else 'danger'
-                send_notification(user.id, message, notification_type=notification_type, duration=10000)
 
                 operation_log = OperationLog()
                 operation_log.operation = operation

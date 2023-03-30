@@ -10,24 +10,26 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
 
 
-async def _async_send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
+async def _async_send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url='', refresh=False):
     channel_layer = get_channel_layer()
     await channel_layer.group_send('notification-{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
                                                                        "notification_type": notification_type,
                                                                        "style": style,
                                                                        "duration": duration,
-                                                                       "jump_url": jump_url})
+                                                                       "jump_url": jump_url,
+                                                                       "refresh": refresh})
 
 
-def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url=''):
+def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url='', refresh=False):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)('notification-{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
                                                                        "notification_type": notification_type,
                                                                        "style": style,
                                                                        "duration": duration,
-                                                                       "jump_url": jump_url})
+                                                                       "jump_url": jump_url,
+                                                                       "refresh": refresh})
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
@@ -47,13 +49,15 @@ class NotificationConsumer(AsyncWebsocketConsumer):
     async def group_message(self, event):
         style = event.get('style', '')
         duration = event.get('duration', 3000)
+        refresh = event.get('refresh', False)
         notification_type = event.get('notification_type', 'success')
         jump_url = event.get('jump_url', '')
         data = {"message": event['message'],
                 "duration": duration,
                 "style": style,
                 "notification_type": notification_type,
-                "jump_url": jump_url}
+                "jump_url": jump_url,
+                "refresh": refresh}
         await self.send(text_data=json.dumps(data))
 
 

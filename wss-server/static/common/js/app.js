@@ -1024,8 +1024,10 @@ File: Main Js File
                 Array.from(document.getElementsByClassName("cart-item-price")).forEach(function (e) {
                         subtotal += parseFloat(e.innerHTML);
                     });
-                document.getElementById("cart-item-total").innerHTML =
-                    currencySign + subtotal.toFixed(2);
+                if (document.getElementById("cart-item-total")){
+                    document.getElementById.innerHTML = currencySign + subtotal.toFixed(2) ;
+                }
+
             }
             updateCartPrice();
         }

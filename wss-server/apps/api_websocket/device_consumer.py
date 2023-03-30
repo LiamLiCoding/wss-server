@@ -1,5 +1,4 @@
 import json
-import os
 import base64
 from django.conf import settings
 from asgiref.sync import async_to_sync
@@ -12,7 +11,7 @@ from django.db.models import ObjectDoesNotExist
 
 from apps.devices.models import Devices, Performance
 from apps.record.models import EventLog
-from .notification_consumer import _async_send_notification
+from .notification_consumer import _async_send_notification, send_notification
 
 
 def send_device_message(device_id, message, message_type="operation"):
@@ -96,6 +95,28 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             event_record.image_url = str(media_path)
             event_record.save()
 
+    @database_sync_to_async
+    def on_operation_feedback(self, message):
+        operation = message.get('operation', '')
+        operation_type = message.get('operation_type', '')
+
+        operation_feedback_message = 'Device {} {} {}'.format(self.device.name, operation, operation_type)
+        notification_type = 'success' if operation == 'enable' else 'danger'
+        if self.device:
+            if operation_type == 'profiler':
+                self.device.enable_profiler = operation == 'enable'
+                self.device.save()
+                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
+                                  notification_type=notification_type, refresh=True)
+            elif operation_type == 'intruder_detection':
+                self.device.enable_intruder_detection = operation == 'enable'
+                self.device.save()
+                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
+                                  notification_type=notification_type, refresh=False)
+            elif operation_type == 'restart':
+                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
+                                  notification_type=notification_type, refresh=False)
+
     async def disconnect(self, close_code):
         await self.update_device_status(active=False)
         if self.device:
@@ -115,10 +136,12 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             await self.close(code=3003)
 
         # parse
-        if message_type == 'running_performance':
+        if message_type == 'profiler':
             await self.update_device_performance(message)
         elif message_type == 'detect_event':
             await self.save_detect_event(message)
+        elif message_type == 'operation_feedback':
+            await self.on_operation_feedback(message)
 
     async def group_message(self, event):
         print("send device message {}".format(event))
