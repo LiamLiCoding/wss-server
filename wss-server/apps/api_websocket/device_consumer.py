@@ -114,9 +114,13 @@ class DeviceConsumer(AsyncWebsocketConsumer):
                                     jump_url=reverse('device_detail', kwargs={'device_id': self.device.id}))
 
             if self.device.enable_profiler:
-                send_device_message(self.device.id, {'operation': 'enable', 'operation_type': 'profiler'}, message_type='init')
+                init_message = {"message": {'operation': 'enable', 'operation_type': 'profiler'},
+                                "message_type": 'init'}
+                await self.send(json.dumps(init_message))
             if self.device.enable_intruder_detection:
-                send_device_message(self.device.id, {'operation': 'enable', 'operation_type': 'intruder_detection'}, message_type='init')
+                init_message = {"message": {'operation': 'enable', 'operation_type': 'intruder_detection'},
+                                "message_type": 'init'}
+                await self.send(json.dumps(init_message))
 
     @database_sync_to_async
     def save_detect_event(self, event_data):
@@ -149,12 +153,12 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             if operation_type == 'profiler':
                 self.device.enable_profiler = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=8000,
+                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
                                   notification_type=notification_type, refresh=True)
             elif operation_type == 'intruder_detection':
                 self.device.enable_intruder_detection = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=8000,
+                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
                                   notification_type=notification_type, refresh=False)
             elif operation_type == 'restart':
                 send_notification(self.user_id, message=operation_feedback_message, duration=8000,
