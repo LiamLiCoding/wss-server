@@ -427,7 +427,7 @@
     </script>
 
 <script>
-    const notificationSocket = new WebSocket('ws://' + window.location.host + '/ws/notification/');
+    const notificationSocket = new WebSocket('wss://' + window.location.host + '/ws/notification/');
 
     notificationSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
