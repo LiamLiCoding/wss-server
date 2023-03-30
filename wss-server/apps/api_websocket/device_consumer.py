@@ -140,9 +140,10 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             event_record = EventLog()
             event_record.device = self.device
             event_record.event = intruder_event_type
-            event_record.message = 'intruder event {}'.format(intruder_event_type)
+            event_record.message = 'Intruder event {}'.format(intruder_event_type)
             event_record.action = 'enter mode'.format(intruder_event_type)
-            event_record.image_url = str(media_path)
+            event_record.resource_type = 'video' if intruder_event_type == 4 else 'image'
+            event_record.resource_url = str(media_path)
             event_record.save()
 
             send_detection_warning_email(self.user_email, intruder_event_type, "127.0.0.1:8000/media/{}".format(media_path))

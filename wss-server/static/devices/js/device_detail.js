@@ -348,11 +348,14 @@ let updateEventLog = function () {
                 let event_image_html = '';
                 let event_type_color = {2: 'text-bg-info', 3: 'text-bg-primary', 4: 'text-bg-danger'};
                 for(let each_log of data.results){
+                    let preview_image_url = each_log.resource_type === 'video' ? '/static/common/img/download.png' : each_log.resource_url;
+                    let gallery_class = each_log.resource_type === 'video' ? '' : 'event-image-gallery';
+
                     event_table_html += `<tr>
                         <th scope="row"><span class="badge ${event_type_color[each_log.event]}">Event${each_log.event}</span></th>
                         <td>${each_log.message}</td>
                         <td>${each_log.action}</td>
-                        <td><a target="_blank" href="${each_log.image_url}"><u>Preview</u></a></td>
+                        <td><a target="_blank" href="${each_log.resource_url}"><u>Preview</u></a></td>
                         <td>${each_log.created_time}</td>
                     </tr>`
 
@@ -360,8 +363,8 @@ let updateEventLog = function () {
                         <div class="col-xl-4 col-sm-6">
                             <div class="gallery-box card">
                                 <div class="gallery-container">
-                                    <a class="event-image-gallery" href="${each_log.image_url}">
-                                        <img class="gallery-img img-fluid mx-auto" src="${each_log.image_url}" alt="" />
+                                    <a class="${gallery_class}" href="${each_log.resource_url}">
+                                        <img class="gallery-img img-fluid mx-auto" src="${preview_image_url}" alt="" />
                                         <div class="gallery-overlay">
                                             <h5 class="overlay-caption">Event${each_log.event}</h5>
                                         </div>
