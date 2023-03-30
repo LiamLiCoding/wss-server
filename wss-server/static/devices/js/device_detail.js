@@ -303,7 +303,7 @@ if ($('#performance-no-result').length === 0) {
     MemUsedArea.render();
     diskIOArea.render();
     updateChartData()
-    window.setInterval("updateChartData()", 5000);
+    window.setInterval("updateChartData()", 6000);
 }
 
 // Event log and Operation log table

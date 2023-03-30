@@ -200,7 +200,7 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
                 operation_log.save()
             else:
                 send_notification(self.request.user.id, message='Operation failed. Device is offline', duration=5000,
-                                  notification_type='danger', refresh=True)
+                                  level='error', refresh=True, notification_type='swal')
             return Response(status=status.HTTP_200_OK)
         except ObjectDoesNotExist:
             return Response(data=json.dumps({}), status=status.HTTP_404_NOT_FOUND)

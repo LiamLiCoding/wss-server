@@ -57,7 +57,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         if self.device:
             await self.channel_layer.group_discard(self.group_name, self.channel_name)
             message = "Device: {} is offline.".format(self.device.name)
-            await _async_send_notification(self.user_id, message=message, duration=8000, notification_type="warning")
+            await _async_send_notification(self.user_id, message=message, duration=8000, level="warning")
 
     async def receive(self, text_data=None, bytes_data=None):
         parsed_data = json.loads(text_data)
@@ -147,24 +147,29 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
             send_detection_warning_email(self.user_email, intruder_event_type, "127.0.0.1:8000/media/{}".format(media_path))
 
+            send_notification(self.user_id, message="Detect Intruder Event {}".format(intruder_event_type), duration=8000,
+                              level="error", refresh=False, notification_type='swal', title='Intruder Event',
+                              footer='<a href="{}">Click here to check event detail</a>'.format(reverse('device_detail',
+                                                                                                        kwargs={'device_id': self.device.id})))
+
     @database_sync_to_async
     def on_operation_feedback_message(self, message):
         operation = message.get('operation', '')
         operation_type = message.get('operation_type', '')
 
         operation_feedback_message = 'Device {} {} {}'.format(self.device.name, operation, operation_type)
-        notification_type = 'success' if operation == 'enable' else 'danger'
+        level = 'success' if operation == 'enable' else 'danger'
         if self.device:
             if operation_type == 'profiler':
                 self.device.enable_profiler = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
-                                  notification_type=notification_type, refresh=True)
+                send_notification(self.user_id, message=operation_feedback_message, duration=3000,
+                                  level=level, refresh=True)
             elif operation_type == 'intruder_detection':
                 self.device.enable_intruder_detection = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=5000,
-                                  notification_type=notification_type, refresh=False)
+                send_notification(self.user_id, message=operation_feedback_message, duration=6000,
+                                  level=level, refresh=False)
             elif operation_type == 'restart':
                 send_notification(self.user_id, message=operation_feedback_message, duration=8000,
-                                  notification_type=notification_type, refresh=False)
+                                  level=level, refresh=False)

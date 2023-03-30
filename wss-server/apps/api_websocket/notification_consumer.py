@@ -10,26 +10,35 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
 
 
-async def _async_send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url='', refresh=False):
+async def _async_send_notification(user_id, message, level="success",
+                                   style='', duration=3000, jump_url='', refresh=False, notification_type='toastify',
+                                   title='', footer=''):
     channel_layer = get_channel_layer()
     await channel_layer.group_send('notification-{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
-                                                                       "notification_type": notification_type,
+                                                                       "level": level,
                                                                        "style": style,
                                                                        "duration": duration,
                                                                        "jump_url": jump_url,
-                                                                       "refresh": refresh})
+                                                                       "refresh": refresh,
+                                                                       "title": title,
+                                                                       "footer": footer,
+                                                                       "notification_type": notification_type})
 
 
-def send_notification(user_id, message, notification_type="success", style='', duration=3000, jump_url='', refresh=False):
+def send_notification(user_id, message, level="success", style='', duration=3000, jump_url='',
+                      refresh=False, notification_type='toastify', title='', footer=''):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)('notification-{}'.format(user_id), {"type": "group_message",
                                                                        "message": message,
-                                                                       "notification_type": notification_type,
+                                                                       "level": level,
                                                                        "style": style,
                                                                        "duration": duration,
                                                                        "jump_url": jump_url,
-                                                                       "refresh": refresh})
+                                                                       "refresh": refresh,
+                                                                       "title": title,
+                                                                       "footer": footer,
+                                                                       "notification_type": notification_type})
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
@@ -50,14 +59,20 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         style = event.get('style', '')
         duration = event.get('duration', 3000)
         refresh = event.get('refresh', False)
-        notification_type = event.get('notification_type', 'success')
+        level = event.get('level', 'success')
         jump_url = event.get('jump_url', '')
+        title = event.get('title', '')
+        footer = event.get('footer', '')
+        notification_type = event.get('notification_type', 'toastify')
         data = {"message": event['message'],
                 "duration": duration,
                 "style": style,
+                "level": level,
                 "notification_type": notification_type,
                 "jump_url": jump_url,
-                "refresh": refresh}
+                "refresh": refresh,
+                'title': title,
+                "footer": footer}
         await self.send(text_data=json.dumps(data))
 
 

@@ -18,6 +18,8 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
+    <!-- Notification Css-->
+    <link href="{% static 'common/libs/sweetalert2/sweetalert2.min.css' %}" rel="stylesheet" type="text/css" />
     <!-- Layout config Js -->
     <script src="{% static 'common/js/layout.js' %}"></script>
     <!-- Bootstrap Css -->
@@ -358,8 +360,8 @@
             {% block content %}
             {% endblock %}
 
-            {% block fotter %}
-                <!-- Begin Fotter-->
+            {% block footer %}
+                <!-- Begin footer-->
                 <footer class="footer">
                     <div class="container-fluid">
                         <div class="row">
@@ -374,7 +376,7 @@
                         </div>
                     </div>
                 </footer>
-                <!-- End Fotter-->
+                <!-- End footer-->
             {% endblock %}
 
         </div>
@@ -396,6 +398,7 @@
     <script src="{% static 'common/libs/node-waves/waves.min.js' %}"></script>
     <script src="{% static 'common/libs/feather-icons/feather.min.js' %}"></script>
     <script src="{% static 'common/js/plugins/lord-icon-2.1.0.js' %}"></script>
+    <script src="{% static 'common/libs/sweetalert2/sweetalert2.min.js' %}"></script>
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/toastify-js'></script>
 
     {% block js %}{% endblock %}
@@ -430,10 +433,13 @@
         const data = JSON.parse(e.data);
         let message = data.message;
         let duration = data.duration;
+        let title = data.title;
         let style = data.style;
-        let type = data.notification_type ? data.notification_type: 'success';
+        let level = data.level ? data.level: 'success';
         let jump_url = data.jump_url ? 'https://' + window.location.host + data.jump_url : document.URL;
         let refresh = data.refresh;
+        let footer = data.footer;
+        let notification_type = data.notification_type;
 
         if (refresh){
             message += `, page will refresh in ${duration/1000}s`;
@@ -442,23 +448,37 @@
             }, duration);
         }
 
-        Toastify({
-            text: message,
-            destination: jump_url,
-            newWindow: false,
-            gravity: "top",
-            position: "center",
-            className: "bg-" + type,
-            stopOnFocus: true,
-            offset: {x: 0, y: 0,},
-            duration: duration,
-            close: "close",
-            style: style === "gradient" ? {
-                background: "linear-gradient(to right, #0AB39C, #405189)"
-            }: ""
-        }).showToast();
-    };
+        if (notification_type === "toastify"){
+            Toastify({
+                text: message,
+                destination: jump_url,
+                newWindow: false,
+                gravity: "top",
+                position: "center",
+                className: "bg-" + level,
+                stopOnFocus: true,
+                offset: {x: 0, y: 0,},
+                duration: duration,
+                close: "close",
+                style: style === "gradient" ? {
+                    background: "linear-gradient(to right, #0AB39C, #405189)"
+                }: ""
+            }).showToast();
+        }
+        else if (notification_type === "swal"){
+            Swal.fire({
+                title: title,
+                text: message,
+                icon: ["success", "error", "warning", "info", "question"].indexOf(level)!==-1 ? level : "info",
+                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                footer: footer,
+                buttonsStyling: false,
+                showCloseButton: true
+            });
+        }
 
+
+    };
     notificationSocket.onclose = function(e) {
         console.error('Notification socket closed unexpectedly');
     };
