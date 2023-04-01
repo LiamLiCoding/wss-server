@@ -169,8 +169,8 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             elif operation_type == 'intruder_detection':
                 self.device.enable_intruder_detection = operation == 'enable'
                 self.device.save()
-                send_notification(self.user_id, message=operation_feedback_message, duration=6000,
-                                  level=level, refresh=False)
+                send_notification(self.user_id, message=operation_feedback_message, duration=3000,
+                                  level=level, refresh=True)
             elif operation_type == 'restart':
                 send_notification(self.user_id, message=operation_feedback_message, duration=8000,
                                   level=level, refresh=False)

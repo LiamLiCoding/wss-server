@@ -8,12 +8,15 @@
 <!-- auth page content -->
 <div class="auth-page-content">
     <div class="container">
-        <div class="row justify-content-center mt-5">
-            <div class="col-md-8 col-lg-6 col-xl-5 mt-5">
-                <div class="card mt-5" style="background-color: #202020; border: 0.05rem solid #333 ">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card" style="background-color: #202020; border: 0.05rem solid #333 ">
                     <div class="card-body p-4">
                         <div class="text-center mt-sm-5 mb-4 text-white-50">
                             <div>
+                                <span class="logo-sm m-1">
+                                    <img src="{% static 'common/img/logo/logo-sm.png' %}" alt="" height="32">
+                                </span>
                                 <a href="{% url 'dashboard' %}" class="d-inline-block auth-logo">
                                     <img src="{% static 'common/img/logo/logo-dark.png' %}" alt="" height="25">
                                 </a>
@@ -71,16 +74,15 @@
                                         <a href="{{ github_oauth_url }}" class="btn btn-dark btn-icon waves-effect waves-light"><i class="ri-github-fill fs-16"></i></a>
                                     </div>
                                 </div>
+                                <div class="mt-4 text-center mb-0">
+                                    <p class="mb-0">Don't have an account ? <a href="{% url 'register' %}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
+                                </div>
                             </form>
                         </div>
                     </div>
                     <!-- end card body -->
                 </div>
                 <!-- end card -->
-
-                <div class="mt-4 text-center">
-                    <p class="mb-0">Don't have an account ? <a href="{% url 'register' %}" class="fw-semibold text-primary text-decoration-underline"> Signup </a> </p>
-                </div>
 
             </div>
         </div>
