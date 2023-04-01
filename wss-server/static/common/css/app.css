@@ -13346,15 +13346,13 @@ span.flatpickr-weekday {
 }
 .profile-wid-bg::before {
   content: "";
-  position: absolute;
-  right: 0;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  opacity: 0.9;
-  background: #4b38b3;
-  background: -webkit-gradient(linear, right bottom, right top, from(#221a52), to(#4b38b3));
-  background: linear-gradient(to top, #221a52, #4b38b3);
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background-size:cover;
+  background: linear-gradient(to bottom,rgba(34,37,41,.45) 0,rgba(34,37,41,.9)) no-repeat center;
 }
 .profile-wid-bg .profile-wid-img {
   width: 100%;

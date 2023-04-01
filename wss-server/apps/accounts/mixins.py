@@ -16,4 +16,5 @@ class UserSettingsMixin:
 			context['last_name'] = user.last_name
 			context['email'] = user.email
 			context['is_staff'] = user.is_staff
+			context['phone'] = user.phone
 		return context

@@ -12,6 +12,9 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('settings/', views.AccountSettings.as_view(), name='account_settings'),
+    path('settings/change_personal_info/', views.ChangePersonalInfoAPI.as_view(), name='change_personal_info'),
+    path('settings/change_password/', views.ChangePasswordAPI.as_view(), name='change_password'),
     path('oauth/github/', views.GitHubOAuthView.as_view(), name='github_oauth'),
     path('reset_password/<str:code>/', views.ResetPasswordView.as_view(), name='reset_password'),
     path('reset_password_success/', views.ResetPasswordSuccessView.as_view(), name='reset_password_success'),
@@ -20,5 +23,4 @@ urlpatterns = [
     path('email_verify_success/', views.EmailVerifySuccessView.as_view(), name='email_verify_success'),
     path('forget_password/', views.ForgetPasswordView.as_view(), name='forget_password'),
     path('reset_link_sent/', views.ResetLinkSentView.as_view(), name='reset_link_sent'),
-
 ]

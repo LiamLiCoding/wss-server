@@ -15,7 +15,6 @@ from apps.accounts.mixins import UserSettingsMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse, FileResponse, Http404
 
-
 from .models import Devices, Performance
 from apps.record.models import OperationLog
 from apps.api_websocket.notification_consumer import send_notification

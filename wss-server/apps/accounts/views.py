@@ -3,15 +3,20 @@ import datetime
 from django.contrib import auth
 from django.urls import reverse
 from django.conf import settings
-from django.shortcuts import render
+from rest_framework import status
 from django.utils import timezone
+from django.shortcuts import render
 from django.views.generic import View
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from django.views.generic import TemplateView
 from django.db.models import ObjectDoesNotExist
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import HttpResponse, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import send_email
+from .mixins import UserSettingsMixin
 from .models import Users, VerifyCode
 from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
 
@@ -189,6 +194,17 @@ class LogoutView(View):
     def get(self, request, *args, **kwargs):
         auth.logout(request)
         return render(request, self.template_name)
+
+
+class AccountSettings(LoginRequiredMixin, UserSettingsMixin, TemplateView):
+    template_name = 'accounts/account-settings.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_user_info())
+        if args:
+            context.update(*args)
+        return context
 
 
 class ResetPasswordSuccessView(TemplateView):
@@ -419,4 +435,33 @@ class ResetLinkSentView(TemplateView):
     template_name = 'accounts/reset_link_sent.html'
 
 
+class ChangePersonalInfoAPI(LoginRequiredMixin, APIView):
+    def post(self, request):
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+
+        if first_name:
+            self.request.user.first_name = first_name
+        if last_name:
+            self.request.user.last_name = last_name
+        if phone:
+            self.request.user.phone = phone
+        self.request.user.save()
+        return Response(status=status.HTTP_200_OK)
+
+
+class ChangePasswordAPI(LoginRequiredMixin, APIView):
+    def post(self, request):
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if old_password:
+            user = auth.authenticate(email=self.request.user.email, password=old_password)
+            if isinstance(user, Users) and user.is_verified and new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 

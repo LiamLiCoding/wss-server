@@ -10,7 +10,7 @@ Array.from(document.querySelectorAll("form .auth-pass-inputgroup")).forEach(func
 var password = document.getElementById("password-input"),
 confirm_password = document.getElementById("confirm-password-input");
 function validatePassword() {
-    password.value != confirm_password.value ? confirm_password.setCustomValidity("Passwords Don't Match") : confirm_password.setCustomValidity("")
+    password.value !== confirm_password.value ? confirm_password.setCustomValidity("Passwords Don't Match") : confirm_password.setCustomValidity("")
 }
 password.onchange = validatePassword;
 var myInput = document.getElementById("password-input"),

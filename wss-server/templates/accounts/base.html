@@ -31,10 +31,12 @@
 
 <body>
     <div class="auth-page-wrapper pt-5">
+        {% block login_bg %}
         <div class="login-cover">
             <div class="login-cover-image" style="background-image: url({% static 'accounts/img/login-bg-7.jpg' %}); position:fixed;top:0;left:0;right:0;bottom:0;background-size:cover;background-repeat:no-repeat;background-position:center"></div>
             <div class="login-cover-bg" style="position:fixed;top:0;left:0;right:0;bottom:0;background-size:cover;background: linear-gradient(to bottom,rgba(0,0,0,.45) 0,rgba(0,0,0,.9)) no-repeat center;"></div>
 	    </div>
+        {% endblock %}
         {% block auth_content %}
         {% endblock %}
 
