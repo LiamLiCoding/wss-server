@@ -206,6 +206,9 @@ class AccountSettings(LoginRequiredMixin, UserSettingsMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_info())
+        profile_complete_percent = round((bool(self.request.user.first_name) + bool(self.request.user.last_name) +
+                                        bool(self.request.user.phone))/3, 4)*100
+        context.update({"profile_complete_percent": profile_complete_percent})
         try:
             user_settings = UserSettings.objects.get(user=self.request.user)
             if user_settings:
@@ -453,13 +456,13 @@ class ChangePersonalInfoAPI(LoginRequiredMixin, APIView):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         phone = request.POST.get('phone')
+        username = request.POST.get('username')
 
-        if first_name:
-            self.request.user.first_name = first_name
-        if last_name:
-            self.request.user.last_name = last_name
-        if phone:
-            self.request.user.phone = phone
+        self.request.user.first_name = first_name
+        self.request.user.last_name = last_name
+        self.request.user.phone = phone
+        if username:
+            self.request.user.username = username
         self.request.user.save()
         return Response(status=status.HTTP_200_OK)
 

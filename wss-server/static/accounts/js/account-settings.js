@@ -17,26 +17,45 @@
 	}, false);
 })();
 
+if (document.querySelector("#phonenumberInput")) {
+    let cleaveBlocks = new Cleave('#phonenumberInput', {
+        delimiters: ['(', ')', '-'],
+        blocks: [0, 3, 3, 4]
+    });
+}
+
 $("#change_personal_info_button").click(function() {
     let first_name = $("#firstnameInput").val();
     let last_name = $("#lastnameInput").val();
     let phone = $("#phonenumberInput").val();
-    if (first_name || last_name ||  phone) {
-        $.ajax({
-            url:'change_personal_info/',
-            type:'post',
-            data:{"first_name": first_name, "last_name": last_name, "phone": phone},
-            success:function (data) {
-                Swal.fire({
-                    title: 'Personal Info Settings',
-                    text: 'Personal info settings update successfully!',
-                    icon: "success",
-                    confirmButtonClass: 'btn btn-primary w-xs mt-2',
-                    buttonsStyling: false,
-                    showCloseButton: true
-                });
-            }});
+    let username = $("#usernameInput").val();
+
+    if (!username){
+        $("#usernameEmptyTip").css("display", "block");
+        return
     }
+    else{
+        $("#usernameEmptyTip").css("display", "none");
+    }
+
+    $.ajax({
+        url:'change_personal_info/',
+        type:'post',
+        data:{"first_name": first_name, "last_name": last_name, "phone": phone, "username": username},
+        success:function (data) {
+            Swal.fire({
+                title: 'Personal Info Settings',
+                text: 'Personal info settings update successfully!',
+                icon: "success",
+                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then((isConfirm) => {
+                if (isConfirm.value) {
+                    window.location.reload();
+                }
+            });
+        }});
 });
 
 

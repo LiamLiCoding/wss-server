@@ -61,8 +61,8 @@
                                 </div>
                             </div>
                             <div class="progress animated-progress custom-progress progress-label">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 30%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="label">30%</div>
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ profile_complete_percent }}%" aria-valuenow="{{ profile_complete_percent }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="label">{{ profile_complete_percent }}%</div>
                                 </div>
                             </div>
                         </div>
@@ -102,6 +102,21 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
+                                                    <label for="usernameInput" class="form-label">Username</label>
+                                                    <input type="text" name="username" class="form-control" id="usernameInput" placeholder="Enter your username" value="{{ username }}">
+                                                    <span class="text-danger" id="usernameEmptyTip" style="display: none"><i class="las la-exclamation-circle"></i> Username can not be empty</span>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="emailInput" class="form-label">Email Address</label>
+                                                    <input type="email" class="form-control" id="emailInput" placeholder="Enter your email" value="{{ email }}" readonly>
+                                                </div>
+                                            </div>
+                                            <!--end col-->
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
                                                     <label for="firstnameInput" class="form-label">First Name</label>
                                                     <input type="text" name="first_name" class="form-control" id="firstnameInput" placeholder="Enter your firstname" value="{{ first_name }}">
                                                 </div>
@@ -117,14 +132,7 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="phonenumberInput" class="form-label">Phone Number</label>
-                                                    <input type="text" name="phone" class="form-control" id="phonenumberInput" placeholder="Enter your phone number" value="{{ phone }}">
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label for="emailInput" class="form-label">Email Address</label>
-                                                    <input type="email" class="form-control" id="emailInput" placeholder="Enter your email" value="{{ email }}" readonly>
+                                                    <input type="text" name="phone" class="form-control" id="phonenumberInput" placeholder="(xxx)xxx-xxxx" value="{{ phone }}">
                                                 </div>
                                             </div>
                                             <!--end col-->
@@ -327,5 +335,6 @@
 
 {% block js %}
     <script src="{% static 'common/js/csrf.js' %}"></script>
+    <script src="{% static 'common/libs/cleave.js/cleave.min.js' %}"></script>
     <script src="{% static 'accounts/js/account-settings.js' %}"></script>
 {% endblock %}
