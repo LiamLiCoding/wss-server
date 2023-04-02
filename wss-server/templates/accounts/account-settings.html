@@ -178,12 +178,6 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
-                                                <div class="mb-3">
-                                                    <a href="javascript:void(0);" class="link-primary text-decoration-underline">Forgot Password ?</a>
-                                                </div>
-                                            </div>
-                                            <!--end col-->
-                                            <div class="col-lg-12">
                                                 <div class="text-end">
                                                     <button type="button" class="btn btn-success" id="changePasswordButton">Change Password</button>
                                                 </div>
@@ -192,10 +186,8 @@
                                         </div>
                                         <!--end row-->
                                     </form>
+                                    {% comment %}
                                     <div class="mt-4 mb-3 border-bottom pb-2">
-                                        <div class="float-end">
-                                            <a href="javascript:void(0);" class="link-primary">All Logout</a>
-                                        </div>
                                         <h5 class="card-title">Login History</h5>
                                     </div>
                                     <div class="d-flex align-items-center mb-3">
@@ -208,9 +200,6 @@
                                             <h6>iPhone 12 Pro</h6>
                                             <p class="text-muted mb-0">Los Angeles, United States - March 16 at 2:47PM</p>
                                         </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="flex-shrink-0 avatar-sm">
@@ -221,9 +210,6 @@
                                         <div class="flex-grow-1 ms-3">
                                             <h6>Apple iPad Pro</h6>
                                             <p class="text-muted mb-0">Washington, United States - November 06 at 10:43AM</p>
-                                        </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
                                         </div>
                                     </div>
                                     <div class="d-flex align-items-center mb-3">
@@ -236,9 +222,6 @@
                                             <h6>Galaxy S21 Ultra 5G</h6>
                                             <p class="text-muted mb-0">Conneticut, United States - June 12 at 3:24PM</p>
                                         </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 avatar-sm">
@@ -250,10 +233,8 @@
                                             <h6>Dell Inspiron 14</h6>
                                             <p class="text-muted mb-0">Phoenix, United States - July 26 at 8:10AM</p>
                                         </div>
-                                        <div>
-                                            <a href="javascript:void(0);">Logout</a>
-                                        </div>
                                     </div>
+                                    {% endcomment %}
                                 </div>
                                 <!--end tab-pane-->
                                 <div class="tab-pane" id="notification" role="tabpanel">
@@ -263,26 +244,34 @@
                                             <li class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <label class="form-check-label fs-14" for="emailNotification">
-                                                        Send email notifications
+                                                        Detection event Email notifications
                                                     </label>
                                                     <p class="text-muted"> Email notifications for detection event warn. </p>
                                                 </div>
                                                 <div class="flex-shrink-0">
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="emailNotification" />
+                                                        {% if detection_Email_notification %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="detection_Email_notification" type="checkbox" role="switch" id="emailNotification" checked/>
+                                                        {% else %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="detection_Email_notification" type="checkbox" role="switch" id="emailNotification" />
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="d-flex mt-2">
                                                 <div class="flex-grow-1">
                                                     <label class="form-check-label fs-14" for="sms_notification">
-                                                        Send SMS notifications
+                                                        Detection event SMS notifications
                                                     </label>
                                                     <p class="text-muted">SMS warning message from WSS.</p>
                                                 </div>
                                                 <div class="flex-shrink-0">
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="sms_notification" />
+                                                        {% if detection_SMS_notification %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="detection_SMS_notification" type="checkbox" role="switch" id="sms_notification" checked/>
+                                                        {% else %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="detection_SMS_notification" type="checkbox" role="switch" id="sms_notification"/>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </li>
@@ -295,7 +284,11 @@
                                                 </div>
                                                 <div class="flex-shrink-0">
                                                     <div class="form-check form-switch">
-                                                        <input class="form-check-input" type="checkbox" role="switch" id="update_notification" />
+                                                        {% if update_notification %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="update_notification" type="checkbox" role="switch" id="update_notification" checked/>
+                                                        {% else %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="update_notification" type="checkbox" role="switch" id="update_notification"/>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </li>

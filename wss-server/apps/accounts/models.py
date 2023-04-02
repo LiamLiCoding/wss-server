@@ -122,6 +122,16 @@ class Users(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = "users"
 
 
+class UserSettings(models.Model):
+    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    detection_Email_notification = models.BooleanField(default=True)
+    detection_SMS_notification = models.BooleanField(default=False)
+    update_notification = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
+
+
 class VerifyCode(models.Model):
     CODE_TYPE_CHOICE = (
         ('verify_email', 'verify_email'),

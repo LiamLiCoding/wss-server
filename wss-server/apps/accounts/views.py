@@ -17,7 +17,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import send_email
 from .mixins import UserSettingsMixin
-from .models import Users, VerifyCode
+from .models import Users, VerifyCode, UserSettings
 from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
 
 
@@ -142,6 +142,8 @@ class GitHubOAuthView(OauthBaseView):
                                              password='********',
                                              avatar=user_info['avatar_url'],
                                              )
+            user_settings = UserSettings(user=user)
+            user_settings.save()
         else:
             user = user[0]
         auth.login(self.request, user)
@@ -182,7 +184,9 @@ class RegisterView(View):
                 message = "The email has been taken. Try another."
                 return render(request, 'accounts/register.html', self.get_context_data(message))
 
-            self.model.objects.create_user(username=username, password=password, email=email)
+            user = self.model.objects.create_user(username=username, password=password, email=email)
+            user_settings = UserSettings(user=user)
+            user_settings.save()
             return redirect('/accounts/email_verify/' + email)
 
         return render(request, self.template_name, self.get_context_data(message))
@@ -202,6 +206,15 @@ class AccountSettings(LoginRequiredMixin, UserSettingsMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(self.get_user_info())
+        try:
+            user_settings = UserSettings.objects.get(user=self.request.user)
+            if user_settings:
+                context['detection_Email_notification'] = user_settings.detection_Email_notification
+                context['detection_SMS_notification'] = user_settings.detection_SMS_notification
+                context['update_notification'] = user_settings.update_notification
+        except ObjectDoesNotExist:
+            user_settings = UserSettings(user=self.request.user)
+            user_settings.save()
         if args:
             context.update(*args)
         return context
@@ -464,4 +477,18 @@ class ChangePasswordAPI(LoginRequiredMixin, APIView):
                 user.save()
                 return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
+class NotificationSettingsAPI(LoginRequiredMixin, APIView):
+    def post(self, request):
+        notification_type = request.POST.get('notification_type')
+        value = request.POST.get('value')
+        value = True if value == 'on' else False
+        data = {notification_type: value}
+
+        if notification_type and value:
+            user_settings = UserSettings.objects.filter(user=self.request.user)
+            if user_settings:
+                user_settings.update(**data)
+        return Response(status=status.HTTP_200_OK)
 
