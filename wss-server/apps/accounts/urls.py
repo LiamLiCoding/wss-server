@@ -16,6 +16,7 @@ urlpatterns = [
     path('settings/change_personal_info/', views.ChangePersonalInfoAPI.as_view(), name='change_personal_info'),
     path('settings/change_password/', views.ChangePasswordAPI.as_view(), name='change_password'),
     path('settings/notification_settings/', views.NotificationSettingsAPI.as_view(), name='notification_settings'),
+    path('settings/delete_account/', views.DeleteAccountAPI.as_view(), name='delete_account'),
     path('oauth/github/', views.GitHubOAuthView.as_view(), name='github_oauth'),
     path('reset_password/<str:code>/', views.ResetPasswordView.as_view(), name='reset_password'),
     path('reset_password_success/', views.ResetPasswordSuccessView.as_view(), name='reset_password_success'),

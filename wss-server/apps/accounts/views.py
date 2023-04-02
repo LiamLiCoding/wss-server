@@ -475,7 +475,7 @@ class ChangePasswordAPI(LoginRequiredMixin, APIView):
 
         if old_password:
             user = auth.authenticate(email=self.request.user.email, password=old_password)
-            if isinstance(user, Users) and user.is_verified and new_password == confirm_password:
+            if isinstance(user, Users) and new_password == confirm_password:
                 user.set_password(new_password)
                 user.save()
                 return Response(status=status.HTTP_200_OK)
@@ -494,4 +494,15 @@ class NotificationSettingsAPI(LoginRequiredMixin, APIView):
             if user_settings:
                 user_settings.update(**data)
         return Response(status=status.HTTP_200_OK)
+
+
+class DeleteAccountAPI(LoginRequiredMixin, APIView):
+    def post(self, request):
+        confirm_password = request.POST.get('confirm_password')
+        if confirm_password:
+            user = auth.authenticate(email=self.request.user.email, password=confirm_password)
+            if isinstance(user, Users):
+                user.delete()
+                return redirect(reverse('login'))
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 

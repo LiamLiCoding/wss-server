@@ -194,3 +194,26 @@ $(".notification-settings").change(function() {
         success:function (data) {
         }});
 });
+
+$("#deleteAccountConfirm").click(function() {
+    let confirm_password = $("#deleteAccountPassword").val();
+
+    if (!confirm_password){
+        $("#deleteAccountPasswordEmptyTips").css("display", "block");
+        return
+    }
+    else{
+        $("#deleteAccountPasswordEmptyTips").css("display", "none");
+    }
+
+    $.ajax({
+        url:'delete_account/',
+        type:'post',
+        data:{"confirm_password": confirm_password},
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            if (errorThrown === 'Unauthorized'){
+                $("#deleteAccountPasswordNotMatchTips").css("display", "block");
+            }
+        }
+});
+});

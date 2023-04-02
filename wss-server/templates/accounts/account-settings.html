@@ -307,14 +307,13 @@
                                 <div class="tab-pane" id="account" role="tabpanel">
                                     <div>
                                         <h5 class="card-title text-decoration-underline mb-3">Delete This Account:</h5>
-                                        <p class="text-muted">Go to the Data & Privacy section of your profile Account. Scroll to "Your data & privacy options." Delete your Profile Account. Follow the instructions to delete your account :</p>
-                                        <div>
-                                            <input type="password" class="form-control" id="passwordInput" placeholder="Enter your password" value="make@321654987" style="max-width: 265px;">
-                                        </div>
+                                        <p class="text-muted">Deleting your account will delete <span class="text-decoration-underline text-danger">all information</span> related to the account! Please make sure you are doing it right.</p>
                                         <div class="hstack gap-2 mt-3">
-                                            <a href="javascript:void(0);" class="btn btn-soft-danger">Close & Delete This Account</a>
-                                            <a href="javascript:void(0);" class="btn btn-light">Cancel</a>
+                                            <button type="button" class="btn btn-soft-danger" data-bs-toggle="modal" data-bs-target="#exampleModalgrid">
+                                                Delete This Account
+                                            </button>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!--end tab-pane-->
@@ -331,6 +330,46 @@
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
+
+<!-- Grids in modals -->
+
+<div class="modal fade" id="exampleModalgrid" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-modal="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalgridLabel">Delete Account</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="fs-15">
+                    Deleting your account will delete all information related to the account!
+                </h5>
+                <p>Including: </p>
+                <ul>
+                    <li>Device information</li>
+                    <li>Detection event record</li>
+                    <li>Operation record</li>
+                </ul>
+                <HR>
+                <div class="row g-3 mt-2">
+                    <div class="col-12">
+                        <div>
+                            <input type="text" class="form-control" id="deleteAccountPassword" placeholder="Enter your password to confirm">
+                            <span class="text-danger" id="deleteAccountPasswordNotMatchTips" style="display: none"><i class="las la-exclamation-circle"></i> Passwords Don't Match</span>
+                            <span class="text-danger" id="deleteAccountPasswordEmptyTips" style="display: none"><i class="las la-exclamation-circle"></i> Passwords Cannot be empty</span>
+                        </div>
+                    </div><!--end col-->
+                    <div class="col-lg-12">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger" id="deleteAccountConfirm">Delete</button>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block js %}
