@@ -502,7 +502,7 @@ class DeleteAccountAPI(LoginRequiredMixin, APIView):
         if confirm_password:
             user = auth.authenticate(email=self.request.user.email, password=confirm_password)
             if isinstance(user, Users):
+                auth.logout(request)
                 user.delete()
-                return redirect(reverse('login'))
+                return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-

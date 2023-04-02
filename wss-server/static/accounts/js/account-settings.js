@@ -210,6 +210,9 @@ $("#deleteAccountConfirm").click(function() {
         url:'delete_account/',
         type:'post',
         data:{"confirm_password": confirm_password},
+        success:function (data) {
+            location.href="/";
+        },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
             if (errorThrown === 'Unauthorized'){
                 $("#deleteAccountPasswordNotMatchTips").css("display", "block");
