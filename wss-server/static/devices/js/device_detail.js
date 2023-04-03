@@ -519,3 +519,38 @@ if (onlineTimeNode.length !== 0){
     }, 1000)
 }
 
+// Update device
+$("#update-device-button").click(function() {
+    let device_id = $("#update_device_info_form").data('device-id');
+    let update_device_name = $("#update_device_name").val();
+    let update_node_type = $("#update_node_type").val();
+    let update_device_type = $("#update_device_type").val();
+    let update_protocol = $("#update_protocol").val();
+
+    let data_obj = {
+        'device_id': device_id,
+        'device_name': update_device_name,
+        'node_type': update_node_type,
+        'device_type': update_device_type,
+        'protocol': update_protocol,
+    }
+
+    $.ajax({
+        url:'/devices/update_device_info/'+ device_id,
+        type:'post',
+        data:data_obj,
+        success:function (data) {
+            Swal.fire({
+                title: 'Change device info',
+                text: 'Device info change successfully!',
+                icon: "success",
+                confirmButtonClass: 'btn btn-primary w-xs mt-2',
+                buttonsStyling: false,
+                showCloseButton: true
+            }).then((isConfirm) => {
+                if (isConfirm.value) {
+                    window.location.reload();
+                }
+            });
+        }});
+});

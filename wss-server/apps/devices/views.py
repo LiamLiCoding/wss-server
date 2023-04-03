@@ -89,8 +89,7 @@ class CreateDeviceView(LoginRequiredMixin, View):
         node_type = request.POST.get('node_type')
         device_type = request.POST.get('device_type')
         protocol = request.POST.get('protocol')
-        sdk = request.POST.get('sdk')
-        if device_type and node_type and device_name and protocol and sdk:
+        if device_type and node_type and device_name and protocol:
             try:
                 device = self.model.objects.get(name=device_name)
                 if device:
@@ -102,7 +101,6 @@ class CreateDeviceView(LoginRequiredMixin, View):
             new_device.node_type = node_type
             new_device.device_type = device_type
             new_device.protocol = protocol
-            new_device.sdk = sdk
             new_device.user = request.user
             new_device.api_key = secrets.token_urlsafe(32)
             new_device.save()
@@ -111,9 +109,32 @@ class CreateDeviceView(LoginRequiredMixin, View):
         return redirect('/devices/')
 
 
-class UpdateDeviceStatusView(LoginRequiredMixin, View):
+class UpdateDeviceInfoAPI(LoginRequiredMixin, APIView):
     model = Devices
-    template_name = "devices/devices_list.html"
+
+    def post(self, request, *args, **kwargs):
+        device_id = request.POST.get('device_id')
+        device_name = request.POST.get('device_name')
+        node_type = request.POST.get('node_type')
+        device_type = request.POST.get('device_type')
+        protocol = request.POST.get('protocol')
+        print(device_id, device_name, type(device_id))
+        try:
+            device = self.model.objects.get(id=device_id)
+            if device:
+                device.name = device_name
+                device.node_type = node_type
+                device.device_type = device_type
+                device.protocol = protocol
+                device.save()
+                return Response(status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            pass
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class UpdateDeviceStatusAPI(LoginRequiredMixin, View):
+    model = Devices
 
     def post(self, request, *args, **kwargs):
         device_id = kwargs.get('pk')
@@ -125,7 +146,26 @@ class UpdateDeviceStatusView(LoginRequiredMixin, View):
                     if enable_status:
                         device.is_enable = False if enable_status == 'false' else True
                     device.save()
-                    return redirect(reverse('device_detail', kwargs={'device_id': device_id}))
+
+                    # get status
+                    if not device.is_enable:
+                        status = 'disable'
+                    else:
+                        if not device.is_activated:
+                            status = 'inactivated'
+                        else:
+                            if device.is_active:
+                                status = 'active'
+                            else:
+                                status = 'inactive'
+
+                    response = {
+                        'target_id': device.id,
+                        'is_enable': device.is_enable,
+                        'device_status': status,
+                    }
+                    return JsonResponse(response)
+
             except ObjectDoesNotExist:
                 pass
         return redirect('/devices/')

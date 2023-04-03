@@ -363,34 +363,34 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                         </div>
 
-                        <form class="tablelist-form" action="{% url 'edit_device' device.id %}" method="post">
+                        <form class="tablelist-form" data-device-id="{{ device.id }}" id="update_device_info_form">
                             {% csrf_token %}
                             <div class="modal-body">
                                 <div class="row g-3">
                                     <div class="col-lg-12">
-                                        <label for="device_name" class="form-label">Device Name</label>
-                                        <input type="text" name= "device_name" id="device_name" class="form-control" placeholder="Device name" value="{{ device.name }}" required />
+                                        <label for="update_device_name" class="form-label">Device Name</label>
+                                        <input type="text" name= "device_name" id="update_device_name" class="form-control" placeholder="Device name" value="{{ device.name }}" required />
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-6">
-                                        <label for="node_type" class="form-label">Node type</label>
-                                        <select class="form-control" name="node_type" id="node_type">
+                                        <label for="update_node_type" class="form-label">Node type</label>
+                                        <select class="form-control" name="node_type" id="update_node_type">
                                             <option value="motion_detect" {% if device.node_type == 'motion_detect' %} selected {% endif %}>Motion detect</option>
                                             <option value="gateway"{% if device.node_type == 'gateway' %} selected {% endif %}>Gateway</option>
                                         </select>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-6">
-                                        <label for="device_type" class="form-label">Device type</label>
-                                        <select class="form-control" name="device_type" id="device_type">
+                                        <label for="update_device_type" class="form-label">Device type</label>
+                                        <select class="form-control" name="device_type" id="update_device_type">
                                             <option value="raspberry_pi" {% if device.device_type == 'raspberry_pi' %} selected {% endif %}>Raspberry Pi</option>
                                         </select>
                                     </div>
                                     <!--end col-->
                                     <div class="col-lg-12">
-                                        <label for="protocol" class="form-label">Select Connection Protocol</label>
+                                        <label for="update_protocol" class="form-label">Select Connection Protocol</label>
                                         <div class="hstack gap-2 flex-wrap">
-                                            <input type="radio" class="btn-check" name="protocol" id="protocol1" value="Websocket" {% if device.protocol == 'Websocket' %} checked {% endif %}>
+                                            <input type="radio" class="btn-check" name="protocol" id="update_protocol" value="Websocket" {% if device.protocol == 'Websocket' %} checked {% endif %}>
                                             <label class="btn btn-outline-primary shadow-none" for="protocol1">Websocket</label>
                                         </div>
                                     </div>
@@ -401,7 +401,7 @@
                             <div class="modal-footer">
                                 <div class="hstack gap-2 justify-content-end">
                                     <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" id="edit-btn">Update Device</button>
+                                    <button type="button" class="btn btn-success" id="update-device-button">Update Device</button>
                                 </div>
                             </div>
                         </form>
