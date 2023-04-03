@@ -1,5 +1,6 @@
 import requests
 import datetime
+from urllib.parse import urlencode
 from django.contrib import auth
 from django.urls import reverse
 from django.conf import settings
@@ -29,13 +30,27 @@ class LoginView(View):
     form_class = UserLoginForm
     template_name = 'accounts/login.html'
 
+    @staticmethod
+    def get_oauth_url(url, client_id, redirect_uri='', scope='', response_type=''):
+        parameter = {'client_id': client_id}
+        if redirect_uri:
+            parameter.update({'redirect_uri': redirect_uri})
+        if scope:
+            parameter.update({'scope': scope})
+        if scope:
+            parameter.update({'response_type': response_type})
+        data = urlencode(parameter)
+        return url + "?" + data
+
     def get_context_data(self, *args):
         context = {'login_form': self.form_class,
-                   'github_oauth_url': 'https://github.com/login/oauth/authorize?client_id={}'.format(
-                       settings.GITHUB_CLIENT_ID),
-                   'google_oauth_url': 'https://accounts.google.com/o/oauth2/auth?response_type={}&client_id={}&redirect_uri={}&scope={}'.format(
-                       'code', settings.GOOGLE_CLIENT_ID, 'http://127.0.0.1:8000/accounts/oauth/google/', 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
-                   )}
+                   'github_oauth_url': self.get_oauth_url('https://github.com/login/oauth/authorize',
+                                                          settings.GITHUB_CLIENT_ID),
+                   'google_oauth_url': self.get_oauth_url('https://accounts.google.com/o/oauth2/auth',
+                                                          client_id=settings.GOOGLE_CLIENT_ID,
+                                                          redirect_uri='https://wssweb.net/accounts/oauth/google/',
+                                                          scope='https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+                                                          response_type='code')}
         if args:
             context.update(*args)
         return context
@@ -169,7 +184,7 @@ class GoogleOAuthView(OauthBaseView):
             'client_secret': self.client_secret,
             'code': request.GET['code'],
             'grant_type': 'authorization_code',
-            'redirect_uri': 'http://127.0.0.1:8000/accounts/oauth/google/',
+            'redirect_uri': 'https://wssweb.net/accounts/oauth/google/',
         }
         results = requests.post(self.access_token_url, data, headers=headers, timeout=1)
         results = results.json()
@@ -189,6 +204,8 @@ class GoogleOAuthView(OauthBaseView):
             user = Users.objects.create_user(username=user_info['name'],
                                              oauth_id=user_info['sub'],
                                              email=user_info['email'],
+                                             first_name=user_info['given_name'],
+                                             last_name=user_info['family_name'],
                                              password='********',
                                              avatar=user_info['picture'],
                                              )
@@ -208,8 +225,13 @@ class RegisterView(View):
 
     def get_context_data(self, message=None, *args):
         context = {'register_form': self.form_class,
-                   'github_oauth_url': 'https://github.com/login/oauth/authorize?client_id={}'.format(
-                       settings.GITHUB_CLIENT_ID)}
+                   'github_oauth_url': LoginView.get_oauth_url('https://github.com/login/oauth/authorize',
+                                                          settings.GITHUB_CLIENT_ID),
+                   'google_oauth_url': LoginView.get_oauth_url('https://accounts.google.com/o/oauth2/auth',
+                                                          client_id=settings.GOOGLE_CLIENT_ID,
+                                                          redirect_uri='https://wssweb.net/accounts/oauth/google/',
+                                                          scope='https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+                                                          response_type='code')}
         if message:
             context['message'] = message
         if args:
