@@ -52,11 +52,11 @@
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Node Type</td>
-                                            <td>{{ device.node_type }}</td>
+                                            <td>{{ device.node_type|upper }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Device Type</td>
-                                            <td>{{ device.device_type }}</td>
+                                            <td>{{ device.device_type|upper }}</td>
                                         </tr>
                                         <tr>
                                             <td class="fw-medium">Protocol</td>
@@ -147,6 +147,7 @@
                     </div>
                     <!--end card-->
 
+                    {% comment %}
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title mb-3">SDK FILES</h5>
@@ -197,6 +198,7 @@
                         </div>
                     </div>
                     <!--end card-->
+                    {% endcomment %}
 
                 </div>
                 <!---end col-->
@@ -361,7 +363,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                         </div>
 
-                        <form class="tablelist-form" autocomplete="off" action="{% url 'edit_device' 1 %}" method="post">
+                        <form class="tablelist-form" action="{% url 'edit_device' device.id %}" method="post">
                             {% csrf_token %}
                             <div class="modal-body">
                                 <div class="row g-3">
@@ -393,24 +395,13 @@
                                         </div>
                                     </div>
                                     <!--end col-->
-                                    <div class="col-lg-12">
-                                        <label for="sdk" class="form-label">Select SDK</label>
-                                        <div class="hstack gap-2 flex-wrap" id="sdk">
-                                            <input type="radio" class="btn-check" name="sdk" id="sdk1" value="python" {% if device.sdk == 'python' %} checked {% endif %}>
-                                            <label class="btn btn-outline-primary shadow-none" for="sdk1">Python</label>
-
-                                            <input type="radio" class="btn-check" name="sdk" id="sdk2" value="c++" {% if device.sdk == 'c++' %} checked {% endif %}>
-                                            <label class="btn btn-outline-primary shadow-none" for="sdk2">C++</label>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
                                 </div>
                                 <!--end row-->
                             </div>
                             <div class="modal-footer">
                                 <div class="hstack gap-2 justify-content-end">
                                     <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success" id="edit-btn">Update Device</button>
+                                    <button type="submit" class="btn btn-success" id="edit-btn">Update Device</button>
                                 </div>
                             </div>
                         </form>

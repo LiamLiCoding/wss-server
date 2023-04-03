@@ -2,6 +2,7 @@ import json
 import secrets
 from django.conf import settings
 from rest_framework import status
+from django.urls import reverse
 from django.urls import reverse_lazy
 from django.views.generic import View
 from rest_framework.views import APIView
@@ -124,25 +125,7 @@ class UpdateDeviceStatusView(LoginRequiredMixin, View):
                     if enable_status:
                         device.is_enable = False if enable_status == 'false' else True
                     device.save()
-
-                    # get status
-                    if not device.is_enable:
-                        status = 'disable'
-                    else:
-                        if not device.is_activated:
-                            status = 'inactivated'
-                        else:
-                            if device.is_active:
-                                status = 'active'
-                            else:
-                                status = 'inactive'
-
-                    response = {
-                        'target_id': device.id,
-                        'is_enable': device.is_enable,
-                        'device_status': status,
-                    }
-                    return JsonResponse(response)
+                    return redirect(reverse('device_detail', kwargs={'device_id': device_id}))
             except ObjectDoesNotExist:
                 pass
         return redirect('/devices/')
