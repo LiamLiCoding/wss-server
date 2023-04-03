@@ -32,7 +32,10 @@ class LoginView(View):
     def get_context_data(self, *args):
         context = {'login_form': self.form_class,
                    'github_oauth_url': 'https://github.com/login/oauth/authorize?client_id={}'.format(
-                       settings.GITHUB_CLIENT_ID)}
+                       settings.GITHUB_CLIENT_ID),
+                   'google_oauth_url': 'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={}&redirect_uri={}'.format(
+                       settings.GOOGLE_CLIENT_ID, 'http://127.0.0.1:8000'
+                   )}
         if args:
             context.update(*args)
         return context
@@ -149,6 +152,31 @@ class GitHubOAuthView(OauthBaseView):
         auth.login(self.request, user)
         self.request.session['user_name'] = user.username
         return redirect(self.get_success_url())
+
+
+class GoogleOAuthView(OauthBaseView):
+    access_token_url = 'https://oauth2.googleapis.com/token'
+    user_api = 'https://api.github.com/user'
+    client_id = settings.GOOGLE_CLIENT_ID
+    client_secret = settings.GOOGLE_CLIENT_SECRET
+
+    def authenticate(self, user_info):
+        print(user_info)
+        user = Users.objects.filter(oauth_id=user_info['id'])
+        # if not user:
+        #     user = Users.objects.create_user(username=user_info['login'],
+        #                                      oauth_id=user_info['id'],
+        #                                      email=user_info['email'],
+        #                                      password='********',
+        #                                      avatar=user_info['avatar_url'],
+        #                                      )
+        #     user_settings = UserSettings(user=user)
+        #     user_settings.save()
+        # else:
+        #     user = user[0]
+        # auth.login(self.request, user)
+        # self.request.session['user_name'] = user.username
+        # return redirect(self.get_success_url())
 
 
 class RegisterView(View):
