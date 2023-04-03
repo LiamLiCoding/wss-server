@@ -96,7 +96,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField("date joined", default=timezone.now)
 
     avatar = models.ImageField(upload_to='accounts/avatar', max_length=200, null=True, blank=True)
-    oauth_id = models.PositiveIntegerField('Oauth-id', unique=True, null=True, blank=True)
+    oauth_id = models.CharField('Oauth-id', max_length=100, unique=True, null=True, blank=True)
     is_verified = models.BooleanField("Is verified", default=False)
     phone = models.CharField("phone", max_length=25, blank=True)
 

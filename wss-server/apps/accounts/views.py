@@ -33,8 +33,8 @@ class LoginView(View):
         context = {'login_form': self.form_class,
                    'github_oauth_url': 'https://github.com/login/oauth/authorize?client_id={}'.format(
                        settings.GITHUB_CLIENT_ID),
-                   'google_oauth_url': 'https://accounts.google.com/o/oauth2/auth?response_type=code&client_id={}&redirect_uri={}'.format(
-                       settings.GOOGLE_CLIENT_ID, 'http://127.0.0.1:8000'
+                   'google_oauth_url': 'https://accounts.google.com/o/oauth2/auth?response_type={}&client_id={}&redirect_uri={}&scope={}'.format(
+                       'code', settings.GOOGLE_CLIENT_ID, 'http://127.0.0.1:8000/accounts/oauth/google/', 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
                    )}
         if args:
             context.update(*args)
@@ -109,8 +109,10 @@ class OauthBaseView(View):
             raise PermissionDenied
 
     def get_user_info(self, access_token):
-        headers = {'Authorization': 'token {}'.format(access_token)}
-        results = requests.get(self.user_api, headers=headers, timeout=1)
+        data = {
+            'access_token': access_token,
+        }
+        results = requests.get(self.user_api, data, timeout=1)
         user_info = results.json()
         return user_info
 
@@ -156,27 +158,47 @@ class GitHubOAuthView(OauthBaseView):
 
 class GoogleOAuthView(OauthBaseView):
     access_token_url = 'https://oauth2.googleapis.com/token'
-    user_api = 'https://api.github.com/user'
+    user_api = 'https://www.googleapis.com/oauth2/v3/userinfo'
     client_id = settings.GOOGLE_CLIENT_ID
     client_secret = settings.GOOGLE_CLIENT_SECRET
 
+    def get_access_token(self, request):
+        headers = {'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
+        data = {
+            'client_id': self.client_id,
+            'client_secret': self.client_secret,
+            'code': request.GET['code'],
+            'grant_type': 'authorization_code',
+            'redirect_uri': 'http://127.0.0.1:8000/accounts/oauth/google/',
+        }
+        results = requests.post(self.access_token_url, data, headers=headers, timeout=1)
+        results = results.json()
+
+        if 'access_token' in results:
+            return results['access_token']
+        else:
+            raise PermissionDenied
+
     def authenticate(self, user_info):
-        print(user_info)
-        user = Users.objects.filter(oauth_id=user_info['id'])
-        # if not user:
-        #     user = Users.objects.create_user(username=user_info['login'],
-        #                                      oauth_id=user_info['id'],
-        #                                      email=user_info['email'],
-        #                                      password='********',
-        #                                      avatar=user_info['avatar_url'],
-        #                                      )
-        #     user_settings = UserSettings(user=user)
-        #     user_settings.save()
-        # else:
-        #     user = user[0]
-        # auth.login(self.request, user)
-        # self.request.session['user_name'] = user.username
-        # return redirect(self.get_success_url())
+        """
+        Google user info return keys:
+        {'sub', 'name', 'given_name', 'family_name', 'picture', 'email', 'email_verified', 'locale', 'hd',}
+        """
+        user = Users.objects.filter(oauth_id=user_info['sub'])
+        if not user:
+            user = Users.objects.create_user(username=user_info['name'],
+                                             oauth_id=user_info['sub'],
+                                             email=user_info['email'],
+                                             password='********',
+                                             avatar=user_info['picture'],
+                                             )
+            user_settings = UserSettings(user=user)
+            user_settings.save()
+        else:
+            user = user[0]
+        auth.login(self.request, user)
+        self.request.session['user_name'] = user.username
+        return redirect(self.get_success_url())
 
 
 class RegisterView(View):
