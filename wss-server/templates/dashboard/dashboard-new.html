@@ -206,7 +206,7 @@
                                                                     <img src="{% static 'devices/img/RaspberryPi.png' %}" alt="" height="24">
                                                                 </div>
                                                             </div>
-                                                            <h5  class="mb-0">{{ device.name }}</h5>
+                                                            <a href="{% url 'device_detail' device.id %}"><h5  class="mb-0">{{ device.name }}</h5></a>
                                                         </div>
                                                     </td>
                                                     <td>
