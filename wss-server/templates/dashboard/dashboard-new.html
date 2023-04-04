@@ -73,7 +73,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Online device</p>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="2">0</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="{{ online_devices_num }}">0</span></h4>
                                             </div>
                                         </div>
                                     </div><!-- end card body -->
@@ -97,7 +97,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Latest event</p>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0">Event <span class="counter-value" data-target="3">3</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0">Event <span class="counter-value" data-target="{{ latest_event }}">0</span></h4>
                                             </div>
                                         </div>
                                     </div><!-- end card body -->
@@ -121,7 +121,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Today Device conversations</p>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="100">0</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="{{ total_conversation }}">0</span></h4>
                                             </div>
                                         </div>
                                     </div><!-- end card body -->
@@ -144,7 +144,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Today events</p>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="3948">0</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="{{ today_events }}">0</span></h4>
                                             </div>
                                         </div>
                                     </div><!-- end card body -->
@@ -168,7 +168,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Today operation</p>
-                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="1340">0</span></h4>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="{{ today_operations }}">0</span></h4>
                                             </div>
                                         </div>
                                     </div><!-- end card body -->
@@ -241,21 +241,7 @@
                 <div class="col-12">
                     <div class="card card-height-100">
                         <div class="card-header border-0 align-items-center d-flex">
-                            <h4 class="card-title mb-0 flex-grow-1">Detection Event Statistic</h4>
-                            <div>
-                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                    ALL
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                    1M
-                                </button>
-                                <button type="button" class="btn btn-soft-secondary btn-sm">
-                                    6M
-                                </button>
-                                <button type="button" class="btn btn-soft-primary btn-sm">
-                                    1Y
-                                </button>
-                            </div>
+                            <h4 class="card-title mb-0 flex-grow-1">Log Statistic</h4>
                         </div><!-- end card header -->
 
                         <div class="card-header p-0 border-0 bg-soft-light">
@@ -263,28 +249,28 @@
                                 <div class="col-6 col-sm-3">
                                     <div class="p-3 border border-dashed border-start-0">
                                         <h5 class="mb-1 fs-17 fw-semibold"><span class="counter-value" data-target="3364">0</span></h5>
-                                        <p class="text-muted mb-0">New Applications</p>
+                                        <p class="text-muted mb-0">Total Event Logs</p>
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-6 col-sm-3">
                                     <div class="p-3 border border-dashed border-start-0">
                                         <h5 class="mb-1 fs-17 fw-semibold"><span class="counter-value" data-target="2804">0</span></h5>
-                                        <p class="text-muted mb-0">Interview</p>
+                                        <p class="text-muted mb-0">Today Event Logs</p>
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-6 col-sm-3">
                                     <div class="p-3 border border-dashed border-start-0">
                                         <h5 class="mb-1 fs-17 fw-semibold"><span class="counter-value" data-target="2402">0</span></h5>
-                                        <p class="text-muted mb-0">Hired</p>
+                                        <p class="text-muted mb-0">Total Operation Logs</p>
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-6 col-sm-3">
                                     <div class="p-3 border border-dashed border-start-0 border-end-0">
                                         <h5 class="mb-1 text-success"><span class="counter-value" data-target="8">0</span>k</h5>
-                                        <p class="text-muted mb-0">Total Applications</p>
+                                        <p class="text-muted mb-0">Today Operation Logs</p>
                                     </div>
                                 </div>
                                 <!--end col-->
@@ -293,7 +279,7 @@
 
                         <div class="card-body p-0 pb-2">
                             <div class="w-100">
-                                <div id="line_chart_dashed" data-colors='["--vz-success", "--vz-primary", "--vz-secondary"]' class="apex-charts" dir="ltr"></div>
+                                <div id="log_statistic_chart" class="apex-charts" dir="ltr"></div>
                             </div>
                         </div><!-- end card body -->
                     </div><!-- end card -->
@@ -305,11 +291,6 @@
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Recent Detection Event Log</h4>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-soft-info btn-sm">
-                                    <i class="ri-file-list-3-line align-bottom"></i> Generate Report
-                                </button>
-                            </div>
                         </div><!-- end card header -->
 
                         <div class="card-body">
@@ -352,7 +333,7 @@
                                                     </td>
                                                     <td>{{ event.message }}</td>
                                                     <td>{{ event.action }}</td>
-                                                    <td><a target="_blank" href="{{ event.resource_url }}"><u>Preview</u></a></td>
+                                                    <td><a target="_blank" href="{{ MEDIA_URL }}{{ event.resource_url }}"><u>Preview</u></a></td>
                                                     <td>{{ event.created_time }}</td>
                                                 </tr><!-- end tr -->
                                             {% endfor %}
@@ -368,11 +349,6 @@
                     <div class="card card-height-100">
                         <div class="card-header align-items-center d-flex">
                             <h4 class="card-title mb-0 flex-grow-1">Login history</h4>
-                            <div class="flex-shrink-0">
-                                <button type="button" class="btn btn-soft-primary btn-sm">
-                                    Export Report
-                                </button>
-                            </div>
                         </div><!-- end card header -->
 
                         <!-- card body -->

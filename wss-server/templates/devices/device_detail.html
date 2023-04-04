@@ -250,7 +250,7 @@
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="event-log" role="tabpanel" data-urls="{% url 'event_log' device.id%}">
+                                <div class="tab-pane active" id="event-log" role="tabpanel" data-urls="{% url 'get_event_log_by_device' device.id%}">
                                     <div class="card-body" id="event-log-noresult">
                                         <div class="noresult" style="display: inline">
                                             <div class="text-center">
@@ -290,7 +290,7 @@
                                     </div>
                                 </div>
                                 <!--edn tab-pane-->
-                                <div class="tab-pane" id="operation-log" role="tabpanel" data-urls="{% url 'operation_log' device.id%}">
+                                <div class="tab-pane" id="operation-log" role="tabpanel" data-urls="{% url 'get_operation_log_by_device' device.id%}">
                                     <div class="card-body" id="operation-log-noresult"  style="display: inline">
                                         <div class="noresult">
                                             <div class="text-center">

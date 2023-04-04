@@ -27,6 +27,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
     api_key = ''
     device = None
     device_enable = False
+    user = None
     user_id = 0
     user_email = ''
 
@@ -45,6 +46,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             device = Devices.objects.get(api_key=self.api_key)
             if device:
                 self.device = device
+                self.user = device.user
                 self.user_id = device.user.id
                 self.user_email = device.user.email
                 self.device_enable = device.is_enable
@@ -139,6 +141,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
             event_record = EventLog()
             event_record.device = self.device
+            event_record.user = self.user
             event_record.event = intruder_event_type
             event_record.message = 'Intruder event {}'.format(intruder_event_type)
             event_record.action = 'enter mode'.format(intruder_event_type)

@@ -1,5 +1,6 @@
 from django.db import models
 from apps.devices.models import Devices
+from apps.accounts.models import Users
 
 
 class EventLog(models.Model):
@@ -9,6 +10,7 @@ class EventLog(models.Model):
         (3, 'Event3'),
         (4, 'Event4'),
     )
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
     device = models.ForeignKey(Devices, on_delete=models.CASCADE)
     event = models.IntegerField(choices=EVENT_TYPE, default=1)
     message = models.TextField(null=True, blank=True)
@@ -27,6 +29,7 @@ class EventLog(models.Model):
 
 
 class OperationLog(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
     device = models.ForeignKey(Devices, on_delete=models.CASCADE)
     operation = models.CharField(max_length=50)
     operation_type = models.CharField(max_length=50)

@@ -215,6 +215,7 @@ class DeviceOperationAPI(LoginRequiredMixin, APIView):
                 send_device_message(device_id, {'operation': operation, 'operation_type': operation_type}, 'operation')
 
                 operation_log = OperationLog()
+                operation_log.user = self.request.user
                 operation_log.operation = operation
                 operation_log.operation_type = operation_type
                 operation_log.device = device
