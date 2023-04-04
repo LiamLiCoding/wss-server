@@ -28,7 +28,7 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
         online_devices_num = len(devices_list.filter(is_active=True))
         total_conversation = sum([device.conversation_num for device in devices_list])
         total_event_logs_list = EventLog.objects.filter(user=self.request.user)
-        recent_events_logs_list = EventLog.objects.filter(user=self.request.user)[:5]
+        recent_events_logs_list = EventLog.objects.filter(user=self.request.user).order_by('-id')[:5]
         total_operation_logs_list = OperationLog.objects.filter(user=self.request.user)
         today_event_num = len(total_event_logs_list.filter(created_time__startswith=datetime.date.today()))
         today_operation_num = len(total_operation_logs_list.filter(created_time__startswith=datetime.date.today()))
