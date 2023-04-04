@@ -9,7 +9,6 @@ class EventLog(models.Model):
         (3, 'Event3'),
         (4, 'Event4'),
     )
-
     device = models.ForeignKey(Devices, on_delete=models.CASCADE)
     event = models.IntegerField(choices=EVENT_TYPE, default=1)
     message = models.TextField(null=True, blank=True)

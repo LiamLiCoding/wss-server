@@ -1,0 +1,433 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard | WSS{% endblock %}
+
+{% block css %}
+    <link href="{% static 'common/libs/jsvectormap/css/jsvectormap.min.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                        <h4 class="mb-sm-0">WSS Dashboard</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Menu</a></li>
+                                <li class="breadcrumb-item active">WSS Dashboard</li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-xl-6">
+                    <!-- View board -->
+                    <div class="d-flex flex-column h-100">
+                        <div class="row">
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card card-animate overflow-hidden">
+                                    <div class="position-absolute start-0" style="z-index: 0;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                            <style>
+                                                .s0 {
+                                                    opacity: .05;
+                                                    fill: var(--vz-info)
+                                                }
+                                            </style>
+                                            <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="card-body" style="z-index:1;min-height: 120px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3">System Mode</p>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0">Mode <span class="counter-value" data-target="3">3</span></h4>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!--end col-->
+                            <div class="col-xl-6 col-md-6">
+                                <!-- card -->
+                                <div class="card card-animate overflow-hidden">
+                                    <div class="position-absolute start-0" style="z-index: 0;">
+                                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                            <style>
+                                                .s0 {
+                                                    opacity: .05;
+                                                    fill: var(--vz-info)
+                                                }
+                                            </style>
+                                            <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="card-body" style="z-index:1;min-height: 120px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Online device</p>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="2">0</span></h4>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                            <div class="col-xl-6 col-md-6">
+                                <!-- card -->
+                                <div class="card card-animate overflow-hidden">
+                                    <div class="position-absolute start-0" style="z-index: 0;">
+                                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                            <style>
+                                                .s0 {
+                                                    opacity: .05;
+                                                    fill: var(--vz-info)
+                                                }
+                                            </style>
+                                            <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="card-body" style="z-index:1;min-height: 120px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Latest event</p>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0">Event <span class="counter-value" data-target="3">3</span></h4>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                            <div class="col-xl-6 col-md-6">
+                                <!-- card -->
+                                <div class="card card-animate overflow-hidden">
+                                    <div class="position-absolute start-0" style="z-index: 0;">
+                                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                            <style>
+                                                .s0 {
+                                                    opacity: .05;
+                                                    fill: var(--vz-info)
+                                                }
+                                            </style>
+                                            <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="card-body" style="z-index:1;min-height: 120px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Today Device conversations</p>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="100">0</span></h4>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                            <div class="col-xl-6 col-md-6">
+                                <div class="card card-animate overflow-hidden">
+                                    <div class="position-absolute start-0" style="z-index: 0;">
+                                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                            <style>
+                                                .s0 {
+                                                    opacity: .05;
+                                                    fill: var(--vz-info)
+                                                }
+                                            </style>
+                                            <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="card-body" style="z-index:1;min-height: 120px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3"> Today events</p>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="3948">0</span></h4>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!--end col-->
+                            <div class="col-xl-6 col-md-6">
+                                <!-- card -->
+                                <div class="card card-animate overflow-hidden">
+                                    <div class="position-absolute start-0" style="z-index: 0;">
+                                        <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+                                            <style>
+                                                .s0 {
+                                                    opacity: .05;
+                                                    fill: var(--vz-info)
+                                                }
+                                            </style>
+                                            <path id="Shape 8" class="s0" d="m189.5-25.8c0 0 20.1 46.2-26.7 71.4 0 0-60 15.4-62.3 65.3-2.2 49.8-50.6 59.3-57.8 61.5-7.2 2.3-60.8 0-60.8 0l-11.9-199.4z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="card-body" style="z-index:1;min-height: 120px">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <p class="text-uppercase fw-medium text-muted text-truncate mb-3">Today operation</p>
+                                                <h4 class="fs-22 fw-semibold ff-secondary mb-0"><span class="counter-value" data-target="1340">0</span></h4>
+                                            </div>
+                                        </div>
+                                    </div><!-- end card body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+                        </div><!--end row-->
+                    </div>
+                </div><!--end col-->
+                <div class="col-xl-6">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Devices</h4>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            {% if not devices_list %}
+                                <div class="card-body">
+                                    <div class="noresult mt-5">
+                                        <div class="text-center">
+                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"  colors="primary:#405189,secondary:#02a8b5" style="width:150px;height:150px"></lord-icon>
+                                            <h5 class="mt-2">No Devices Found</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="table-responsive table-card">
+                                    <table class="table table-centered table-hover align-middle table-nowrap mb-0">
+                                        <tbody>
+                                            {% for device in devices_list %}
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar-xs me-2 flex-shrink-0">
+                                                                <div class="avatar-title bg-transparent rounded">
+                                                                    <img src="{% static 'devices/img/RaspberryPi.png' %}" alt="" height="24">
+                                                                </div>
+                                                            </div>
+                                                            <h5  class="mb-0">{{ device.name }}</h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {{ device.node_type|upper }}
+                                                    </td>
+                                                    <td>
+                                                        <span class="badge bg-primary text-uppercase">
+                                                            {% if device.is_active %}
+                                                                online
+                                                            {% else %}
+                                                                offline
+                                                            {% endif %}</span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{% url 'device_detail' device.id %}" class="btn btn-link btn-sm shadow-none">View<i class="ri-arrow-right-line align-bottom"></i></a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="align-items-center mt-4 pt-2 justify-content-end d-flex">
+                                    <a href="{% url 'devices_list' %}" class="btn btn-primary btn-sm">Show More <i class="ri-arrow-right-line align-bottom"></i></a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div> <!-- .card-->
+                </div><!--end col-->
+            </div><!--end row-->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-height-100">
+                        <div class="card-header border-0 align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Detection Event Statistic</h4>
+                            <div>
+                                <button type="button" class="btn btn-soft-secondary btn-sm">
+                                    ALL
+                                </button>
+                                <button type="button" class="btn btn-soft-secondary btn-sm">
+                                    1M
+                                </button>
+                                <button type="button" class="btn btn-soft-secondary btn-sm">
+                                    6M
+                                </button>
+                                <button type="button" class="btn btn-soft-primary btn-sm">
+                                    1Y
+                                </button>
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-header p-0 border-0 bg-soft-light">
+                            <div class="row g-0 text-center">
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1 fs-17 fw-semibold"><span class="counter-value" data-target="3364">0</span></h5>
+                                        <p class="text-muted mb-0">New Applications</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1 fs-17 fw-semibold"><span class="counter-value" data-target="2804">0</span></h5>
+                                        <p class="text-muted mb-0">Interview</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0">
+                                        <h5 class="mb-1 fs-17 fw-semibold"><span class="counter-value" data-target="2402">0</span></h5>
+                                        <p class="text-muted mb-0">Hired</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                                <div class="col-6 col-sm-3">
+                                    <div class="p-3 border border-dashed border-start-0 border-end-0">
+                                        <h5 class="mb-1 text-success"><span class="counter-value" data-target="8">0</span>k</h5>
+                                        <p class="text-muted mb-0">Total Applications</p>
+                                    </div>
+                                </div>
+                                <!--end col-->
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-body p-0 pb-2">
+                            <div class="w-100">
+                                <div id="line_chart_dashed" data-colors='["--vz-success", "--vz-primary", "--vz-secondary"]' class="apex-charts" dir="ltr"></div>
+                            </div>
+                        </div><!-- end card body -->
+                    </div><!-- end card -->
+                </div><!-- end col -->
+            </div><!--end row-->
+
+            <div class="row">
+                <div class="col-xxl-8">
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Recent Detection Event Log</h4>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-soft-info btn-sm">
+                                    <i class="ri-file-list-3-line align-bottom"></i> Generate Report
+                                </button>
+                            </div>
+                        </div><!-- end card header -->
+
+                        <div class="card-body">
+                            <div class="table-responsive table-card">
+                                {% if not events_list %}
+                                <div class="card-body">
+                                    <div class="noresult mt-5">
+                                        <div class="text-center">
+                                            <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop"  colors="primary:#405189,secondary:#02a8b5" style="width:150px;height:150px"></lord-icon>
+                                            <h5 class="mt-2">No Event Log Found</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% else %}
+                                    <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+                                        <thead class="text-muted table-light">
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Event</th>
+                                                <th scope="col">Message</th>
+                                                <th scope="col">Action</th>
+                                                <th scope="col">Image Capture</th>
+                                                <th scope="col">Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for event in events_list %}
+                                                <tr>
+                                                    <td>
+                                                        <a href="#" class="fw-medium link-primary">#{{ event.id }}</a>
+                                                    </td>
+                                                    <td>
+                                                        {% if event.event == 2 %}
+                                                            <span class="badge text-bg-info">Event {{ event.event }}</span>
+                                                        {% elif event.event == 3%}
+                                                            <span class="badge text-bg-primary">Event {{ event.event }}</span>
+                                                        {% elif event.event == 4 %}
+                                                            <span class="badge text-bg-danger">Event {{ event.event }}</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>{{ event.message }}</td>
+                                                    <td>{{ event.action }}</td>
+                                                    <td><a target="_blank" href="{{ event.resource_url }}"><u>Preview</u></a></td>
+                                                    <td>{{ event.created_time }}</td>
+                                                </tr><!-- end tr -->
+                                            {% endfor %}
+                                        </tbody><!-- end tbody -->
+                                    </table><!-- end table -->
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div> <!-- .card-->
+                </div> <!-- .col-->
+                <div class="col-xxl-4">
+                    <!-- card -->
+                    <div class="card card-height-100">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Login history</h4>
+                            <div class="flex-shrink-0">
+                                <button type="button" class="btn btn-soft-primary btn-sm">
+                                    Export Report
+                                </button>
+                            </div>
+                        </div><!-- end card header -->
+
+                        <!-- card body -->
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0 avatar-sm">
+                                    <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
+                                        <i class="ri-smartphone-line"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>iPhone 12 Pro</h6>
+                                    <p class="text-muted mb-0">Los Angeles, United States - March 16 at 2:47PM</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0 avatar-sm">
+                                    <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
+                                        <i class="ri-tablet-line"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Apple iPad Pro</h6>
+                                    <p class="text-muted mb-0">Washington, United States - November 06 at 10:43AM</p>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="flex-shrink-0 avatar-sm">
+                                    <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
+                                        <i class="ri-smartphone-line"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6>Galaxy S21 Ultra 5G</h6>
+                                    <p class="text-muted mb-0">Conneticut, United States - June 12 at 3:24PM</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end card body -->
+                    </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+            </div> <!-- end row-->
+        </div>
+        <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+{% endblock %}
+
+{% block js %}
+    <!-- apexcharts -->
+    <script src="{% static 'common/libs/apexcharts/apexcharts.min.js' %}"></script>
+    <!-- Vector map-->
+    <script src="{% static 'common/libs/jsvectormap/js/jsvectormap.min.js' %}"></script>
+    <script src="{% static 'common/libs/jsvectormap/maps/world-merc.js' %}"></script>
+    <script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+{% endblock %}

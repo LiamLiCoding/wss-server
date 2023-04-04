@@ -265,7 +265,6 @@
                     <div id="two-column-menu">
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
-                        {% comment %}
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'dashboard' %}">
@@ -273,7 +272,6 @@
                                 <span data-key="t-dashboards">Dashboards</span>
                             </a>
                         </li>
-                        {% endcomment %}
 
                         <li class="menu-title"><i class="ri-more-fill"></i> <span data-key="t-pages">Management</span></li>
 
@@ -393,7 +391,6 @@
     {% block js %}{% endblock %}
 
     <!-- App js -->
-    <script src="{% static 'common/js/app.js' %}"></script>
     <script>
         let activeParentMenuItem = function(li_node){
             let menu_dropdown_node = li_node.parent().parent();
@@ -472,6 +469,7 @@
         console.error('Notification socket closed unexpectedly');
     };
 </script>
+    <script src="{% static 'common/js/app.js' %}"></script>
 </body>
 
 </html>
