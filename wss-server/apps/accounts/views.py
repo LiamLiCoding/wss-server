@@ -1,11 +1,12 @@
 import requests
 import datetime
-from urllib.parse import urlencode
+from user_agents import parse
 from django.contrib import auth
 from django.urls import reverse
 from django.conf import settings
 from rest_framework import status
 from django.utils import timezone
+from urllib.parse import urlencode
 from django.shortcuts import render
 from django.views.generic import View
 from rest_framework.views import APIView
@@ -18,8 +19,46 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import send_email
 from .mixins import UserSettingsMixin
-from .models import Users, VerifyCode, UserSettings
+from .models import Users, VerifyCode, UserSettings, LoginHistory
 from .forms import UserLoginForm, UserRegisterForm, ResetPasswordForm
+
+
+def get_device_info(request):
+    device_info = {
+        "is_mobile": request.user_agent.is_mobile,  # returns True
+        "is_tablet": request.user_agent.is_tablet,  # returns False
+        "is_touch_capable": request.user_agent.is_touch_capable,  # returns True
+        "is_pc": request.user_agent.is_pc,  # returns False
+        "is_bot": request.user_agent.is_bot,  # returns False
+    
+        # Accessing user agent's browser attributes
+        "browser": request.user_agent.browser.family,  # returns 'Mobile Safari'
+        "browser_version": request.user_agent.browser.version_string,  # returns '5.1'
+    
+        # Operating System properties
+        "device_os": request.user_agent.os.family,  # returns 'iOS'
+        "device_os_version": request.user_agent.os.version_string,  # returns '5.1'
+    
+        # Device properties
+        "device": request.user_agent.device.family,  # returns 'iPhone'
+    }
+
+    return device_info
+
+
+def save_login_history(user_obj, device_info):
+    history = LoginHistory()
+    history.user = user_obj
+    history.device = device_info['device']
+    history.device_os = device_info['device_os']
+    history.device_os_version = device_info['device_os_version']
+    history.browser = device_info['browser']
+    history.browser_version = device_info['browser_version']
+    history.is_pc = device_info['is_pc']
+    history.is_mobile = device_info['is_mobile']
+    history.location = None
+
+    history.save()
 
 
 def redirect_to_login(request):
@@ -82,6 +121,7 @@ class LoginView(View):
                 if user.is_verified:
                     request.session['user_name'] = user.username
                     auth.login(self.request, user)
+                    save_login_history(self.request.user, get_device_info(request))
                     return redirect(self.get_success_url())
                 else:
                     verify_tips = "Your account have not been verified."

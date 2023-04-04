@@ -151,3 +151,25 @@ class VerifyCode(models.Model):
         ordering = ["-send_time"]
         verbose_name = "verify_code"
         verbose_name_plural = "verify_code"
+
+
+class LoginHistory(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    login_time = models.DateTimeField(default=timezone.now)
+    device = models.CharField(max_length=200, blank=True, null=True)
+    device_os = models.CharField(max_length=200, blank=True, null=True)
+    device_os_version = models.CharField(max_length=200, blank=True, null=True)
+    browser = models.CharField(max_length=200, blank=True, null=True)
+    browser_version = models.CharField(max_length=200, blank=True, null=True)
+    is_pc = models.BooleanField(blank=True, null=True)
+    is_mobile = models.BooleanField(blank=True, null=True)
+    is_tablet = models.BooleanField(blank=True, null=True)
+    location = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        ordering = ["-login_time"]
+        verbose_name = "login_history"
+        verbose_name_plural = "login_history"

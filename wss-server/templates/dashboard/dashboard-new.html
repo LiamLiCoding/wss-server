@@ -353,39 +353,27 @@
 
                         <!-- card body -->
                         <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="flex-shrink-0 avatar-sm">
-                                    <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
-                                        <i class="ri-smartphone-line"></i>
+                            {% for history in login_history %}
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="flex-shrink-0 avatar-sm">
+                                        <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
+                                            {% if history.is_tablet %}
+                                                <i class="ri-tablet-line"></i>
+                                            {% elif history.is_mobile %}
+                                                <i class="ri-smartphone-line"></i>
+                                            {% elif history.is_pc %}
+                                                <i class="ri-computer-line"></i>
+                                            {% else %}
+                                                <i class="ri-cast-line"></i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>{{ history.device }} ({{ history.device_os }}{{ history.device_os_version }})</h6>
+                                        <p class="text-muted mb-0">{{ history.browser }}({{ history.browser_version }}) - {{ history.login_time }}</p>
                                     </div>
                                 </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6>iPhone 12 Pro</h6>
-                                    <p class="text-muted mb-0">Los Angeles, United States - March 16 at 2:47PM</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="flex-shrink-0 avatar-sm">
-                                    <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
-                                        <i class="ri-tablet-line"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6>Apple iPad Pro</h6>
-                                    <p class="text-muted mb-0">Washington, United States - November 06 at 10:43AM</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="flex-shrink-0 avatar-sm">
-                                    <div class="avatar-title bg-light text-primary rounded-3 fs-18 shadow">
-                                        <i class="ri-smartphone-line"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h6>Galaxy S21 Ultra 5G</h6>
-                                    <p class="text-muted mb-0">Conneticut, United States - June 12 at 3:24PM</p>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                         <!-- end card body -->
                     </div>

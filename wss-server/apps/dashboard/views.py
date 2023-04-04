@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from apps.devices.models import Devices
+from apps.accounts.models import LoginHistory
 from apps.record.models import EventLog, OperationLog
 
 
@@ -32,6 +33,7 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
         today_event_num = len(total_event_logs_list.filter(created_time__startswith=datetime.date.today()))
         today_operation_num = len(total_operation_logs_list.filter(created_time__startswith=datetime.date.today()))
         latest_event_log = total_event_logs_list.order_by('-created_time')[0] if total_event_logs_list else 0
+
         context.update({'devices_list': devices_list,
                         'online_devices_num': online_devices_num,
                         'total_conversation': total_conversation,
@@ -41,6 +43,10 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
                         'recent_events': recent_events_logs_list,
                         'today_operations': today_operation_num,
                         'latest_event': latest_event_log})
+
+        login_history = LoginHistory.objects.filter(user=self.request.user)
+        context.update({'login_history': login_history})
+
         context.update(self.get_user_info())
         if args:
             context.update(*args)

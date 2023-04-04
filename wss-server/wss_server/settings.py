@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'channels',
     'daphne',
     'rest_framework',
+    'django_user_agents',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -57,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 TEMPLATES = [
@@ -75,6 +77,8 @@ TEMPLATES = [
         },
     },
 ]
+
+USER_AGENTS_CACHE = 'default'
 
 WSGI_APPLICATION = 'wss_server.wsgi.application'
 ASGI_APPLICATION = 'wss_server.asgi.application'
