@@ -11,6 +11,7 @@ from django.db.models import ObjectDoesNotExist
 
 from apps.devices.models import Devices, Performance
 from apps.record.models import EventLog
+from apps.accounts.models import UserSettings
 from apps.accounts.send_email import send_detection_warning_email
 from .notification_consumer import _async_send_notification, send_notification
 
@@ -148,8 +149,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             event_record.resource_type = 'video' if intruder_event_type == 4 else 'image'
             event_record.resource_url = str(media_path)
             event_record.save()
-
-            send_detection_warning_email(self.user_email, intruder_event_type, "127.0.0.1:8000/media/{}".format(media_path))
+            send_detection_warning_email(self.user_id, self.user_email, intruder_event_type, "127.0.0.1:8000/media/{}".format(media_path))
 
             send_notification(self.user_id, message="Detect Intruder Event {}".format(intruder_event_type), duration=8000,
                               level="error", refresh=False, notification_type='swal', title='Intruder Event',
@@ -177,3 +177,13 @@ class DeviceConsumer(AsyncWebsocketConsumer):
             elif operation_type == 'restart':
                 send_notification(self.user_id, message=operation_feedback_message, duration=8000,
                                   level=level, refresh=False)
+
+    @database_sync_to_async
+    def check_notification_availability(self, user_obj):
+        try:
+            user_settings = UserSettings.objects.get(user=user_obj)
+            if user_settings:
+                return user_settings.web_notification
+        except ObjectDoesNotExist:
+            pass
+        return False

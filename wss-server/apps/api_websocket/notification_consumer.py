@@ -6,8 +6,13 @@
 
 import json
 from asgiref.sync import async_to_sync
+from django.db.models import ObjectDoesNotExist
+from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.layers import get_channel_layer
+
+
+from apps.accounts.models import UserSettings
 
 
 async def _async_send_notification(user_id, message, level="success",
@@ -43,6 +48,7 @@ def send_notification(user_id, message, level="success", style='', duration=3000
 
 class NotificationConsumer(AsyncWebsocketConsumer):
     group_name = ''
+    availability = True
 
     async def connect(self):
         if not self.scope.get('user'):
@@ -51,11 +57,25 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             self.group_name = 'notification-{}'.format(str(self.scope.get('user').id))
             await self.accept()
             await self.channel_layer.group_add(self.group_name, self.channel_name)
+            self.check_notification_availability(self.scope.get('user'))
+
+    @database_sync_to_async
+    def check_notification_availability(self, user_obj):
+        try:
+            settings = UserSettings.objects.get(user=user_obj)
+            if settings:
+                return settings.web_notification
+        except ObjectDoesNotExist:
+            pass
+        return False
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def group_message(self, event):
+        availability = await self.check_notification_availability(self.scope.get('user'))
+        if not availability:
+            return
         style = event.get('style', '')
         duration = event.get('duration', 3000)
         refresh = event.get('refresh', False)

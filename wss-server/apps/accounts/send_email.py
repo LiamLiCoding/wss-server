@@ -2,10 +2,11 @@ import datetime
 from django.conf import settings
 from django.utils import timezone
 from django.core.mail import send_mail
+from django.db.models import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives
 from apps.utils.verification_code import generate_digit_verification_code, generate_str_verification_code
 
-from apps.accounts.models import VerifyCode
+from apps.accounts.models import VerifyCode, UserSettings
 
 
 def send_digit_code_email(email, code_type="verify_email"):
@@ -119,8 +120,19 @@ WSS developer.
     msg.send()
 
 
-def send_detection_warning_email(email, detection_event_type, resource_url):
-    email_title= "[WSS] Intruder Detection Event"
+def send_detection_warning_email(user_id, email, detection_event_type, resource_url):
+    # Check availability
+    availability = False
+    try:
+        user_settings = UserSettings.objects.get(id=user_id)
+        if user_settings:
+            availability = user_settings.detection_Email_notification
+    except ObjectDoesNotExist:
+        availability = False
+
+    if not availability:
+        return
+    email_title = "[WSS] Intruder Detection Event"
 
     text_content = """
     Hey!
