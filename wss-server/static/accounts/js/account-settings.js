@@ -186,11 +186,11 @@ $("#changePasswordButton").click(function() {
 
 $(".notification-settings").change(function() {
     let notification_type = $(this).data("notification-type");
-    let value = $(this).val();
+    let is_checked = $(this).is(':checked');
     $.ajax({
         url:"notification_settings/",
         type:'post',
-        data: {"notification_type": notification_type, "value":value},
+        data: {"notification_type": notification_type, "value":is_checked},
         success:function (data) {
         }});
 });

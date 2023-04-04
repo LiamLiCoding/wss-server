@@ -127,6 +127,7 @@ class UserSettings(models.Model):
     detection_Email_notification = models.BooleanField(default=True)
     detection_SMS_notification = models.BooleanField(default=False)
     update_notification = models.BooleanField(default=False)
+    web_notification = models.BooleanField(default=True)
 
     def __str__(self):
         return self.user.username

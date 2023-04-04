@@ -207,6 +207,7 @@ class GitHubOAuthView(OauthBaseView):
         else:
             user = user[0]
         auth.login(self.request, user)
+        save_login_history(self.request.user, get_device_info(self.request))
         self.request.session['user_name'] = user.username
         return redirect(self.get_success_url())
 
@@ -254,6 +255,7 @@ class GoogleOAuthView(OauthBaseView):
         else:
             user = user[0]
         auth.login(self.request, user)
+        save_login_history(self.request.user, get_device_info(self.request))
         self.request.session['user_name'] = user.username
         return redirect(self.get_success_url())
 
@@ -327,6 +329,7 @@ class AccountSettings(LoginRequiredMixin, UserSettingsMixin, TemplateView):
                 context['detection_Email_notification'] = user_settings.detection_Email_notification
                 context['detection_SMS_notification'] = user_settings.detection_SMS_notification
                 context['update_notification'] = user_settings.update_notification
+                context['web_notification'] = user_settings.web_notification
         except ObjectDoesNotExist:
             user_settings = UserSettings(user=self.request.user)
             user_settings.save()
@@ -598,13 +601,13 @@ class NotificationSettingsAPI(LoginRequiredMixin, APIView):
     def post(self, request):
         notification_type = request.POST.get('notification_type')
         value = request.POST.get('value')
-        value = True if value == 'on' else False
+        value = False if value == 'false' else True
         data = {notification_type: value}
 
-        if notification_type and value:
-            user_settings = UserSettings.objects.filter(user=self.request.user)
-            if user_settings:
-                user_settings.update(**data)
+        user_settings = UserSettings.objects.filter(user=self.request.user)
+        if user_settings:
+            user_settings.update(**data)
+
         return Response(status=status.HTTP_200_OK)
 
 

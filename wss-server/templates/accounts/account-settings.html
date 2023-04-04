@@ -249,6 +249,23 @@
                                     <div class="mb-3">
                                         <h5 class="card-title text-decoration-underline mb-3">System Notifications:</h5>
                                         <ul class="list-unstyled mb-0">
+                                            <li class="d-flex mt-2">
+                                                <div class="flex-grow-1">
+                                                    <label class="form-check-label fs-14" for="web_notification">
+                                                        Web notifications
+                                                    </label>
+                                                    <p class="text-muted">Show notification when you are using WSS</p>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <div class="form-check form-switch">
+                                                        {% if web_notification %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="web_notification" type="checkbox" role="switch" id="web_notification" checked/>
+                                                        {% else %}
+                                                            <input class="form-check-input notification-settings" data-notification-type="web_notification" type="checkbox" role="switch" id="web_notification"/>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </li>
                                             <li class="d-flex">
                                                 <div class="flex-grow-1">
                                                     <label class="form-check-label fs-14" for="emailNotification">
