@@ -29,12 +29,12 @@ class GetLogByUserAPIView(LoginRequiredMixin, APIView):
 		return Response(log_serializer.data)
 
 
-class EventLogAPI(GetLogByDeviceAPIView):
+class GetEventLogByDevice(GetLogByDeviceAPIView):
 	model = EventLog
 	serializer = EventLogSerializer
 
 
-class OperationLogAPI(GetLogByDeviceAPIView):
+class GetOperationLogByDevice(GetLogByDeviceAPIView):
 	model = OperationLog
 	serializer = OperationLogSerializer
 

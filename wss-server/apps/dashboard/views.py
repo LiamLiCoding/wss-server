@@ -1,6 +1,10 @@
 import datetime
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Count
+from django.db.models.functions import TruncDate
+from datetime import timedelta
 from apps.accounts.mixins import UserSettingsMixin
-from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -55,4 +59,27 @@ def page_404(request, *args, **kwargs):
 
 def page_500(request, *args, **kwargs):
     return render(request, 'common/page-500.html')
+
+
+class LogChartDataAPI(APIView):
+    def get(self, request, *args, **kwargs):
+        one_month_ago = datetime.datetime.now() - timedelta(days=30)
+
+        daily_events = (
+            EventLog.objects
+                .filter(created_time__gte=one_month_ago)
+                .annotate(x=TruncDate('created_time'))
+                .values('x')
+                .annotate(y=Count('id'))
+                .order_by('x')
+        )
+        daily_operations = (
+            OperationLog.objects
+                .filter(created_time__gte=one_month_ago)
+                .annotate(x=TruncDate('created_time'))
+                .values('x')
+                .annotate(y=Count('id'))
+                .order_by('x')
+        )
+        return Response(data={'events': daily_events, 'operations': daily_operations})
 

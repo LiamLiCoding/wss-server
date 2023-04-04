@@ -425,11 +425,21 @@ let updateOperationLog = function () {
                 $('#operation-log-table').css("display", "inline");
                 let operation_table_html = '';
                 for(let each_log of data.results){
+                    if (each_log.operation === 'disable'){
                     operation_table_html += `<tr>
                         <th scope="row"><span class="badge text-bg-danger fs-15">${each_log.operation}</span></th>
                         <td>${each_log.message}</td>
                         <td>${each_log.created_time}</td>
                     </tr>`
+                    }
+                    else{
+                    operation_table_html += `<tr>
+                        <th scope="row"><span class="badge text-bg-success fs-15">${each_log.operation}</span></th>
+                        <td>${each_log.message}</td>
+                        <td>${each_log.created_time}</td>
+                    </tr>`
+                    }
+
                 }
                 $('#operation-log-tbody').html(operation_table_html);
             }
