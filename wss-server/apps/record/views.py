@@ -13,7 +13,7 @@ class GetLogByDeviceAPIView(LoginRequiredMixin, APIView):
 	serializer = None
 
 	def get(self, request, device_id, *args, **kwargs):
-		log_list = self.model.objects.filter(device=device_id)
+		log_list = self.model.objects.filter(device=device_id).order_by('-id')
 		result = self.pagination.paginate_queryset(log_list, request)
 		log_serializer = self.serializer(result, many=True)
 		return self.pagination.get_paginated_response(log_serializer.data)
@@ -24,7 +24,7 @@ class GetLogByUserAPIView(LoginRequiredMixin, APIView):
 	serializer = None
 
 	def get(self, request, *args, **kwargs):
-		log_list = self.model.objects.filter(user=self.request.user)
+		log_list = self.model.objects.filter(user=self.request.user).order_by('-id')
 		log_serializer = self.serializer(log_list, many=True)
 		return Response(log_serializer.data)
 
