@@ -551,6 +551,8 @@ class ForgetPasswordView(TemplateView):
                 code_record.delete()
         except ObjectDoesNotExist:
             pass
+        except Exception as ee:
+            print("Object Send ERROR:", ee)
 
         try:
             Users.objects.get(email=email)
@@ -560,6 +562,8 @@ class ForgetPasswordView(TemplateView):
             return render(request, self.template_name, self.get_context_data({
                 'message': 'Account does not exist!',
             }))
+        except Exception as ee:
+            print("Forget Password Send ERROR:", ee)
 
 
 class ResetLinkSentView(TemplateView):

@@ -1,0 +1,36 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block title %}Maintenance | WSS{% endblock %}
+{% block login_bg %}{% endblock %}
+{% block auth_content %}
+<!-- auth page content -->
+<div class="auth-page-content">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center mt-sm-5 pt-4">
+                    <div class="mb-5 text-white-50">
+                        <h1 class="display-5 coming-soon-text">Site is Under Maintenance</h1>
+                        <p class="fs-14">We are working on it. Please check back in sometime</p>
+                    </div>
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-xl-4 col-lg-8">
+                            <div>
+                                <img src="{% static 'common/img/maintenance.png' %}" alt="" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row -->
+
+    </div>
+    <!-- end container -->
+</div>
+<!-- end auth page content -->
+{% endblock %}
+
+{% block js %}
+{% endblock %}

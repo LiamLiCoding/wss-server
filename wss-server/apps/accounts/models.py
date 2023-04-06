@@ -139,7 +139,7 @@ class VerifyCode(models.Model):
         ('reset_password', 'reset_password'),
     )
 
-    code = models.CharField(max_length=20)
+    code = models.CharField(max_length=100)
     email = models.EmailField(max_length=50)
     code_type = models.CharField(max_length=20, choices=CODE_TYPE_CHOICE, default='verify_email')
     send_time = models.DateTimeField(default=timezone.now)

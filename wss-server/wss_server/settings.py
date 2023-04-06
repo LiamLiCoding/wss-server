@@ -28,6 +28,7 @@ SECRET_KEY = key_define.DJANGO_SECRET_KEY
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
+IS_ = ['*']
 
 
 # Application definition
@@ -94,8 +95,8 @@ AUTHENTICATION_BACKENDS = (
 SILENCED_SYSTEM_CHECKS = ['auth.W004']
 
 ADMINS = key_define.ADMINS
-SEND_BROKEN_LINK_EMAILS = True
-MANAGERS = ADMINS
+# SEND_BROKEN_LINK_EMAILS = True
+# MANAGERS = ADMINS
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -185,3 +186,50 @@ GITHUB_CLIENT_SECRET = key_define.GITHUB_CLIENT_SECRET
 
 GOOGLE_CLIENT_ID = key_define.GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_SECRET = key_define.GOOGLE_CLIENT_SECRET
+
+DEFAULT_LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'formatters': {
+        'django.server': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '[%(server_time)s] %(message)s',
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
+        'django.server': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
+        },
+        'mail_admins': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'mail_admins'],
+            'level': 'DEBUG',
+        },
+        'django.server': {
+            'handlers': ['django.server'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}
