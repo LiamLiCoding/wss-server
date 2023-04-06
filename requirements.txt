@@ -13,8 +13,10 @@ cryptography==39.0.2
 daphne==4.0.0
 Django==4.1.7
 django-redis==5.2.0
+django-user-agents==0.4.0
 djangorestframework==3.14.0
 hyperlink==21.0.0
+idna==3.4
 incremental==22.10.0
 msgpack==1.0.4
 mysqlclient==2.1.1
@@ -33,6 +35,8 @@ sqlparse==0.4.3
 Twisted==22.10.0
 txaio==23.1.1
 typing-extensions==4.5.0
+ua-parser==0.16.1
 urllib3==1.26.14
+user-agents==2.2.0
 websocket-client==1.5.1
 zope.interface==5.5.2
