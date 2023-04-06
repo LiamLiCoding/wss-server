@@ -22,21 +22,6 @@ from django.views.static import serve
 
 from apps.dashboard import views as dashboard_views
 
-urlpatterns = [
-    path('', dashboard_views.redirect_to_dashboard),
-    path('dashboard/', include('apps.dashboard.urls')),
-    path('admin/', admin.site.urls),
-    path('accounts/', include('apps.accounts.urls')),
-    path('devices/', include('apps.devices.urls')),
-    path('record/', include('apps.record.urls')),
-    path('documentation/', include('apps.documentation.urls')),
-    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
-]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 def handler_404_page(request, exception=None):
     return render(request, 'common/page-404.html')
@@ -46,5 +31,35 @@ def handler_500_page(request, *args, **kwargs):
     return render(request, 'common/page-500.html')
 
 
-handler404 = handler_404_page
-handler500 = handler_500_page
+def maintenance(request, *args, **kwargs):
+    return render(request, 'common/maintenance.html')
+
+
+if settings.IS_MAINTENANCE:
+    urlpatterns = [
+        path('', maintenance),
+        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+    ]
+    handler404 = maintenance
+    handler500 = maintenance
+else:
+    urlpatterns = [
+        path('', dashboard_views.redirect_to_dashboard),
+        path('dashboard/', include('apps.dashboard.urls')),
+        path('admin/', admin.site.urls),
+        path('accounts/', include('apps.accounts.urls')),
+        path('devices/', include('apps.devices.urls')),
+        path('record/', include('apps.record.urls')),
+        path('documentation/', include('apps.documentation.urls')),
+        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+    ]
+    handler404 = handler_404_page
+    handler500 = handler_500_page
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+
