@@ -16,30 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
-from django.shortcuts import render
 from django.conf.urls.static import static
 from django.views.static import serve
 
+from .views import handler_404_page, handler_500_page, maintenance, coming_soon_page
 from apps.dashboard import views as dashboard_views
-
-
-def handler_404_page(request, exception=None):
-    return render(request, 'common/page-404.html')
-
-
-def handler_500_page(request, *args, **kwargs):
-    return render(request, 'common/page-500.html')
-
-
-def maintenance(request, *args, **kwargs):
-    return render(request, 'common/maintenance.html')
 
 
 if settings.IS_MAINTENANCE:
     urlpatterns = [
         path('', maintenance),
-        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
     ]
     handler404 = maintenance
     handler500 = maintenance
@@ -51,12 +37,17 @@ else:
         path('accounts/', include('apps.accounts.urls')),
         path('devices/', include('apps.devices.urls')),
         path('record/', include('apps.record.urls')),
+        path('comming-soon/', coming_soon_page, name='coming_soon'),
         path('documentation/', include('apps.documentation.urls')),
-        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
-        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+
     ]
     handler404 = handler_404_page
     handler500 = handler_500_page
+
+urlpatterns += [
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

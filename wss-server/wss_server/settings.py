@@ -6,8 +6,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = key_define.DJANGO_SECRET_KEY
 
-DEBUG = False
-IS_MAINTENANCE = True
+DEBUG = True
+IS_MAINTENANCE = False
 
 ALLOWED_HOSTS = ['*']
 

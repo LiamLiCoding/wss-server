@@ -53,27 +53,6 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
         return context
 
 
-# TODO: tmp cancel dashboard page
-def redirect_to_device(request):
-    return redirect('/devices/')
-
-
-class ComingSoonView(TemplateView):
-    template_name = 'common/coming-soon.html'
-
-
-def page_404(request, *args, **kwargs):
-    return render(request, 'common/page-404.html')
-
-
-def maintenance(request, *args, **kwargs):
-    return render(request, 'common/maintenance.html')
-
-
-def page_500(request, *args, **kwargs):
-    return render(request, 'common/page-500.html')
-
-
 class LogChartDataAPI(APIView):
     def get(self, request, *args, **kwargs):
         one_month_ago = datetime.datetime.now() - timedelta(days=30)
