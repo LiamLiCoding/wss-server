@@ -121,6 +121,8 @@ WSS developer.
 
 
 def send_detection_warning_email(user_id, email, detection_event_type, resource_url):
+    print("!!Temporarily forbid sending email")
+    return
     # Check availability
     availability = False
     try:
