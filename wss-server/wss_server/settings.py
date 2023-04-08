@@ -75,8 +75,8 @@ AUTHENTICATION_BACKENDS = (
 SILENCED_SYSTEM_CHECKS = ['auth.W004']
 
 ADMINS = key_define.ADMINS
-# SEND_BROKEN_LINK_EMAILS = True
-# MANAGERS = ADMINS
+SEND_BROKEN_LINK_EMAILS = True
+MANAGERS = ADMINS
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
