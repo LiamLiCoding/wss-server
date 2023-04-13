@@ -1,4 +1,5 @@
 from django.db import models
+from apps.accounts.models import Users
 
 
 class SystemSetting(models.Model):
@@ -8,6 +9,7 @@ class SystemSetting(models.Model):
 		(1, 'Mode 1'),
 		(1, 'Mode 1')
 	)
+	user = models.ForeignKey(Users, on_delete=models.CASCADE)
 	mode = models.IntegerField(choices=MODE_CHOICES, default=1)
 
 	class Meta:
