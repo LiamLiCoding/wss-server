@@ -19,13 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 
-from .views import handler_404_page, handler_500_page, maintenance, coming_soon_page
+from .views import handler_404_page, handler_500_page, maintenance, coming_soon_page, privacy_policy_page
 from apps.dashboard import views as dashboard_views
 
 
 if settings.IS_MAINTENANCE:
     urlpatterns = [
         path('', maintenance),
+        path('privacy-policy/', privacy_policy_page),
     ]
     handler404 = maintenance
     handler500 = maintenance
@@ -39,7 +40,7 @@ else:
         path('record/', include('apps.record.urls')),
         path('comming-soon/', coming_soon_page, name='coming_soon'),
         path('documentation/', include('apps.documentation.urls')),
-
+        path('privacy-policy/', privacy_policy_page),
     ]
     handler404 = handler_404_page
     handler500 = handler_500_page

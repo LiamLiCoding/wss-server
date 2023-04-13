@@ -21,3 +21,7 @@ def maintenance(request, *args, **kwargs):
 
 def coming_soon_page(request, *args, **kwargs):
     return render(request, 'common/coming-soon.html')
+
+
+def privacy_policy_page(request, *args, **kwargs):
+    return render(request, 'common/privacy-policy.html')
