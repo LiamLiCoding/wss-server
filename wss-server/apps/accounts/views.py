@@ -201,6 +201,7 @@ class GitHubOAuthView(OauthBaseView):
                                              email=user_info['email'],
                                              password='********',
                                              avatar=user_info['avatar_url'],
+                                             is_verified=True,
                                              )
             user_settings = UserSettings(user=user)
             user_settings.save()
@@ -249,6 +250,7 @@ class GoogleOAuthView(OauthBaseView):
                                              last_name=user_info['family_name'],
                                              password='********',
                                              avatar=user_info['picture'],
+                                             is_verified=True,
                                              )
             user_settings = UserSettings(user=user)
             user_settings.save()

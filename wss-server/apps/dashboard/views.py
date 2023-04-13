@@ -1,5 +1,6 @@
 import datetime
 from datetime import timedelta
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models.functions import TruncDate
@@ -73,23 +74,28 @@ class DashboardView(LoginRequiredMixin, UserSettingsMixin, TemplateView):
 
 class LogChartDataAPI(APIView):
     def get(self, request, *args, **kwargs):
-        one_month_ago = datetime.datetime.now() - timedelta(days=30)
-
+        one_month_ago = timezone.now() - timedelta(days=30)
         daily_events = (
             EventLog.objects
                 .filter(created_time__gte=one_month_ago)
                 .annotate(x=TruncDate('created_time'))
-                .values('x')
+                .values('created_time')
                 .annotate(y=Count('id'))
-                .order_by('x')
+                .order_by('created_time')
         )
+        for each in daily_events:
+            each.update({'x': each['created_time']})
+
         daily_operations = (
             OperationLog.objects
                 .filter(created_time__gte=one_month_ago)
                 .annotate(x=TruncDate('created_time'))
-                .values('x')
+                .values('created_time')
                 .annotate(y=Count('id'))
-                .order_by('x')
+                .order_by('created_time')
         )
+        for each in daily_operations:
+            each.update({'x': each['created_time']})
+
         return Response(data={'events': daily_events, 'operations': daily_operations})
 

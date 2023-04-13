@@ -49,7 +49,7 @@ def send_reset_password_link_email(email, code_type="reset_password"):
     send_record.expiration_time = timezone.now() + datetime.timedelta(minutes=10)
     send_record.save()
 
-    reset_link = "http://127.0.0.1:7000/accounts/reset_password/{}".format(code)
+    reset_link = "https://wssweb.net/accounts/reset_password/{}".format(code)
     email_title = "[WSS] Reset your password"
     text_content = '''
 We just received a password request for your account. To choose a new password, please click the link below. This link will be expire in 3 hours.
@@ -121,8 +121,6 @@ WSS developer.
 
 
 def send_detection_warning_email(user_id, email, detection_event_type, resource_url):
-    print("!!Temporarily forbid sending email")
-    return
     # Check availability
     availability = False
     try:

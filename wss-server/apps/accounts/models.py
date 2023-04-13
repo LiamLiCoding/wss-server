@@ -124,7 +124,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
 
 class UserSettings(models.Model):
     user = models.OneToOneField(Users, on_delete=models.CASCADE)
-    detection_Email_notification = models.BooleanField(default=True)
+    detection_Email_notification = models.BooleanField(default=False)
     detection_SMS_notification = models.BooleanField(default=False)
     update_notification = models.BooleanField(default=False)
     web_notification = models.BooleanField(default=True)
