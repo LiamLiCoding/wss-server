@@ -240,7 +240,7 @@ class GoogleOAuthView(OauthBaseView):
         Google user info return keys:
         {'sub', 'name', 'given_name', 'family_name', 'picture', 'email', 'email_verified', 'locale', 'hd',}
         """
-        user = Users.objects.filter(oauth_id=user_info['sub'])
+        user = Users.objects.filter(email=user_info['email'])
         if not user:
             user = Users.objects.create_user(username=user_info['name'],
                                              oauth_id=user_info['sub'],
