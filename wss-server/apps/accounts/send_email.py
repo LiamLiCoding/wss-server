@@ -122,7 +122,7 @@ WSS developer.
 
 def send_detection_warning_email(user_id, email, detection_event_type, resource_url):
     # Check availability
-    availability = False
+    availability = True
     try:
         user_settings = UserSettings.objects.get(id=user_id)
         if user_settings:
