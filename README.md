@@ -19,23 +19,9 @@ Website: [WSS-Web](https://wssweb.net/)
 
 ## Preview
 
-<img width="1440" alt="device_list" src="https://user-images.githubusercontent.com/47854126/225729290-502c222b-ee2b-4110-8275-37fb6fe5330d.png">
+![dashboard](https://github.com/Haozheng-Li/wss-server/assets/47854126/dc34b21f-d46a-4501-8afe-028e65be2c40)
 
-<img width="1440" alt="device_detail_online" src="https://user-images.githubusercontent.com/47854126/225729313-f0fa58d8-6366-4d95-a914-00a8c588f4f0.png">
-
-## Client
-
-It is recommended to use it with [wss-client](https://github.com/Haozheng-Li/wss-client). 
-
-wss-client is multifunctional detection Python IoT client. 
-
-wss-client features:
-1. Support Websocket protocol data communication interface
-2. Device running performance monitoring
-3. Motion detection
-4. Intruder detection
-5. Low coupling development
-6. Singleton pattern and observer pattern development
+![device_details](https://github.com/Haozheng-Li/wss-server/assets/47854126/57a68a57-ddba-4064-b188-ac79763dcb25)
 
 ## Requirements
 
