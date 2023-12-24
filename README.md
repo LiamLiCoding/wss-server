@@ -1,6 +1,6 @@
 # Project Discontinuation Notice
 
-## 📢 Important Update Regarding Our IoT Platform
+## 📢 Important Update Regarding my WSS IoT Platform Project
 
 Dear Community,
 
